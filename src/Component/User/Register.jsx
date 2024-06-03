@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FaCamera, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useFormik } from "formik";
 import "animate.css";
 import axios from "axios";
+import { InfoContainer } from "../../AuthProvider/AuthProvider";
 
 const validation = (values) => {
   const errors = {};
@@ -41,8 +42,8 @@ const validation = (values) => {
 
 export default function Login({ oldOrNew, conValue }) {
   const [condition, setCondition] = useState(true);
-  const [info,setInfo] = useState(null)
   const [preview,setPreview] = useState(null);
+  const {registerUser} = useContext(InfoContainer);
 
   const formInfo = useFormik({
     initialValues: {
@@ -53,8 +54,7 @@ export default function Login({ oldOrNew, conValue }) {
     },
     validate: validation,
     onSubmit: (value) => {
-      
-      console.log(value);
+      registerUser(value)
     },
   });
 

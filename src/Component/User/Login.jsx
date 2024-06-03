@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "animate.css"
+import { InfoContainer } from "../../AuthProvider/AuthProvider";
 
 export default function Login({oldOrNew,conValue}) {
     const [condition,setCondition] = useState(true);
+    const {loginUser} = useContext(InfoContainer);
+    
   return (
     <>
       <div className={`mt-[100px] mx-auto w-[70%] shadow-xl shadow-rose-400 py-10 px-4 rounded-xl ${conValue?"animate__animated animate__flipInY":"animate__animated animate__flipOutY"}`}>
@@ -39,7 +42,7 @@ export default function Login({oldOrNew,conValue}) {
           </div>
 
           <div className="pt-8">
-            <button className=" bg-green-500 w-full py-3 rounded-xl text-white capitalize font-sans font-bold hover:bg-green-900">
+            <button className=" bg-green-500 w-full py-3 rounded-xl text-white capitalize font-sans font-bold hover:bg-green-900" onClick={userLogin}>
                 login
             </button>
           </div>

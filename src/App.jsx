@@ -6,9 +6,14 @@ import { InfoContainer } from './AuthProvider/AuthProvider';
 export default function App(){
   const {user} = useContext(InfoContainer);
   const navigate = useNavigate();
+  const {userLogout} = useContext(InfoContainer);
 
   const loginPage=()=>{
     navigate('/loginPage')
+  }
+
+  const signOutUser=()=>{
+    userLogout()
   }
   return(
     <>
@@ -45,14 +50,14 @@ export default function App(){
             user?
             <div>
               <div className='h-10 w-10 rounded-full border'>
-                <img src="" alt="" className='h-full w-full rounded-full object-cover' />
+                <img src={user?.photoURL} alt="profileImg" className='h-full w-full rounded-full object-cover' />
               </div>
             </div>:""
           }
             <div>
             {
               user?
-              <button className=' py-2 px-5 border border-rose-500 bg-transparent hover:bg-rose-900 hover:opacity-80 hover:text-white transition-all duration-500 ease-in font-semibold text-blue-950'>
+              <button className=' py-2 px-5 rounded-full border border-rose-500 bg-transparent hover:bg-rose-900 hover:opacity-80 hover:text-white transition-all duration-500 ease-in font-semibold text-blue-950' onClick={signOutUser}>
                 Log out
               </button>
               :
