@@ -16,14 +16,17 @@ export const InfoContainer = createContext(null);
 
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [loading,setLoading] = useState(false);
 
   const registerUser = (value) => {
+    setLoading(true);
     createUserWithEmailAndPassword(fireAuth, value.email, value.password).then(
       (userInfo) => {
         updateProfile(userInfo.user, {
           displayName: value.userName,
           photoURL: value.profileImg,
         }).then(() => {
+          setUser(userInfo.user);
           toast.success("Account created!", {
             position: "top-center",
             autoClose: 3000,
@@ -35,7 +38,7 @@ export default function AuthProvider({ children }) {
             theme: "light",
             transition: Flip,
           });
-          setUser(userInfo.user);
+          setLoading(false)
         });
       }
     );
@@ -48,6 +51,7 @@ export default function AuthProvider({ children }) {
   };
 
   const loginUser = (value) => {
+    setLoading(true);
     signInWithEmailAndPassword(fireAuth, value.email, value.pass).then(
       (userInfo) => {
         setUser(userInfo);
@@ -62,11 +66,13 @@ export default function AuthProvider({ children }) {
           theme: "light",
           transition: Bounce,
         });
+        setLoading(false);
       }
     );
   };
 
   const googleLogin = () => {
+    setLoading(true);
     const provider = new GoogleAuthProvider();
 
     signInWithPopup(fireAuth, provider).then((userInfo) => {
@@ -82,19 +88,21 @@ export default function AuthProvider({ children }) {
         theme: "light",
         transition: Bounce,
       });
+      setLoading(false)
     });
   };
   useEffect(() => {
     const unMount = onAuthStateChanged(fireAuth, (userInfo) => {
       setUser(userInfo);
+      setLoading(false);
     });
 
     return () => {
       unMount();
     };
-  }, [user?.photoURL]);
+  }, [user]);
 
-  const allInfo = { user, registerUser, userLogout, loginUser, googleLogin };
+  const allInfo = { user, loading, registerUser, userLogout, loginUser, googleLogin };
   return (
     <>
       <ToastContainer />

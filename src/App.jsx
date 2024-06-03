@@ -2,11 +2,12 @@ import { useContext, useEffect } from 'react';
 import logo from '../public/logo.png';
 import {NavLink, Outlet, useNavigate} from 'react-router-dom';
 import { InfoContainer } from './AuthProvider/AuthProvider';
+import Loader from './Loader/Loader';
 
 export default function App(){
   const {user} = useContext(InfoContainer);
   const navigate = useNavigate();
-  const {userLogout} = useContext(InfoContainer);
+  const {userLogout,loading} = useContext(InfoContainer);
 
   const loginPage=()=>{
     navigate('/loginPage')
@@ -47,6 +48,7 @@ export default function App(){
           </div>
           <div className='w-[20%] flex items-center justify-around'>
           {
+            loading? <div><Loader/></div>: 
             user?
             <div>
               <div className='h-10 w-10 rounded-full border'>
