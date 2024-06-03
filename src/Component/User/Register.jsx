@@ -2,6 +2,7 @@ import { useState } from "react";
 import { FaCamera, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useFormik } from "formik";
 import "animate.css";
+import axios from "axios";
 
 const validation = (values) => {
   const errors = {};
@@ -12,7 +13,7 @@ const validation = (values) => {
 
   if (!values.profileImg) {
     errors.profileImg = "Required!";
-  } else if (imgPattern.test(values.profileImg)) {
+  } else if (!imgPattern.test(values.profileImg)) {
     errors.profileImg = "input must be image!";
   }
 
@@ -40,6 +41,7 @@ const validation = (values) => {
 
 export default function Login({ oldOrNew, conValue }) {
   const [condition, setCondition] = useState(true);
+  const [info,setInfo] = useState(null)
   const [preview,setPreview] = useState(null);
 
   const formInfo = useFormik({
@@ -51,16 +53,26 @@ export default function Login({ oldOrNew, conValue }) {
     },
     validate: validation,
     onSubmit: (value) => {
-      setInfo(value);
+      
       console.log(value);
     },
   });
 
-  const imgHandler=(event)=>{
-    formInfo.setFieldValue('profileImg',event.currentTarget.files[0]);
+  const imgHandler= async (event)=>{
+    // formInfo.setFieldValue('profileImg',event.currentTarget.files[0]);
 
     const file = event.currentTarget.files[0];
     const reader = new FileReader();
+    const body = new FormData();
+
+    body.set('key',import.meta.env.VITE_IMGBB);
+    body.append('image',file);
+
+    await axios({
+      method:'post',
+      url:'https://api.imgbb.com/1/upload',
+      data:body
+    }).then((res)=>{formInfo.setFieldValue('profileImg',res.data.data.display_url)})
 
     reader.onloadend=()=>{
         setPreview(reader.result)
