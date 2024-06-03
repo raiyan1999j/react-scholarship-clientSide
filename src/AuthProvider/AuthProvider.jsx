@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth';
+import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from 'firebase/auth';
 import fireAuth from "../Firebase/Firebase";
 
 export const InfoContainer = createContext(null);
@@ -27,9 +27,20 @@ export default function AuthProvider({children}){
     }
 
     const loginUser=(value)=>{
-        signInWithEmailAndPassword(fireAuth,value.email,value.password)
+        signInWithEmailAndPassword(fireAuth,value.email,value.pass)
+        .then((userInfo)=>{
+            setUser(userInfo)
+        })
     }
 
+    const googleLogin=()=>{
+        const provider = new GoogleAuthProvider;
+
+        signInWithPopup(fireAuth,provider)
+        .then((userInfo)=>{
+            console.log(userInfo)
+        })
+    }
     useEffect(()=>{
         const unMount = onAuthStateChanged(fireAuth,(userInfo)=>{
             setUser(userInfo)
@@ -38,9 +49,9 @@ export default function AuthProvider({children}){
         return ()=>{
             unMount()
         }
-    },[])
+    },[user?.photoURL])
 
-    const allInfo = {user,registerUser,userLogout,loginUser}
+    const allInfo = {user,registerUser,userLogout,loginUser,googleLogin}
     return(
         <>
             <InfoContainer.Provider value={allInfo}>

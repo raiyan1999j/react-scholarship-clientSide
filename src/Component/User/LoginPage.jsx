@@ -1,14 +1,20 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Register from "./Register";
 import Login from "./Login";
 import { FcGoogle } from "react-icons/fc";
+import { InfoContainer } from "../../AuthProvider/AuthProvider";
 
 export default function LoginPage() {
   const [condition, setCondition] = useState(true);
+  const {googleLogin} = useContext(InfoContainer);
 
   const newOrOld = (value) => {
     setCondition(value);
   };
+
+  const loginGoogle=()=>{
+    googleLogin()
+  }
   return (
     <>
       <section className="w-full">
@@ -31,7 +37,7 @@ export default function LoginPage() {
               </div>
 
               <div className="flex flex-row justify-center">
-                <div className="mr-4 h-10 w-10 rounded-xl bg-white flex justify-center items-center hover:cursor-pointer hover:scale-125">
+                <div className="mr-4 h-10 w-10 rounded-xl bg-white flex justify-center items-center hover:cursor-pointer hover:scale-125" onClick={loginGoogle}>
                 <FcGoogle className="text-2xl"/>
                 </div>
               </div>

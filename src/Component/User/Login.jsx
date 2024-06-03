@@ -2,11 +2,21 @@ import { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "animate.css"
 import { InfoContainer } from "../../AuthProvider/AuthProvider";
+import { useFormik } from 'formik';
 
 export default function Login({oldOrNew,conValue}) {
     const [condition,setCondition] = useState(true);
     const {loginUser} = useContext(InfoContainer);
     
+    const formInfo = useFormik({
+      initialValues:{
+        email:'',
+        pass: ''
+      },
+      onSubmit: (value)=>{
+        loginUser(value)
+      }
+    })
   return (
     <>
       <div className={`mt-[100px] mx-auto w-[70%] shadow-xl shadow-rose-400 py-10 px-4 rounded-xl ${conValue?"animate__animated animate__flipInY":"animate__animated animate__flipOutY"}`}>
@@ -20,11 +30,13 @@ export default function Login({oldOrNew,conValue}) {
           </p>
         </div>
         <div className="pt-8 flex flex-col justify-center">
+        <form onSubmit={formInfo.handleSubmit}>
           <div>
             <input
               type="text"
               placeholder="Email address"
               className="border border-t-0 border-r-0 border-l-0 bg-transparent border-rose-500 py-4 w-full placeholder:pl-5 pl-5 text-blue-950 font-semibold font-mono"
+              {...formInfo.getFieldProps('email')}
             />
           </div>
           <div className="py-4 relative">
@@ -32,6 +44,7 @@ export default function Login({oldOrNew,conValue}) {
               type={condition?"password":"text"}
               placeholder="Password"
               className="border border-t-0 border-r-0 border-l-0 bg-transparent border-rose-500 w-full py-4 placeholder:pl-5 pl-5 text-blue-950 font-semibold font-mono"
+              {...formInfo.getFieldProps('pass')}
             />
             <span className="absolute top-[50%] right-[0%]" onClick={()=>{setCondition(!condition)}}>
             {
@@ -42,10 +55,11 @@ export default function Login({oldOrNew,conValue}) {
           </div>
 
           <div className="pt-8">
-            <button className=" bg-green-500 w-full py-3 rounded-xl text-white capitalize font-sans font-bold hover:bg-green-900" onClick={userLogin}>
+            <button className=" bg-green-500 w-full py-3 rounded-xl text-white capitalize font-sans font-bold hover:bg-green-900" type="submit">
                 login
             </button>
           </div>
+          </form>
         </div>
       </div>
     </>

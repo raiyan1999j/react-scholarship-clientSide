@@ -134,11 +134,7 @@ export default function Login({ oldOrNew, conValue }) {
                 type="text"
                 placeholder="Your name"
                 className="border border-t-0 border-r-0 border-l-0 bg-transparent border-rose-500 py-4 w-full placeholder:pl-5 pl-5 text-blue-950 font-semibold font-mono"
-                name="userName"
-                id="userName"
-                onChange={formInfo.handleChange}
-                onBlur={formInfo.handleBlur}
-                value={formInfo.values.userName}
+                {...formInfo.getFieldProps('userName')}
               />
               {formInfo.touched.userName && formInfo.errors.userName ? (
                 <span className="font-bold text-sm text-rose-800 capitalize font-serif">{formInfo.errors.userName}</span>
@@ -149,10 +145,7 @@ export default function Login({ oldOrNew, conValue }) {
                 type="text"
                 placeholder="Email address"
                 className="border border-t-0 border-r-0 border-l-0 bg-transparent border-rose-500 py-4 w-full placeholder:pl-5 pl-5 text-blue-950 font-semibold font-mono"
-                name="email"
-                onChange={formInfo.handleChange}
-                onBlur={formInfo.handleBlur}
-                value={formInfo.values.email}
+                {...formInfo.getFieldProps('email')}
               />
               {formInfo.touched.email && formInfo.errors.email ? (
                 <span className="font-bold text-sm text-rose-800 capitalize font-serif">{formInfo.errors.email}</span>
@@ -163,10 +156,7 @@ export default function Login({ oldOrNew, conValue }) {
                 type={condition ? "password" : "text"}
                 placeholder="Password"
                 className="border border-t-0 border-r-0 border-l-0 bg-transparent border-rose-500 w-full py-4 placeholder:pl-5 pl-5 text-blue-950 font-semibold font-mono"
-                name="password"
-                onChange={formInfo.handleChange}
-                onBlur={formInfo.handleBlur}
-                value={formInfo.values.password}
+                {...formInfo.getFieldProps('password')}
               />
               <span
                 className="absolute top-[50%] right-[0%]"
