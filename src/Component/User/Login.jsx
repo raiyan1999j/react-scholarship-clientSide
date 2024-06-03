@@ -1,12 +1,14 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "animate.css"
 import { InfoContainer } from "../../AuthProvider/AuthProvider";
 import { useFormik } from 'formik';
+import { useNavigate } from "react-router-dom";
 
 export default function Login({oldOrNew,conValue}) {
     const [condition,setCondition] = useState(true);
-    const {loginUser} = useContext(InfoContainer);
+    const navigate = useNavigate();
+    const {loginUser,user} = useContext(InfoContainer);
     
     const formInfo = useFormik({
       initialValues:{
@@ -17,6 +19,12 @@ export default function Login({oldOrNew,conValue}) {
         loginUser(value)
       }
     })
+
+    useEffect(()=>{
+      if(user){
+        navigate('/')
+      }
+    },[user])
   return (
     <>
       <div className={`mt-[100px] mx-auto w-[70%] shadow-xl shadow-rose-400 py-10 px-4 rounded-xl ${conValue?"animate__animated animate__flipInY":"animate__animated animate__flipOutY"}`}>

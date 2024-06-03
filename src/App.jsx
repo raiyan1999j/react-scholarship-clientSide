@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import logo from '../public/logo.png';
 import {NavLink, Outlet, useNavigate} from 'react-router-dom';
 import { InfoContainer } from './AuthProvider/AuthProvider';

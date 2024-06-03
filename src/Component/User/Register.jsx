@@ -1,9 +1,10 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaCamera, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useFormik } from "formik";
 import "animate.css";
 import axios from "axios";
 import { InfoContainer } from "../../AuthProvider/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 const validation = (values) => {
   const errors = {};
@@ -43,7 +44,8 @@ const validation = (values) => {
 export default function Login({ oldOrNew, conValue }) {
   const [condition, setCondition] = useState(true);
   const [preview,setPreview] = useState(null);
-  const {registerUser} = useContext(InfoContainer);
+  const navigate = useNavigate();
+  const {registerUser,user} = useContext(InfoContainer);
 
   const formInfo = useFormik({
     initialValues: {
@@ -59,8 +61,6 @@ export default function Login({ oldOrNew, conValue }) {
   });
 
   const imgHandler= async (event)=>{
-    // formInfo.setFieldValue('profileImg',event.currentTarget.files[0]);
-
     const file = event.currentTarget.files[0];
     const reader = new FileReader();
     const body = new FormData();
@@ -82,6 +82,12 @@ export default function Login({ oldOrNew, conValue }) {
       reader.readAsDataURL(file)
     }
   }
+
+  useEffect(()=>{
+    if(user){
+      navigate('/')
+    }
+  },[user])
   return (
     <>
       <div
