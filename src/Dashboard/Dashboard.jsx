@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { InfoContainer } from "../AuthProvider/AuthProvider";
 import { FaPaperPlane, FaUser } from "react-icons/fa";
@@ -13,6 +13,10 @@ import { IoReturnDownBackOutline } from "react-icons/io5";
 export default function Dashboard() {
   const navigate = useNavigate();
   const { operator, user } = useContext(InfoContainer);
+
+  useEffect(()=>{
+    navigate('/dashboard/profile')
+  },[])
   return (
     <>
       <header>
