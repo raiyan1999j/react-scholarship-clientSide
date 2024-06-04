@@ -9,7 +9,8 @@ export default {
       backgroundImage:{
         'login-main':'url(https://i.postimg.cc/LshrHF6t/bg-main-img.jpg)',
         'login-supp':'url(https://i.postimg.cc/L8jVLyCc/wave-1.png)',
-        'login-sup2':'url(https://i.postimg.cc/htrWWpQW/wave-2.png)'
+        'login-sup2':'url(https://i.postimg.cc/htrWWpQW/wave-2.png)',
+        'dashNav' : 'linear-gradient(to bottom, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 1) 100%), url(https://i.postimg.cc/59TxtPqQ/dashboard-Nav.png)',
       }
     },
   },

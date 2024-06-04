@@ -39,7 +39,7 @@ export default function App(){
               </li>
               {
                 user?<li>
-                <NavLink>
+                <NavLink to="/dashboard">
                   {operator}
                 </NavLink>
               </li>:""

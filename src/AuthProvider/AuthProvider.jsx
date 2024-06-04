@@ -98,6 +98,7 @@ export default function AuthProvider({ children }) {
       .then((res)=>{setOperator(res.data)})
     })
   };
+
   useEffect(() => {
     const unMount = onAuthStateChanged(fireAuth, (userInfo) => {
       setUser(userInfo);
