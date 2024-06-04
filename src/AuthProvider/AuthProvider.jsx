@@ -11,12 +11,14 @@ import {
 import fireAuth from "../Firebase/Firebase";
 import "react-toastify/dist/ReactToastify.css";
 import { Bounce, Flip, ToastContainer, toast } from "react-toastify";
+import { publicRoute } from "../PublicRoute/PublicRoute";
 
 export const InfoContainer = createContext(null);
 
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading,setLoading] = useState(false);
+  const [operator,setOperator] = useState("");
 
   const registerUser = (value) => {
     setLoading(true);
@@ -39,14 +41,16 @@ export default function AuthProvider({ children }) {
             transition: Flip,
           });
           setLoading(false)
-        });
-      }
-    );
+          publicRoute.get(`/userOperator?email=${value.email}`)
+          .then((res)=>{setOperator(res.data)})
+        })
+      })
   };
 
   const userLogout = () => {
     signOut(fireAuth).then(() => {
       setUser(null);
+      setOperator("")
     });
   };
 
@@ -67,8 +71,9 @@ export default function AuthProvider({ children }) {
           transition: Bounce,
         });
         setLoading(false);
-      }
-    );
+        publicRoute.get(`/userOperator?email=${value.email}`)
+        .then((res)=>{setOperator(res.data)})
+      })
   };
 
   const googleLogin = () => {
@@ -89,12 +94,18 @@ export default function AuthProvider({ children }) {
         transition: Bounce,
       });
       setLoading(false)
-    });
+      publicRoute.get(`/userOperator?email=${userInfo.user.email}`)
+      .then((res)=>{setOperator(res.data)})
+    })
   };
   useEffect(() => {
     const unMount = onAuthStateChanged(fireAuth, (userInfo) => {
       setUser(userInfo);
       setLoading(false);
+      publicRoute.get(`/userOperator?email=${userInfo?.email}`)
+      .then((res)=>{
+        setOperator(res?.data)
+      })
     });
 
     return () => {
@@ -102,7 +113,7 @@ export default function AuthProvider({ children }) {
     };
   }, [user]);
 
-  const allInfo = { user, loading, registerUser, userLogout, loginUser, googleLogin };
+  const allInfo = { user, loading,operator, registerUser, userLogout, loginUser, googleLogin };
   return (
     <>
       <ToastContainer />

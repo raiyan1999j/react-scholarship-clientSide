@@ -7,7 +7,7 @@ import Loader from './Loader/Loader';
 export default function App(){
   const {user} = useContext(InfoContainer);
   const navigate = useNavigate();
-  const {userLogout,loading} = useContext(InfoContainer);
+  const {userLogout,loading,operator} = useContext(InfoContainer);
 
   const loginPage=()=>{
     navigate('/loginPage')
@@ -40,7 +40,7 @@ export default function App(){
               {
                 user?<li>
                 <NavLink>
-                  user
+                  {operator}
                 </NavLink>
               </li>:""
               }
