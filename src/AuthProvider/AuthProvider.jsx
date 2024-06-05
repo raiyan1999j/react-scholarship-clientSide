@@ -99,6 +99,14 @@ export default function AuthProvider({ children }) {
     })
   };
 
+  const adminUpdateProfile=(value)=>{
+    updateProfile(fireAuth.currentUser,{
+      displayName : value.name,
+      photoURL: value.photo
+    }).then(()=>{
+      console.log(user)
+    })
+  }
   useEffect(() => {
     const unMount = onAuthStateChanged(fireAuth, (userInfo) => {
       setUser(userInfo);
@@ -114,7 +122,7 @@ export default function AuthProvider({ children }) {
     };
   }, [user]);
 
-  const allInfo = { user, loading,operator, registerUser, userLogout, loginUser, googleLogin };
+  const allInfo = { user, loading,operator, registerUser, userLogout, loginUser, googleLogin,adminUpdateProfile };
   return (
     <>
       <ToastContainer />

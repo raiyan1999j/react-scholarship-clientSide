@@ -7,6 +7,7 @@ import AuthProvider from './AuthProvider/AuthProvider.jsx';
 import LoginPage from './Component/User/LoginPage.jsx';
 import Admin from './Dashboard/Admin/Admin.jsx';
 import Dashboard from './Dashboard/Dashboard.jsx';
+import AddScholarship from './Dashboard/AddScholarShip/AddScholarShip.jsx';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path:'/dashboard/profile',
         element:<Admin/>
+      },
+      {
+        path:'/dashboard/addScholarShip',
+        element:<AddScholarship/>
       }
     ]
   }
