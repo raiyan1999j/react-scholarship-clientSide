@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {  FaPlus } from "react-icons/fa";
 import AddCategory from "./AddCategory";
 
@@ -8,10 +8,16 @@ const wrapObject = {
     degreeCategory :["diploma","bachelor","masters"]
 }
 
-export default function Selection(){
+export default function Selection({handleSelection}){
     const [modal,setModal] = useState(false)
     const [state,setState] = useState("");
     
+    const selectedData=(event)=>{
+      const {name,value} = event.target
+
+      handleSelection(name,value);
+    }
+
     const showHide=(condition,subCategory)=>{
         setModal(condition);
         setState(subCategory);
@@ -55,6 +61,8 @@ export default function Selection(){
                   <select
                     className="bg-transparent shadow-md shadow-[#bdc3c7] rounded-md w-[80%] py-2 px-3 placeholder:font-mono placeholder:font-bold placeholder:capitalize font-mono text-gray-500 font-bold"
                     placeholder="subject-category"
+                    name="subject"
+                    onChange={selectedData}
                   >
                     {
                         wrapObject.subjectCategory.map((value,index)=>{
@@ -70,7 +78,7 @@ export default function Selection(){
                 <div>
                 <p className="font-mono capitalize text-white font-medium bg-neutral rounded-full text-center text-sm mb-4">Scholarship Category</p>
                 <div className="flex flex-row">
-                  <select className="bg-transparent shadow-md shadow-[#bdc3c7] rounded-md w-full py-2 px-3 placeholder:font-mono placeholder:font-bold placeholder:capitalize font-mono text-gray-600 font-bold">
+                  <select className="bg-transparent shadow-md shadow-[#bdc3c7] rounded-md w-full py-2 px-3 placeholder:font-mono placeholder:font-bold placeholder:capitalize font-mono text-gray-600 font-bold" name="scholarship" onChange={selectedData}>
                     {
                         wrapObject.scholarCategory.map((value,index)=>{
                             return <option key={index} value={value}>{value}</option>
@@ -85,7 +93,7 @@ export default function Selection(){
                 <div>
                 <p className="font-mono capitalize text-white font-medium bg-neutral rounded-full text-center mb-4">Diploma Category</p>
                 <div className="flex flex-row">
-                  <select className="bg-transparent shadow-md shadow-[#bdc3c7] rounded-md w-full py-2 px-3 placeholder:font-mono placeholder:font-bold placeholder:capitalize font-mono text-gray-600 font-bold">
+                  <select className="bg-transparent shadow-md shadow-[#bdc3c7] rounded-md w-full py-2 px-3 placeholder:font-mono placeholder:font-bold placeholder:capitalize font-mono text-gray-600 font-bold" name="diploma" onChange={selectedData}>
                     {
                         wrapObject.degreeCategory.map((value,index)=>{return <option key={index} value={value}>{value}</option>})
                         }
