@@ -5,12 +5,14 @@ import "../../App.css";
 import Selection from './Selection';
 import { useFormik } from "formik";
 import Calendar from "react-calendar";
+import { publicRoute } from "../../PublicRoute/PublicRoute";
+import { Flip, toast } from "react-toastify";
 
 
 export default function AddScholarship() {
   const [selectOpt,setSelectOpt] = useState({});
   const [imgView,setImg] = useState(null);
-  const [value, onChange] = useState(new Date());
+  const [datePicker, onChange] = useState(new Date());
 
   const formInfo = useFormik({
     initialValues:{
@@ -30,9 +32,26 @@ export default function AddScholarship() {
       scholarship:'',
       diploma:''
     },
-    onSubmit:value=>{
-      console.log(value)
-    }
+    onSubmit:(value,{resetForm})=>{
+      publicRoute.post('/scholarshipData',value)
+      .then((res)=>{
+        if(res.status == 200){
+          toast.success('Added to Database', {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Flip,
+            });
+        }
+      })
+      resetForm()
+    },
+   
   })
 
   const selectionHandle=(name,value)=>{
@@ -72,8 +91,16 @@ export default function AddScholarship() {
   },[selectOpt])
 
   useEffect(()=>{
-    formInfo.setFieldValue('deadline',value)
-  },[value])
+    const dateString = datePicker;
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month= String(date.getMonth() + 1).padStart(2,'0');
+    const day  = String(date.getDate()).padStart(2,'0');
+
+    const formateDate = `${year}-${month}-${day}`;
+
+    formInfo.setFieldValue('deadline',formateDate);
+  },[datePicker])
   return (
     <>
       <section className="px-10 mt-[50px]">
@@ -224,7 +251,7 @@ export default function AddScholarship() {
                 </h2>
               </div>
               <div >
-              <Calendar onChange={onChange} value={value} />
+              <Calendar onChange={onChange} value={datePicker} />
               </div>
             </div>
           </div>
