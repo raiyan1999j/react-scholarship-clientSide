@@ -17,7 +17,7 @@ export default function AddScholarship() {
   const formInfo = useFormik({
     initialValues:{
       university:'',
-      scholarship:'',
+      scholarshipName:'',
       country:'',
       city:'',
       rank:'',
@@ -50,6 +50,7 @@ export default function AddScholarship() {
         }
       })
       resetForm()
+      console.log(value)
     },
    
   })
@@ -127,7 +128,7 @@ export default function AddScholarship() {
                     type="text"
                     placeholder="Scholarship name"
                     className="bg-transparent shadow-md shadow-[#bdc3c7] rounded-md w-full py-2 px-3 placeholder:font-mono placeholder:font-bold placeholder:capitalize"
-                    {...formInfo.getFieldProps('scholarship')}
+                    {...formInfo.getFieldProps('scholarshipName')}
                   />
                 </div>
               </div>

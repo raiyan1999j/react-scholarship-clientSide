@@ -43,7 +43,7 @@ export default function Dashboard() {
                 Add scholarship
               </NavLink>
 
-              <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white">
+              <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to='/dashboard/manageScholarship'>
                 <MdOutlineManageAccounts className="mr-4 text-xl" />
                 Manage scholarship
               </NavLink>
