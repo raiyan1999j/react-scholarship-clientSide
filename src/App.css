@@ -353,4 +353,22 @@ backdrop-filter: blur(3.1px);
 -webkit-backdrop-filter: blur(3.1px);
 border: 1px solid rgba(83, 92, 104, 0.3);
 }
-/* edit-modal cancel-button */
+/* edit-modal add-selection-modal */
+.selectionModal{
+  /* From https://css.glass */
+background: rgba(149, 165, 166, 0.4);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(5px);
+-webkit-backdrop-filter: blur(5px);
+border: 1px solid rgba(149, 165, 166, 0.3);
+}
+.selectionModal input{
+  /* From https://css.glass */
+background: rgba(236, 240, 241, 0.24);
+border-radius: 16px;
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(5px);
+-webkit-backdrop-filter: blur(5px);
+border: 1px solid rgba(236, 240, 241, 0.3);
+}

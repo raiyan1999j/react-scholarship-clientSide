@@ -19,17 +19,18 @@ export default function ManageScholar(){
 
     const modalActive=(value)=>{
         setModal(value);
+        setBox(false)
     }
     useEffect(()=>{
         publicRoute('/getScholarData')
         .then((res)=>{setAllInfo(res.data)})
-    },[])
+    },[allInfo])
     return(
         <>
             <section >
-                <div>
-                <input type="text" placeholder="Type here" className="input input-bordered w-full max-w-xs" />
-                <button>
+                <div className="flex flex-row justify-center my-8">
+                <input type="text" placeholder="Type here" className="py-2 border border-gray-400 bg-transparent rounded-lg w-[30%] placeholder:pl-4" />
+                <button className="btn btn-outline btn-success ml-2">
                 <IoSearchOutline />
                 </button>
                 </div>
@@ -54,7 +55,7 @@ export default function ManageScholar(){
                     </tbody>
                 </table>
 
-                <div className={`fixed top-[50%] right-0 ${box?"w-[20%]":"w-[0%]"} transition-all duration-200 ease-in bg-white rounded-lg py-2 px-2`}>
+                <div className={`fixed top-[50%] right-0 ${box?"w-[20%]":"w-[0%] right-[-5%]"} transition-all duration-200 ease-in bg-white rounded-lg py-2 px-2`}>
                     <OptionBox activeOption={optionActive} activeModal={modalActive}/>
                 </div>
                 {
