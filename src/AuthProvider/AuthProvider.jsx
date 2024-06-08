@@ -41,7 +41,7 @@ export default function AuthProvider({ children }) {
             transition: Flip,
           });
           setLoading(false)
-          publicRoute.get(`/userOperator?email=${value.email}`)
+          publicRoute.get(`/userOperator?email=${value.email}&&name=${value.userName}`)
           .then((res)=>{setOperator(res.data)})
         })
       })
@@ -71,7 +71,7 @@ export default function AuthProvider({ children }) {
           transition: Bounce,
         });
         setLoading(false);
-        publicRoute.get(`/userOperator?email=${value.email}`)
+        publicRoute.get(`/userOperator?email=${value.email}&&name=${userInfo.displayName}`)
         .then((res)=>{setOperator(res.data)})
       })
   };
@@ -94,7 +94,7 @@ export default function AuthProvider({ children }) {
         transition: Bounce,
       });
       setLoading(false)
-      publicRoute.get(`/userOperator?email=${userInfo.user.email}`)
+      publicRoute.get(`/userOperator?email=${userInfo.user.email}&&name=${userInfo.user.displayName}`)
       .then((res)=>{setOperator(res.data)})
     })
   };

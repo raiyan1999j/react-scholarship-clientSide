@@ -9,6 +9,7 @@ import Admin from './Dashboard/Admin/Admin.jsx';
 import Dashboard from './Dashboard/Dashboard.jsx';
 import AddScholarship from './Dashboard/AddScholarShip/AddScholarShip.jsx';
 import ManageScholar from './Dashboard/ManageScholarship/ManageScholar.jsx';
+import ManageUser from './Dashboard/ManageUser/ManageUser.jsx';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path:'/dashboard/manageScholarship',
         element:<ManageScholar/>
+      },
+      {
+        path:'/dashboard/manageUser',
+        element:<ManageUser/>
       }
     ]
   }

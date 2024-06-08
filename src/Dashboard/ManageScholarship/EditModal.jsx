@@ -41,7 +41,7 @@ export default function EditModal({ activeModal, editId }) {
       diploma:`${container.diploma}`
     },
     onSubmit:value=>{
-      publicRoute.post(`/editData?editId=${container._id}`,value)
+      publicRoute.put(`/editData?editId=${container._id}`,value)
       .then((res)=>{
         if(res.status===200){
           toast.success('Update Success', {
