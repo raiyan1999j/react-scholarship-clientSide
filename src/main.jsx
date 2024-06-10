@@ -10,6 +10,7 @@ import Dashboard from './Dashboard/Dashboard.jsx';
 import AddScholarship from './Dashboard/AddScholarShip/AddScholarShip.jsx';
 import ManageScholar from './Dashboard/ManageScholarship/ManageScholar.jsx';
 import ManageUser from './Dashboard/ManageUser/ManageUser.jsx';
+import Home from './Component/Home/Home.jsx';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
         path:'/loginPage',
         element:<LoginPage/>
       },
+      {
+        path:'/home',
+        element:<Home/>
+      }
     ],
   },
   {

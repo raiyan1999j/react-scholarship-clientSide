@@ -16,10 +16,14 @@ export default function App(){
   const signOutUser=()=>{
     userLogout()
   }
+
+  useEffect(()=>{
+    navigate('/home')
+  },[])
   return(
     <>
       <header>
-        <nav className="h-[60px] w-[1200px] rounded-full bg-white shadow-lg mx-auto flex flex-row items-center fixed top-4 z-50 left-[5%]">
+        <nav className="h-[60px] w-[1200px] rounded-full bg-transparent shadow-lg shadow-gray-600 mx-auto flex flex-row items-center fixed top-4 z-50 left-[5.5%]">
           <div className='w-[10%] flex justify-center'>
             <div className='h-[40px] w-10'>
               <img src={logo} alt="logoImg" className='h-full w-full object-cover' />
@@ -28,7 +32,7 @@ export default function App(){
           <div className='w-[70%] flex justify-center'>
             <ul className='flex flex-row justify-center w-[90%] font-semibold text-blue-950 capitalize'>
               <li className=''>
-                <NavLink>
+                <NavLink to="/home">
                   Home
                 </NavLink>
               </li>
