@@ -1,14 +1,17 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import logo from '../public/logo.png';
 import {NavLink, Outlet, useNavigate} from 'react-router-dom';
 import { InfoContainer } from './AuthProvider/AuthProvider';
 import Loader from './Loader/Loader';
 
 export default function App(){
-  const {user} = useContext(InfoContainer);
+  const [navScroll,setNav] = useState(false);
   const navigate = useNavigate();
-  const {userLogout,loading,operator} = useContext(InfoContainer);
+  const {userLogout,loading,operator,user} = useContext(InfoContainer);
 
+  const scrollChange=()=>{
+    window.scrollY > 50? setNav(true) : setNav(false)
+  }
   const loginPage=()=>{
     navigate('/loginPage')
   }
@@ -18,12 +21,19 @@ export default function App(){
   }
 
   useEffect(()=>{
+    window.addEventListener('scroll',scrollChange);
+
+    return ()=>{
+      window.removeEventListener('scroll',scrollChange)
+    }
+  },[])
+  useEffect(()=>{
     navigate('/home')
   },[])
   return(
     <>
       <header>
-        <nav className="h-[60px] w-[1200px] rounded-full bg-transparent shadow-lg shadow-gray-600 mx-auto flex flex-row items-center fixed top-4 z-50 left-[5.5%]">
+        <nav className={`h-[60px] w-[1200px] rounded-full ${navScroll?"bg-white transition-all duration-500":"bg-transparent transition-all duration-500"} shadow-lg shadow-gray-600 mx-auto flex flex-row items-center fixed top-4 z-50 left-[5.5%]`}>
           <div className='w-[10%] flex justify-center'>
             <div className='h-[40px] w-10'>
               <img src={logo} alt="logoImg" className='h-full w-full object-cover' />
@@ -37,7 +47,7 @@ export default function App(){
                 </NavLink>
               </li>
               <li className={`${user?"mx-auto":"ml-auto"}`}>
-                <NavLink>
+                <NavLink to="/allScholars">
                   All Scholarship
                 </NavLink>
               </li>

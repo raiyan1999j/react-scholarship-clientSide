@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import HomeSlider from "./HomeSlider";
 import TopScholar from "./TopScholar";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
+import { useNavigate } from "react-router-dom";
 
 export default function Home(){
-    const [info,setInfo] = useState(null)
+    const [info,setInfo] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(()=>{
         publicRoute('/latestData')
@@ -34,15 +36,11 @@ export default function Home(){
                     <div className="grid grid-cols-[600px_600px_600px_600px_600px_600px_600px] gap-x-6">
                         {
                             info?.map((value,index)=>{
-                                return (
-                                    <>
-                                    <TopScholar allData={value} key={index}/>
-                                    </>
-                                    )
+                                return <TopScholar allData={value} key={index}/>
                             })
                         }
                         <div className="h-[350px] w-full flex justify-center items-center">
-                            <button className="scholarsBtn w-[80%]">
+                            <button className="scholarsBtn w-[80%]" onClick={()=>{navigate('/allScholars')}}>
                                 Show All
                             </button>
                         </div>
