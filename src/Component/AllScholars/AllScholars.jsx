@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
 import { FaPlus } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
-import { limit } from "firebase/firestore";
 
 const optArray = [4,8,12];
 
@@ -14,16 +13,18 @@ export default function AllScholars() {
   const [totalPage, setTotal] = useState(1);
   const [limitation,setLimit] = useState(4);
   const [allInfo, setInfo] = useState(null);
+  const [searchItem,setItem] = useState("");
   const [condition,setCondition] = useState(true);
   const customPageNum = useRef();
   const limitPerPage = useRef(4);
+  const searchBox = useRef();
   const pageArray = [];
   useEffect(() => {
-    publicRoute(`/allScholarData?pageNumber=${pagination}&&limitation=${limitation}`).then((res) => {
+    publicRoute(`/allScholarData?pageNumber=${pagination}&&limitation=${limitation}&&searchItem=${searchItem}`).then((res) => {
       setTotal(res.data.totalPage);
       setInfo(res.data.result);
     });
-  }, [pagination,limitation]);
+  }, [pagination,limitation,searchItem]);
 
   const setPageNumber = (value) => {
     setPage(value);
@@ -34,6 +35,12 @@ export default function AllScholars() {
     const pageNum = customPageNum.current.value;
 
     pageNum== "" ? 4 : Number(optArray.push(pageNum));
+  }
+
+  const searchOpt=()=>{
+    const items = searchBox.current.value;
+
+    setItem(items)
   }
 
   for (let repeat = 1; repeat <= totalPage; repeat++) {
@@ -47,11 +54,12 @@ export default function AllScholars() {
             <div className="w-[80%]">
               <input
                 type="text"
-                className="border py-4 px-4 rounded-xl w-full bg-transparent placeholder:font-mono placeholder:pl-4 placeholder:italic"
+                className="border py-4 px-4 rounded-xl w-full bg-transparent placeholder:font-mono placeholder:pl-4 placeholder:italic capitalize font-semibold text-xl text-blue-950"
                 placeholder="Scholars,Degree or University"
+                ref={searchBox}
               />
             </div>
-            <div className="w-[20%] flex justify-center items-center transition-all duration-300 border rounded-xl hover:cursor-pointer hover:bg-white hover:scale-105 hover:shadow-inner hover:shadow-black/60">
+            <div className="w-[20%] flex justify-center items-center transition-all duration-300 border rounded-xl hover:cursor-pointer hover:bg-white hover:scale-105 hover:shadow-inner hover:shadow-black/60" onClick={searchOpt}>
               <IoSearchOutline />
             </div>
           </div>
