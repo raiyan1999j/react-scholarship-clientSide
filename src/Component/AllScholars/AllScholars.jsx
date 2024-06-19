@@ -43,7 +43,10 @@ export default function AllScholars() {
         </section>
 
         <section className="w-[1200px] mx-auto mt-[100px]">
-          <ScholarCard />
+          {/* <ScholarCard /> */}
+          {allInfo?.map((value,index)=>{
+            return <ScholarCard allData={value} key={index}/>
+          })}
         </section>
 
         <section className="w-[1200px] mx-auto flex justify-end">
