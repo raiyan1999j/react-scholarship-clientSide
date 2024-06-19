@@ -1,6 +1,10 @@
+import { useNavigate } from "react-router-dom";
 
 export default function TopScholar({allData}){
-    const {university,scholarshipName,country,city,application,photo,subject,deadline} = allData;
+    const {university,scholarshipName,country,city,application,photo,subject,deadline,_id} = allData;
+
+    const navigate = useNavigate();
+
     return(
         <>
             <div className="shadow-lg shadow-gray-600 rounded-lg">
@@ -65,7 +69,7 @@ export default function TopScholar({allData}){
                             </p>
                         </div>
                         <div>
-                            <button className="btn-17">
+                            <button className="btn-17" onClick={()=>{navigate(`/details/${_id}`)}}>
                                 Details
                             </button>
                         </div>

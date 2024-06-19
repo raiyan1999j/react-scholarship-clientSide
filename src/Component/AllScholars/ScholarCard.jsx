@@ -1,4 +1,5 @@
 import { BiBadgeCheck } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 export default function ScholarCard({ allData }) {
   const {
     university,
@@ -9,7 +10,9 @@ export default function ScholarCard({ allData }) {
     deadline,
     service,
     photo,
+    _id
   } = allData;
+  const navigate = useNavigate();
   return (
     <>
       <div className="rounded-md shadow-md shadow-gray-400 py-2 px-2 w-[80%] grid grid-cols-[20%_77%] gap-x-4 mb-10">
@@ -75,7 +78,7 @@ export default function ScholarCard({ allData }) {
                 </span>
               </div>
               <div>
-                <button className="scholarsBtn">Details</button>
+                <button className="scholarsBtn" onClick={()=>{navigate(`/details/${_id}`)}}>Details</button>
               </div>
             </div>
           </div>

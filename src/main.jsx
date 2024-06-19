@@ -13,6 +13,9 @@ import ManageUser from './Dashboard/ManageUser/ManageUser.jsx';
 import Home from './Component/Home/Home.jsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AllScholars from './Component/AllScholars/AllScholars.jsx';
+import Details from './Component/Details/Details.jsx';
+import Privet from './Component/Privet/Privet.jsx';
+import { publicRoute } from './PublicRoute/PublicRoute.jsx';
 
 const queryClient = new QueryClient()
 
@@ -32,6 +35,16 @@ const router = createBrowserRouter([
       {
         path:'/allScholars',
         element:<AllScholars/>
+      },
+      {
+        path:'/details/:id',
+        element:<Privet><Details/></Privet>,
+        loader:({params})=>{
+          return publicRoute(`/details/${params.id}`)
+          .then((res)=>{
+            return res.data
+          })
+        }
       }
     ],
   },
