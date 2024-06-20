@@ -20,7 +20,9 @@ export default function ManageScholar() {
   const [modal, setModal] = useState(false);
   const [id, setId] = useState(null);
   const [condition,setCondition] = useState(true);
+  const [searchItem,setSearch] = useState("")
   const pageRef = useRef();
+  const searchBox = useRef();
   const pageArray = [];
 
   const optionActive = (value) => {
@@ -38,11 +40,11 @@ export default function ManageScholar() {
     optArray.push(pageRef.current.value);
   }
   useEffect(() => {
-    publicRoute(`/getScholarData?pageNumber=${pageNumber}&&limitation=${limitation}`).then((res) => {
+    publicRoute(`/getScholarData?pageNumber=${pageNumber}&&limitation=${limitation}&&searchItem=${searchItem}`).then((res) => {
       setAllInfo(res.data.result);
       setTotal(res.data.totalPage);
     });
-  }, [allInfo, pageNumber,limitation]);
+  }, [allInfo, pageNumber,limitation,searchItem]);
 
   for (let repeat = 1; repeat <= totalPage; repeat++) {
     pageArray.push(repeat);
@@ -54,9 +56,10 @@ export default function ManageScholar() {
           <input
             type="text"
             placeholder="Type here"
-            className="py-2 border border-gray-400 bg-transparent rounded-lg w-[30%] placeholder:pl-4"
+            className="py-2 border border-gray-400 bg-transparent rounded-lg w-[30%] placeholder:pl-4 pl-4 capitalize text-base text-gray-500 font-semibold font-mono"
+            ref={searchBox}
           />
-          <button className="btn btn-outline btn-success ml-2">
+          <button className="btn btn-outline btn-success ml-2" onClick={()=>{setSearch(searchBox.current.value)}}>
             <IoSearchOutline />
           </button>
         </div>
