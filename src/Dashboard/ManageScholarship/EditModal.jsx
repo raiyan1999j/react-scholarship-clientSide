@@ -38,7 +38,8 @@ export default function EditModal({ activeModal, editId }) {
       deadline:`${container.deadline}`,
       subject:`${container.subject}`,
       scholarship:`${container.scholarship}`,
-      diploma:`${container.diploma}`
+      diploma:`${container.diploma}`,
+      description:`${container?.description}`
     },
     onSubmit:value=>{
       publicRoute.put(`/editData?editId=${container._id}`,value)
@@ -233,6 +234,10 @@ export default function EditModal({ activeModal, editId }) {
                         {...formInfo.getFieldProps('tuition')}
                       />
                     </div>
+                  </div>
+                  {/* third-row */}
+                  <div>
+                    
                   </div>
                 </div>
               </div>

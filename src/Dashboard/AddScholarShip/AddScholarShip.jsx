@@ -12,9 +12,12 @@ import { Flip, toast } from "react-toastify";
 export default function AddScholarship() {
   const [selectOpt,setSelectOpt] = useState({});
   const [imgView,setImg] = useState(null);
+  const [statement,setStatement]= useState("");
+  const [wordCount,setCount] = useState(0);
   const [datePicker, onChange] = useState(new Date());
 
   const formInfo = useFormik({
+    enableReinitialize: true,
     initialValues:{
       university:'',
       scholarshipName:'',
@@ -30,7 +33,8 @@ export default function AddScholarship() {
       deadline:'',
       subject:'',
       scholarship:'',
-      diploma:''
+      diploma:'',
+      description:`${statement}`
     },
     onSubmit:(value,{resetForm})=>{
       publicRoute.post('/scholarshipData',value)
@@ -50,9 +54,8 @@ export default function AddScholarship() {
         }
       })
       resetForm()
-      console.log(value)
-    },
-   
+      console.log(value.description)
+    }
   })
 
   const selectionHandle=(name,value)=>{
@@ -84,7 +87,18 @@ export default function AddScholarship() {
       data:body
     }).then((res)=>{formInfo.setFieldValue('photo',res.data.data.display_url)})
   }
+  const wordCounter=(event)=>{
+    const inputText = event.target.value;
+    const word = inputText.split(" ");
 
+    if(word.length <= 100){
+      setStatement(inputText);
+      setCount(word.length);
+    }else{
+      const limitWord = word.slice(0,50).joint(" ");
+      setStatement(limitWord)
+    }
+  }
   useEffect(()=>{
     Object.keys(selectOpt).forEach(value=>{
       formInfo.setFieldValue(value,selectOpt[value])
@@ -206,6 +220,16 @@ export default function AddScholarship() {
                     {...formInfo.getFieldProps('email')}
                   />
                 </div>
+              </div>
+              <div>
+              <p className="capitalize font-mono font-medium bg-neutral  text-white text-center rounded-full">Description</p>
+              </div>
+              <div className="h-[250px] w-full relative">
+              <textarea placeholder="description within 100 words" className="absolute h-[85%] w-full mt-4 bg-transparent shadow-md shadow-[#bdc3c7] placeholder:capitalize placeholder:py-4 placeholder:px-4 placeholder:font-mono placeholder:text-xl font-mono text-sm text-gray-600 p-4 resize-none capitalize" value={statement} onChange={wordCounter}>
+              </textarea>
+              <p className="absolute bottom-0 right-4 font-mono text-gray-500">
+                {wordCount}/100
+              </p>
               </div>
             </div>
           </div>

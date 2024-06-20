@@ -16,6 +16,7 @@ import AllScholars from './Component/AllScholars/AllScholars.jsx';
 import Details from './Component/Details/Details.jsx';
 import Privet from './Component/Privet/Privet.jsx';
 import { publicRoute } from './PublicRoute/PublicRoute.jsx';
+import Payment from './Component/Payment/Payment.jsx';
 
 const queryClient = new QueryClient()
 
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
             return res.data
           })
         }
+      },
+      {
+        path:'/payment',
+        element:<Privet><Payment/></Privet>
       }
     ],
   },
