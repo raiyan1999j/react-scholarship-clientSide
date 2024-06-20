@@ -34,7 +34,7 @@ export default function AddScholarship() {
       subject:'',
       scholarship:'',
       diploma:'',
-      description:`${statement}`
+      description:''
     },
     onSubmit:(value,{resetForm})=>{
       publicRoute.post('/scholarshipData',value)
@@ -54,7 +54,7 @@ export default function AddScholarship() {
         }
       })
       resetForm()
-      console.log(value.description)
+      console.log(value)
     }
   })
 
@@ -87,16 +87,20 @@ export default function AddScholarship() {
       data:body
     }).then((res)=>{formInfo.setFieldValue('photo',res.data.data.display_url)})
   }
-  const wordCounter=(event)=>{
+  const wordCounter=async (event)=>{
     const inputText = event.target.value;
     const word = inputText.split(" ");
 
     if(word.length <= 100){
       setStatement(inputText);
       setCount(word.length);
+
+      await formInfo.setFieldValue('description',inputText)
     }else{
-      const limitWord = word.slice(0,50).joint(" ");
+      const limitWord = word.slice(0,100).join(" ");
       setStatement(limitWord)
+
+      await formInfo.setFieldValue('description',limitWord)
     }
   }
   useEffect(()=>{

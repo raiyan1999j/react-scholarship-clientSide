@@ -19,27 +19,29 @@ export default function EditModal({ activeModal, editId }) {
   const [container, setContainer] = useState("");
   const [modal,setModal] = useState(false);
   const [category,setCategory] = useState("");
+  const [wordCounter,setCounter] = useState(0);
+  const [statement,setStatement] = useState(container?.description)
   const optRef = useRef("")
 
   const formInfo = useFormik({
     enableReinitialize: true,
     initialValues:{
-      university:`${container.university}`,
-      scholarshipName:`${container.scholarshipName}`,
-      country:`${container.country}`,
-      city:`${container.city}`,
-      rank:`${container.rank}`,
-      tuition:`${container.tuition}`,
-      application:`${container.application}`,
-      service:`${container.service}`,
-      postDate:`${container.postDate}`,
-      email:`${container.email}`,
-      photo:`${container.photo}`,
-      deadline:`${container.deadline}`,
-      subject:`${container.subject}`,
-      scholarship:`${container.scholarship}`,
-      diploma:`${container.diploma}`,
-      description:`${container?.description}`
+      university:`${container?.university}`,
+      scholarshipName:`${container?.scholarshipName}`,
+      country:`${container?.country}`,
+      city:`${container?.city}`,
+      rank:`${container?.rank}`,
+      tuition:`${container?.tuition}`,
+      application:`${container?.application}`,
+      service:`${container?.service}`,
+      postDate:`${container?.postDate}`,
+      email:`${container?.email}`,
+      photo:`${container?.photo}`,
+      deadline:`${container?.deadline}`,
+      subject:`${container?.subject}`,
+      scholarship:`${container?.scholarship}`,
+      diploma:`${container?.diploma}`,
+      description:`${container?.description==undefined?"":container?.description}`
     },
     onSubmit:value=>{
       publicRoute.put(`/editData?editId=${container._id}`,value)
@@ -80,6 +82,18 @@ export default function EditModal({ activeModal, editId }) {
     }
   }
 
+  const wordLimitation=(event)=>{
+    const inputText = event.target.value;
+    const words = inputText.split(" ").filter(word=> word);
+
+    if(words.length<=100){
+      formInfo.setFieldValue('description',inputText);
+      setCounter(words.length)
+    }else{
+      const limitWord = words.slice(0,100).join(" ");
+      formInfo.setFieldValue('description',limitWord)
+    }
+  }
   useEffect(() => {
     async function loadData() {
       await publicRoute(`/specificId?editId=${editId}`).then((res) => {
@@ -236,8 +250,14 @@ export default function EditModal({ activeModal, editId }) {
                     </div>
                   </div>
                   {/* third-row */}
-                  <div>
-                    
+                  <div className="mt-8 px-9">
+                  <p className="capitalize font-mono font-medium bg-neutral  text-white text-center rounded-full">Description</p>
+                  </div>
+                  <div className="relative w-[90%] h-[250px] mx-auto">
+                    <textarea placeholder="description within 100 words" className="absolute h-[85%] w-full mt-4 bg-transparent shadow-md shadow-[#bdc3c7] placeholder:capitalize placeholder:py-4 placeholder:px-4 placeholder:font-mono placeholder:text-xl font-mono text-sm text-gray-600 p-4 resize-none capitalize" {...formInfo.getFieldProps('description')} onChange={wordLimitation}></textarea>
+                    <p className="absolute bottom-0 right-4 font-mono text-gray-500">
+                      {wordCounter}/100
+                    </p>
                   </div>
                 </div>
               </div>
@@ -258,8 +278,8 @@ export default function EditModal({ activeModal, editId }) {
                           
                           {...formInfo.getFieldProps('subject')}
                         >
-                        <option defaultValue={container.subject}>
-                          {container.subject}
+                        <option defaultValue={container?.subject}>
+                          {container?.subject}
                         </option>
                           {wrapObject.subjectCategory.map((value, index) => {
                             return (
@@ -283,8 +303,8 @@ export default function EditModal({ activeModal, editId }) {
                           className="bg-transparent shadow-xl shadow-gray-600 rounded-md w-full py-2 px-3 placeholder:font-mono placeholder:font-bold placeholder:capitalize font-mono text-gray-600 font-bold"
                           {...formInfo.getFieldProps('scholarship')}
                         >
-                        <option defaultValue={container.scholarship}>
-                          {container.scholarship}
+                        <option defaultValue={container?.scholarship}>
+                          {container?.scholarship}
                         </option>
                           {wrapObject.scholarCategory.map((value, index) => {
                             return (
@@ -307,8 +327,8 @@ export default function EditModal({ activeModal, editId }) {
                         <select className="bg-transparent shadow-xl shadow-gray-600 rounded-md w-full py-2 px-3 placeholder:font-mono placeholder:font-bold placeholder:capitalize font-mono text-gray-600 font-bold"
                         {...formInfo.getFieldProps('diploma')}
                         >
-                        <option defaultValue={container.diploma}>
-                          {container.diploma}
+                        <option defaultValue={container?.diploma}>
+                          {container?.diploma}
                         </option>
                           {wrapObject.degreeCategory.map((value, index) => {
                             return (
