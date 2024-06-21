@@ -1,12 +1,13 @@
 import { useContext, useEffect } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { InfoContainer } from "../AuthProvider/AuthProvider";
-import { FaPaperPlane, FaUser } from "react-icons/fa";
+import { FaEnvelope, FaPaperPlane, FaUser } from "react-icons/fa";
 import {
   MdManageAccounts,
   MdManageHistory,
   MdManageSearch,
   MdOutlineManageAccounts,
+  MdRateReview,
 } from "react-icons/md";
 import { IoReturnDownBackOutline } from "react-icons/io5";
 
@@ -33,35 +34,61 @@ export default function Dashboard() {
           </div>
           <div>
             <div className="flex flex-col pl-8 my-4 capitalize font-mono text-base font-medium">
+            
               <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to='/dashboard/profile'>
                 <FaUser className="mr-4" />
-                Admin profile
+                {operator} profile
               </NavLink>
 
-              <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to="/dashboard/addScholarShip">
+              {
+                operator=='user'?
+                <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to="/dashboard/myApplication">
+                <FaEnvelope className="mr-4" />
+                My application
+              </NavLink>
+                :
+                <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to="/dashboard/addScholarShip">
                 <FaPaperPlane className="mr-4" />
                 Add scholarship
               </NavLink>
-
-              <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to='/dashboard/manageScholarship'>
+              }
+              
+              {
+                operator=='user'?
+                <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to="/dashboard/myReviews">
+                <MdRateReview className="mr-4" />
+                my reviews
+                </NavLink>
+                :
+                <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to='/dashboard/manageScholarship'>
                 <MdOutlineManageAccounts className="mr-4 text-xl" />
                 Manage scholarship
               </NavLink>
-
-              <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white">
+              }
+              
+              {
+                operator=='user'?"":
+                <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white">
                 <MdManageHistory className="mr-4 text-xl" />
                 manage applied scholarship
               </NavLink>
-
-              <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to="/dashboard/manageUser">
+              }
+              
+              {
+                operator=='user'?"":
+                <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to="/dashboard/manageUser">
                 <MdManageAccounts className="mr-4 text-xl" />
                 manage user
               </NavLink>
-
-              <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white">
+              }
+              
+              {
+                operator=='user'?"":
+                <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white">
                 <MdManageSearch className="mr-4 text-xl" />
                 manage review
               </NavLink>
+              }
             </div>
           </div>
 

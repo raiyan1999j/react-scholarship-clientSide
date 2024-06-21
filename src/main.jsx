@@ -17,6 +17,8 @@ import Details from './Component/Details/Details.jsx';
 import Privet from './Component/Privet/Privet.jsx';
 import { publicRoute } from './PublicRoute/PublicRoute.jsx';
 import Payment from './Component/Payment/Payment.jsx';
+import MyApplication from './Dashboard/User/MyApplication/MyApplication.jsx';
+import MyReviews from './Dashboard/User/MyReviews/MyReviews.jsx';
 
 const queryClient = new QueryClient()
 
@@ -72,6 +74,14 @@ const router = createBrowserRouter([
       {
         path:'/dashboard/manageUser',
         element:<ManageUser/>
+      },
+      {
+        path:'/dashboard/myApplication',
+        element:<MyApplication/>
+      },
+      {
+        path:'/dashboard/myReviews',
+        element:<MyReviews/>
       }
     ]
   }
