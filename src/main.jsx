@@ -50,7 +50,13 @@ const router = createBrowserRouter([
         }
       },
       {
-        path:'/payment',
+        path:'/payment/:id',
+        loader:({params})=>{
+          return publicRoute(`/details/${params.id}`)
+          .then((res)=>{
+            return res.data
+          })
+        },
         element:<Privet><Payment/></Privet>
       }
     ],

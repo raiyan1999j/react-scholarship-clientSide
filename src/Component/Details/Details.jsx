@@ -1,4 +1,4 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 
 export default function Details() {
   const {
@@ -15,6 +15,7 @@ export default function Details() {
     photo,
     description
   } = useLoaderData();
+  const navigate = useNavigate();
   return (
     <>
       <section className="w-[1200px] mx-auto mt-[100px]">
@@ -33,6 +34,7 @@ export default function Details() {
 
             <div className="mt-[30px]">
               <table className="table table-zebra-zebra border border-gray-500 w-full">
+              <tbody>
                 <tr>
                   <td className="border border-gray-300/90 w-[40%]">
                     <h2 className="capitalize font-semibold text-base text-indigo-500">
@@ -129,6 +131,7 @@ export default function Details() {
                     </p>
                   </td>
                 </tr>
+                </tbody>
               </table>
             </div>
           </div>
@@ -139,7 +142,7 @@ export default function Details() {
         <div className="grid grid-cols-2 gap-x-5 w-[80%] mx-auto">
           <div></div>
           <div>
-            <button className="w-full border border-black/50 py-4 text-gray-600 font-bold font-sans transition-all duration-500 hover:border-none hover:bg-gray-500/50 hover:text-white hover:scale-95">
+            <button className="w-full border border-black/50 py-4 text-gray-600 font-bold font-sans transition-all duration-500 hover:border-none hover:bg-gray-500/50 hover:text-white hover:scale-95" onClick={()=>{navigate(`/payment/${_id}`)}}>
               Apply scholarship
             </button>
           </div>
