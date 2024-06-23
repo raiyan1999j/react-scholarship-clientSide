@@ -34,7 +34,8 @@ export default function AddScholarship() {
       subject:'',
       scholarship:'',
       diploma:'',
-      description:''
+      description:'',
+      photo:''
     },
     onSubmit:(value,{resetForm})=>{
       publicRoute.post('/scholarshipData',value)
