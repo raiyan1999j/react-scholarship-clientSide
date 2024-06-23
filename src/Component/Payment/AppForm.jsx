@@ -1,26 +1,15 @@
 import { useFormik } from "formik";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaImages } from "react-icons/fa";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
-
-const degreeArray = [];
+import { InfoContainer } from "../../AuthProvider/AuthProvider";
+import axios from "axios";
 
 export default function AppForm({preDefined}) {
   const [profile,setProfile] = useState();
   const [degreeContainer,setDegree] = useState([]);
 
-  const imgHandler=(event)=>{
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend=()=>{
-      setProfile(reader.result)
-    }
-
-    if(file){
-      reader.readAsDataURL(file)
-    }
-  }
+  const {user} = useContext(InfoContainer)
 
   const formInfo=useFormik({
     enableReinitialize:true,
@@ -34,15 +23,57 @@ export default function AppForm({preDefined}) {
      studyGap:'',
      ssc:'',
      hsc:'',
+     photo:'',
      subject:`${preDefined.subject}`,
      scholarship:`${preDefined.scholarshipName}`,
-     university:`${preDefined.university}`
+     university:`${preDefined.university}`,
+     user_name:`${user.displayName}`,
+     user_email:`${user.email}`,
+     scholarship_id:`${preDefined._id}`
     },
     onSubmit:value=>{
-      console.log(value)
+      const base = new Date();
+      
+      const year = base.getFullYear();
+      const month= base.getMonth() + 1;
+      const date = base.getDate();
+
+      const currentDate = `${year}-${month}-${date}`;
+
+      value.currentDate = currentDate;
+
+      publicRoute.post('/application',value)
+      .then((res)=>{
+        if(res.status == 200){
+          console.log('successfully done')
+        }
+      })
     }
   })
   
+  const imgHandler=async (event)=>{
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    const body = new FormData();
+
+    body.set('key',import.meta.env.VITE_IMGBB);
+    body.append('image',file);
+
+    reader.onloadend=()=>{
+      setProfile(reader.result)
+    }
+
+    if(file){
+      reader.readAsDataURL(file)
+    }
+
+    await axios({
+      method:'post',
+      url:'https://api.imgbb.com/1/upload',
+      data:body
+    }).then((res)=>{formInfo.setFieldValue('photo',res.data.data.display_url)})
+  }
+
   useEffect(()=>{
     publicRoute(`/universityDegree?institute=${preDefined.university}`)
     .then((res)=>{
@@ -121,9 +152,6 @@ export default function AppForm({preDefined}) {
             <div className="w-full">
             <select className="select rounded-none border border-b-blue-600 w-[50%] max-w-xs text-rose-600/60 font-mono font-bold text-base capitalize pl-0" {...formInfo.getFieldProps('degree')}>
             <option disabled={true} value="">Select Degree</option>
-              {/* <option className="text-blue-600/60 font-mono font-semibold text-base">Male</option>
-              <option className="text-blue-600/60 font-mono font-semibold text-base">Female</option>
-              <option className="text-blue-600/60 font-mono font-semibold text-base">Others</option> */}
               {
                 degreeContainer.map((value,index)=>{
                   return <option value={value.diploma} key={index}>
@@ -134,12 +162,7 @@ export default function AppForm({preDefined}) {
             </select>
             </div>
             <div className="w-full flex justify-end pr-9">
-            <select className="select rounded-none border border-b-blue-600 w-[50%] max-w-xs text-rose-600/60 font-mono font-bold text-base capitalize pl-0" {...formInfo.getFieldProps('studyGap')}>
-            <option disabled={true} value="">Study gap(optional)</option>
-              <option className="text-blue-600/60 font-mono font-semibold text-base">Male</option>
-              <option className="text-blue-600/60 font-mono font-semibold text-base">Female</option>
-              <option className="text-blue-600/60 font-mono font-semibold text-base">Others</option>
-            </select>
+            <input type="number" className="w-[50%] py-2 text-rose-600/60 font-mono font-semibold text-base bg-transparent border border-b-blue-600 placeholder:text-blue-600/60  placeholder:font-mono placeholder:font-bold placeholder:text-base placeholder:capitalize" placeholder="Study gap (optional)" {...formInfo.getFieldProps('studyGap')}/>
             </div>
           </div>
 
@@ -154,10 +177,10 @@ export default function AppForm({preDefined}) {
 
           <div className="flex flex-row w-[100%] mx-auto mb-4">
             <div className="w-full">
-            <input type="text" placeholder="subject category " className="py-2 bg-transparent border-b-blue-600 border w-[50%] text-rose-600/60 font-mono font-semibold text-base placeholder:text-blue-600/60 placeholder:font-mono placeholder:font-bold placeholder:text-base placeholder:capitalize" {...formInfo.getFieldProps('subject')}/>
+            <input type="text" placeholder="subject category " className="py-2 bg-transparent border-b-blue-600 border w-[50%] text-rose-600/60 font-mono font-semibold text-base placeholder:text-blue-600/60 placeholder:font-mono placeholder:font-bold placeholder:text-base placeholder:capitalize hover:cursor-not-allowed" disabled {...formInfo.getFieldProps('subject')}/>
             </div>
             <div className="w-full flex justify-end pr-9">
-            <input type="text" placeholder="scholarship category" className="py-2 bg-transparent border-b-blue-600 border w-[50%] text-rose-600/60 font-mono font-semibold text-base placeholder:text-blue-600/60 placeholder:font-mono placeholder:font-bold placeholder:text-base placeholder:capitalize" {...formInfo.getFieldProps('scholarship')}/>
+            <input type="text" placeholder="scholarship category" className="py-2 bg-transparent border-b-blue-600 border w-[50%] text-rose-600/60 font-mono font-semibold text-base placeholder:text-blue-600/60 placeholder:font-mono placeholder:font-bold placeholder:text-base placeholder:capitalize hover:cursor-not-allowed" disabled {...formInfo.getFieldProps('scholarship')}/>
             </div>
           </div>
 
