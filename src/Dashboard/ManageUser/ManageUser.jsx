@@ -45,7 +45,6 @@ export default function ManageUser() {
       confirmButtonText: "Yes",
       denyButtonText: `No`
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         Swal.fire("User removed!", "", "success");
         publicRoute.delete(`/removeUser?userId=${value}`)

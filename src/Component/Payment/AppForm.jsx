@@ -4,10 +4,21 @@ import { FaImages } from "react-icons/fa";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
 import { InfoContainer } from "../../AuthProvider/AuthProvider";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { cssTransition, toast } from "react-toastify";
+
+const customAnimation = cssTransition({
+  enter:"animate__animated animate__fadeInLeft",
+  exit:"animate__animated animate__flipOutX",
+  appendPosition: false,
+  collapse: true,
+  collapseDuration: 300
+})
 
 export default function AppForm({preDefined}) {
   const [profile,setProfile] = useState();
   const [degreeContainer,setDegree] = useState([]);
+  const navigate = useNavigate();
 
   const {user} = useContext(InfoContainer)
 
@@ -45,7 +56,13 @@ export default function AppForm({preDefined}) {
       publicRoute.post('/application',value)
       .then((res)=>{
         if(res.status == 200){
-          console.log('successfully done')
+          toast.success('Applied successfully',{
+            transition: customAnimation,
+            autoClose: 2000
+          })
+          setTimeout(()=>{
+            navigate('/home')
+          },1000)
         }
       })
     }
