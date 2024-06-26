@@ -3,15 +3,24 @@ import { InfoContainer } from "../../../AuthProvider/AuthProvider";
 import { publicRoute } from "../../../PublicRoute/PublicRoute";
 import TableGroupBtn from './TableGroupBtn';
 import { CiMenuKebab } from "react-icons/ci";
+import Review from "./Review";
 
 export default function MyApplication() {
   const [allInfo, setAllInfo] = useState([]);
   const { user } = useContext(InfoContainer);
   const [box,setBox] = useState(false);
-  const btnRef = useRef(null);
+  const [review,setReview] = useState(false)
 
   const menuTab=(value)=>{
     // setBox(true)
+  }
+
+  const boxHandle=(value)=>{
+    setBox(value);
+  }
+
+  const reviewModal=(value)=>{
+    setReview(value)
   }
   useEffect(() => {
     publicRoute(`/userApplied/${user.email}`).then((res) => {
@@ -24,10 +33,8 @@ export default function MyApplication() {
       // console.dir(event.target.parentElement)
       if(event.target.parentElement.classList.contains('btnTest')){
         setBox(true)
-        console.log(event.target.parentElement)
       }else{
         setBox(false)
-        console.log(event.target.parentElement)
       }
     }
 
@@ -93,8 +100,13 @@ export default function MyApplication() {
             box ? "w-[20%]" : "w-[0%] right-[-5%]"
           } transition-all duration-200 ease-in bg-white rounded-lg py-2 px-2`}
         >
-            <TableGroupBtn/>
+            <TableGroupBtn
+            modalReview={reviewModal} 
+            handleBox={boxHandle}/>
         </div>
+        {
+          review?<Review modalReview={reviewModal} />:""
+        }
       </section>
     </>
   );

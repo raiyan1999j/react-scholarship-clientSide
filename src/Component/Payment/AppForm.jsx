@@ -40,7 +40,9 @@ export default function AppForm({preDefined}) {
      university:`${preDefined.university}`,
      user_name:`${user.displayName}`,
      user_email:`${user.email}`,
-     scholarship_id:`${preDefined._id}`
+     scholarship_id:`${preDefined._id}`,
+     application:`${preDefined.application}`,
+     service:`${preDefined.service}`
     },
     onSubmit:value=>{
       const base = new Date();
