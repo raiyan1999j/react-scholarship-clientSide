@@ -2,11 +2,32 @@ import { useEffect } from "react";
 import { FaInfo } from "react-icons/fa";
 import { LuClipboardEdit } from "react-icons/lu";
 import { MdOutlineCancel, MdRateReview } from "react-icons/md";
+import { publicRoute } from "../../../PublicRoute/PublicRoute";
+import { Bounce, toast } from "react-toastify";
 
-export default function TableGroupBtn({handleBox,modalReview}){
+export default function TableGroupBtn({handleBox,modalReview,trackingNum}){
     const reviewOpt=()=>{
         handleBox(false)
-        modalReview(true)
+        // modalReview(true)
+
+        publicRoute(`/checkExistence?tracking=${trackingNum}`)
+        .then((res)=>{
+            if(!res.data){
+                modalReview(true)
+            }else{
+                toast.warn('Feedback already added', {
+                    position: "top-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "colored",
+                    transition:Bounce
+                    });
+            }
+        })
     }
 
     return(
