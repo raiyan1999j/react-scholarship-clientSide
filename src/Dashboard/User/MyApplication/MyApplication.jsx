@@ -9,10 +9,11 @@ export default function MyApplication() {
   const [allInfo, setAllInfo] = useState([]);
   const { user } = useContext(InfoContainer);
   const [box,setBox] = useState(false);
-  const [review,setReview] = useState(false)
+  const [review,setReview] = useState(false);
+  const [tracking,setTracking] = useState(null);
 
   const menuTab=(value)=>{
-    // setBox(true)
+    setTracking(value);
   }
 
   const boxHandle=(value)=>{
@@ -24,7 +25,7 @@ export default function MyApplication() {
   }
   useEffect(() => {
     publicRoute(`/userApplied/${user.email}`).then((res) => {
-      setAllInfo(res.data);
+      setAllInfo(res.data)
     });
   }, []);
 
@@ -84,7 +85,7 @@ export default function MyApplication() {
                     <td></td>
                     <td >
                       <button className="btnTest text-xl"
-                        onClick={()=>{menuTab(value._id)}}
+                        onClick={()=>{menuTab(value.scholarship_id)}}
                       >
                         <CiMenuKebab />
                       </button>
@@ -102,10 +103,11 @@ export default function MyApplication() {
         >
             <TableGroupBtn
             modalReview={reviewModal} 
-            handleBox={boxHandle}/>
+            handleBox={boxHandle}
+            />
         </div>
         {
-          review?<Review modalReview={reviewModal} />:""
+          review?<Review modalReview={reviewModal} idTracking={tracking} />:""
         }
       </section>
     </>
