@@ -1,8 +1,9 @@
 import { useFormik } from "formik";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { InfoContainer } from "../../../AuthProvider/AuthProvider";
 import { publicRoute } from "../../../PublicRoute/PublicRoute";
 import { cssTransition, toast } from "react-toastify";
+import Rating from '@mui/material/Rating';
 
 const customAnimation = cssTransition({
   enter: "animate__animated animate__slideInRight",
@@ -18,6 +19,11 @@ export default function Review({ modalReview, idTracking }) {
   const [ratingPoint, setRating] = useState();
   const [addInfo, setInfo] = useState([]);
   const { user } = useContext(InfoContainer);
+
+  const starRating=(event)=>{
+    // console.log(event.target.defaultValue)
+    setRating(event.target.defaultValue)
+  }
 
   const viewBox = () => {
     setModal(false);
@@ -96,56 +102,7 @@ export default function Review({ modalReview, idTracking }) {
               <div className=" w-1/2">
                 <h5 className="text-sm font-black">rating:</h5>
                 <div>
-                  <div className="rating rating-sm rating-half">
-                    <input
-                      type="radio"
-                      name="rating-10"
-                      className="rating-hidden"
-                      defaultChecked
-                    />
-                    <input
-                      type="radio"
-                      name="rating-10"
-                      className="mask mask-star-2 mask-half-1 bg-green-500"
-                      value="0.5"
-                      onChange={ratingTrack}
-                    />
-                    <input
-                      type="radio"
-                      name="rating-10"
-                      className="mask mask-star-2 mask-half-2 bg-green-500"
-                      value="1"
-                      onChange={ratingTrack}
-                    />
-                    <input
-                      type="radio"
-                      name="rating-10"
-                      className="mask mask-star-2 mask-half-1 bg-green-500"
-                      value="1.5"
-                      onChange={ratingTrack}
-                    />
-                    <input
-                      type="radio"
-                      name="rating-10"
-                      className="mask mask-star-2 mask-half-2 bg-green-500"
-                      value="2"
-                      onChange={ratingTrack}
-                    />
-                    <input
-                      type="radio"
-                      name="rating-10"
-                      className="mask mask-star-2 mask-half-1 bg-green-500"
-                      value="2.5"
-                      onChange={ratingTrack}
-                    />
-                    <input
-                      type="radio"
-                      name="rating-10"
-                      className="mask mask-star-2 mask-half-2 bg-green-500"
-                      value="3"
-                      onChange={ratingTrack}
-                    />
-                  </div>
+                <Rating name="half-rating" defaultValue={0} precision={0.5} onChange={starRating}/>
                 </div>
               </div>
               <div className="w-1/2">

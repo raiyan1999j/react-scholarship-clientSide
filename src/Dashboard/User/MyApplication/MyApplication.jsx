@@ -31,7 +31,6 @@ export default function MyApplication() {
 
   useEffect(()=>{
     const clickHandler=(event)=>{
-      // console.dir(event.target.parentElement)
       if(event.target.parentElement.classList.contains('btnTest')){
         setBox(true)
       }else{
