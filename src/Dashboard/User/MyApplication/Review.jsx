@@ -32,10 +32,6 @@ export default function Review({ modalReview, idTracking }) {
     }, 500);
   };
 
-  const ratingTrack = (event) => {
-    setRating(event.target.value);
-  };
-
   const formInfo = useFormik({
     enableReinitialize: true,
     initialValues: {
