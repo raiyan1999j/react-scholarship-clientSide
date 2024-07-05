@@ -1,6 +1,11 @@
+import { Rating } from "@mui/material";
+import { useEffect, useState } from "react";
 import { BiBadgeCheck } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import { publicRoute } from "../../PublicRoute/PublicRoute";
 export default function ScholarCard({ allData }) {
+  const [condition,setCondition] = useState(true);
+  const [ratingHolder,setHolder] = useState();
   const {
     university,
     scholarshipName,
@@ -10,9 +15,29 @@ export default function ScholarCard({ allData }) {
     deadline,
     service,
     photo,
-    _id
+    _id,
   } = allData;
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    publicRoute(`/ratingCollector?university=${university}`)
+    .then((res)=>{
+      const step1 = res.data;
+      const array = [];
+      let point;
+
+      step1.map((value)=>{
+        array.push(Number(value.rating))
+      })
+
+      point = array.reduce((acc,current)=>{
+        return acc += current;
+      },0)
+
+      setHolder(point/step1.length)
+      setCondition(false)
+    })
+  },[])
   return (
     <>
       <div className="rounded-md shadow-md shadow-gray-400 py-2 px-2 w-[80%] grid grid-cols-[20%_77%] gap-x-4 mb-10">
@@ -68,17 +93,30 @@ export default function ScholarCard({ allData }) {
                 {service}
               </p>
             </div>
-            <div className="flex flex-row justify-between w-[100%] mx-auto">
+            <div className="flex flex-row items-center justify-between w-[100%] mx-auto">
               <div className="flex flex-row items-center">
                 <span className="mr-2">
                   <BiBadgeCheck />
                 </span>
-                <span className="capitalize text-bold font-serif text-indigo-700">
+                <span className="capitalize text-bold font-serif text-indigo-700 mr-4">
                   rating
                 </span>
+                <div className="flex items-center">
+                {condition?<span className="loading loading-dots loading-md text-rose-500"></span>:
+                <Rating defaultValue={ratingHolder} precision={0.5} readOnly size="small"/>
+                }
               </div>
+              </div>
+              
               <div>
-                <button className="scholarsBtn" onClick={()=>{navigate(`/details/${_id}`)}}>Details</button>
+                <button
+                  className="scholarsBtn"
+                  onClick={() => {
+                    navigate(`/details/${_id}`);
+                  }}
+                >
+                  Details
+                </button>
               </div>
             </div>
           </div>

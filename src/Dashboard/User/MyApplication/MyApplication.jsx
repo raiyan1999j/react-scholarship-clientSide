@@ -103,7 +103,8 @@ export default function MyApplication() {
             <TableGroupBtn
             modalReview={reviewModal} 
             handleBox={boxHandle}
-            trackingNum={tracking}
+            trackingEmail={user.email}
+            trackingId={tracking}
             />
         </div>
         {

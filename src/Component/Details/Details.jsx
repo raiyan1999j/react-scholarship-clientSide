@@ -1,6 +1,16 @@
+import { useEffect, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
+import { publicRoute } from "../../PublicRoute/PublicRoute";
+import Loader from '../../Loader/Loader';
+import ReviewSlider from "./ReviewSlider";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
 
 export default function Details() {
+  const [loadCon,setCondition] = useState(true);
+  const [reviewData,setData] = useState();
   const {
     _id,
     university,
@@ -16,6 +26,15 @@ export default function Details() {
     description
   } = useLoaderData();
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    publicRoute(`/universityBaseCom?university=${university}`)
+    .then((res)=>{
+      setData(res.data)
+    }).then(()=>{
+      setCondition(false)
+    })
+  },[])
   return (
     <>
       <section className="w-[1200px] mx-auto mt-[100px]">
@@ -149,10 +168,25 @@ export default function Details() {
         </div>
       </section>
 
-      <section className="w-[1200px] mx-auto mt-10">
+      <section className="w-[1200px] mx-auto my-10 py-10">
         <div className="flex flex-col w-full border-opacity-50">
           <div className="divider font-bold text-gray-500">Reviews</div>
         </div>
+        {
+          loadCon?<div className="w-full flex justify-center items-center"><Loader/></div>:
+          <Swiper className="mySwiper" modules={[Pagination]} grabCursor={true}
+        pagination={{
+          clickable: true,
+        }}>
+            {
+              reviewData.map((value,index)=>{
+                return <SwiperSlide key={index}>
+                <ReviewSlider information={value}/>
+                </SwiperSlide>
+              })
+            }
+          </Swiper>
+        }
       </section>
     </>
   );

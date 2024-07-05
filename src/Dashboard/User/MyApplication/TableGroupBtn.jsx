@@ -5,12 +5,12 @@ import { MdOutlineCancel, MdRateReview } from "react-icons/md";
 import { publicRoute } from "../../../PublicRoute/PublicRoute";
 import { Bounce, toast } from "react-toastify";
 
-export default function TableGroupBtn({handleBox,modalReview,trackingNum}){
+export default function TableGroupBtn({handleBox,modalReview,trackingEmail,trackingId}){
     const reviewOpt=()=>{
         handleBox(false)
         // modalReview(true)
 
-        publicRoute(`/checkExistence?tracking=${trackingNum}`)
+        publicRoute(`/checkExistence?trackEmail=${trackingEmail}&&trackId=${trackingId}`)
         .then((res)=>{
             if(!res.data){
                 modalReview(true)
