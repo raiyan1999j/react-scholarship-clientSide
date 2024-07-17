@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
 import  Rating  from "@mui/material/Rating";
@@ -6,6 +6,7 @@ import  Rating  from "@mui/material/Rating";
 export default function TopScholar({ allData }) {
   const [ratingHolder,setHolder] = useState();
   const [condition,setCondition] = useState(true);
+  const dragRef = useRef();
   const {
     university,
     scholarshipName,
@@ -39,8 +40,7 @@ export default function TopScholar({ allData }) {
         setHolder(point/step1.length)
         setCondition(false)
     })
-  },[])
-
+  },[]);
   
   return (
     <>

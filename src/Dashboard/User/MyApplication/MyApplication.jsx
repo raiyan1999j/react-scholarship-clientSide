@@ -24,7 +24,7 @@ export default function MyApplication() {
     setReview(value)
   }
   useEffect(() => {
-    publicRoute(`/userApplied/${user.email}`).then((res) => {
+    publicRoute(`/userApplied/${user?.email}`).then((res) => {
       setAllInfo(res.data)
     });
   }, []);
@@ -103,7 +103,7 @@ export default function MyApplication() {
             <TableGroupBtn
             modalReview={reviewModal} 
             handleBox={boxHandle}
-            trackingEmail={user.email}
+            trackingEmail={user?.email}
             trackingId={tracking}
             />
         </div>

@@ -15,17 +15,12 @@ export default function AllScholars() {
   const [allInfo, setInfo] = useState(null);
   const [searchItem,setItem] = useState("");
   const [condition,setCondition] = useState(true);
+  const [mainPageLoad,setMainPageLoad] = useState(false);
   const customPageNum = useRef();
   const limitPerPage = useRef(4);
   const searchBox = useRef();
   const pageArray = [];
-  useEffect(() => {
-    publicRoute(`/allScholarData?pageNumber=${pagination}&&limitation=${limitation}&&searchItem=${searchItem}`).then((res) => {
-      setTotal(res.data.totalPage);
-      setInfo(res.data.result);
-    });
-  }, [pagination,limitation,searchItem]);
-
+  
   const setPageNumber = (value) => {
     setPage(value);
   };
@@ -46,8 +41,23 @@ export default function AllScholars() {
   for (let repeat = 1; repeat <= totalPage; repeat++) {
     pageArray.push(repeat);
   }
+
+  useEffect(() => {
+    setMainPageLoad(true);
+
+      publicRoute(`/allScholarData?pageNumber=${pagination}&&limitation=${limitation}&&searchItem=${searchItem}`).then((res) => {
+        setTotal(res.data.totalPage);
+        setInfo(res.data.result);
+        setMainPageLoad(false)
+      });
+  }, [pagination,limitation,searchItem]);
   return (
     <>
+    {
+      mainPageLoad?
+      <div className="h-screen w-full flex justify-center items-center">
+      <span className="loading loading-ring loading-lg"></span>
+      </div>:
       <section className="bg-dashNav bg-no-repeat bg-cover">
         <section className="w-[1200px] mx-auto pt-[100px]">
           <div className="w-[30%] mx-auto rounded-xl shadow-xl shadow-black/50 flex flex-row py-2 px-4">
@@ -112,6 +122,8 @@ export default function AllScholars() {
           </div>
         </section>
       </section>
+    }
+      
     </>
   );
 }

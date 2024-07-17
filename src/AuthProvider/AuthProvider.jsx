@@ -71,6 +71,7 @@ export default function AuthProvider({ children }) {
           transition: Bounce,
         });
         setLoading(false);
+        
         publicRoute.get(`/userOperator?email=${value.email}&&name=${userInfo.displayName}`)
         .then((res)=>{setOperator(res.data)})
       })

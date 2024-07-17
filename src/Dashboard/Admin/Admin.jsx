@@ -3,6 +3,7 @@ import "../../App.css";
 import { InfoContainer } from "../../AuthProvider/AuthProvider";
 import { FaCamera } from "react-icons/fa";
 import axios from "axios";
+import Loader from "../../Loader/Loader";
 
 export default function Admin() {
   const {operator,user,adminUpdateProfile} = useContext(InfoContainer);
@@ -49,6 +50,8 @@ export default function Admin() {
   }
   return (
     <>
+    {
+      user?
       <div className="card py-6 px-4 w-[150px] mt-[20%] mx-auto bg-login-main text-white capitalize font-mono">
         <div className="h-[80px] w-[80px] relative">
           <img src={img!=null?img:user?.photoURL} alt="profileImg" className="h-full w-full rounded-full object-cover" />
@@ -78,7 +81,12 @@ export default function Admin() {
           <button onClick={()=>{setEdit(!edit)}} className="card-btn-glass py-2 w-full text-center hover:card-btn-glassHover">Edit</button>
         }
         </div>
+      </div>:
+      <div className="h-screen w-full flex justify-center items-center">
+        <Loader width="150"/>
       </div>
+    }
+      
     </>
   );
 }

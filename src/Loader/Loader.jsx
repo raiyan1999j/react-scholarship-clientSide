@@ -1,9 +1,9 @@
 import '../App.css';
 
-export default function Loader(){
+export default function Loader({width}){
     return(
         <>
-            <div className="loader">
+            <div className={`loader ${width?`w-[${width}px]`:"w-[50px]"}`}>
                 
             </div>
         </>

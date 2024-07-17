@@ -10,6 +10,7 @@ import {
   MdRateReview,
 } from "react-icons/md";
 import { IoReturnDownBackOutline } from "react-icons/io5";
+import Loader from "../Loader/Loader";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -33,6 +34,8 @@ export default function Dashboard() {
             <p className="badge badge-neutral mt-4">{user?.displayName}</p>
           </div>
           <div>
+          {
+            user?
             <div className="flex flex-col pl-8 my-4 capitalize font-mono text-base font-medium">
             
               <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to='/dashboard/profile'>
@@ -89,7 +92,12 @@ export default function Dashboard() {
                 manage review
               </NavLink>
               }
+            </div>:
+            <div className="h-full w-full flex flex-row justify-center items-center">
+              <Loader width="150"/>
             </div>
+          }
+            
           </div>
 
           <div className="w-full bg-sky-300 text-white hover:cursor-pointer" onClick={()=>{navigate('/')}}> 
@@ -101,6 +109,7 @@ export default function Dashboard() {
         </nav>
       </header>
 
+      
       <main className="ml-[300px]">
         <Outlet/>
       </main>

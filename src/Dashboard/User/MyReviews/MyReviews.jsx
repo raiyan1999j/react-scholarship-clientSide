@@ -18,7 +18,7 @@ export default function MyReviews() {
   }
 
   useEffect(() => {
-    publicRoute(`/specificReview?email=${user.email}`).then((res) => {
+    publicRoute(`/specificReview?email=${user?.email}`).then((res) => {
       setInfo(res.data);
     });
   }, []);
