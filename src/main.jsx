@@ -19,6 +19,7 @@ import { publicRoute } from "./PublicRoute/PublicRoute.jsx";
 import Payment from "./Component/Payment/Payment.jsx";
 import MyApplication from "./Dashboard/User/MyApplication/MyApplication.jsx";
 import MyReviews from "./Dashboard/User/MyReviews/MyReviews.jsx";
+import ErrorHandle from "./ErrorHandle/ErrorHandle.jsx";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement:<ErrorHandle/>,
     children: [
       {
         path: "/loginPage",
@@ -70,6 +72,7 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />,
+    errorElement:<ErrorHandle/>,
     children: [
       {
         path: "/dashboard/profile",

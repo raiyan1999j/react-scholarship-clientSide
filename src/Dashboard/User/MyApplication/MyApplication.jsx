@@ -24,8 +24,12 @@ export default function MyApplication() {
     setReview(value)
   }
   useEffect(() => {
-    publicRoute(`/userApplied/${user?.email}`).then((res) => {
-      setAllInfo(res.data)
+    publicRoute(`/userApplied/${user?.email}`,{withCredentials:true}).then((res) => {
+      if(res.status == 200){
+        setAllInfo(res.data)
+      }else{
+        console.log('bad request');
+      }
     });
   }, []);
 
