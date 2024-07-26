@@ -7,6 +7,8 @@ import Loader from "../../Loader/Loader";
 import "../../App.css"
 import { useFormik } from "formik";
 import { Slide, toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
+import ErrorCompo from "../../ErrorCompo/ErrorCompo";
 
 const wrapObject = {
   subjectCategory: ["agriculture", "Engineering", "doctor"],
@@ -14,53 +16,59 @@ const wrapObject = {
   degreeCategory: ["diploma", "bachelor", "masters"],
 };
 
-export default function EditModal({ activeModal, editId }) {
+export default function EditModal({ activeModal, editId, dataUpdate }) {
   const [datePicker, onChange] = useState(new Date());
-  const [container, setContainer] = useState("");
   const [modal,setModal] = useState(false);
   const [category,setCategory] = useState("");
   const [wordCounter,setCounter] = useState(0);
-  const [statement,setStatement] = useState(container?.description)
   const optRef = useRef("")
+  const {isPending,error,data} = useQuery({
+    queryKey:['editData'],
+    queryFn:()=>{
+      return publicRoute(`/specificId?editId=${editId}`)
+      .then(res=>res.data)
+    }
+  })
 
   const formInfo = useFormik({
     enableReinitialize: true,
     initialValues:{
-      university:`${container?.university}`,
-      scholarshipName:`${container?.scholarshipName}`,
-      country:`${container?.country}`,
-      city:`${container?.city}`,
-      rank:`${container?.rank}`,
-      tuition:`${container?.tuition}`,
-      application:`${container?.application}`,
-      service:`${container?.service}`,
-      postDate:`${container?.postDate}`,
-      email:`${container?.email}`,
-      photo:`${container?.photo}`,
-      deadline:`${container?.deadline}`,
-      subject:`${container?.subject}`,
-      scholarship:`${container?.scholarship}`,
-      diploma:`${container?.diploma}`,
-      description:`${container?.description==undefined?"":container?.description}`
+      university:`${data?.university}`,
+      scholarshipName:`${data?.scholarshipName}`,
+      country:`${data?.country}`,
+      city:`${data?.city}`,
+      rank:`${data?.rank}`,
+      tuition:`${data?.tuition}`,
+      application:`${data?.application}`,
+      service:`${data?.service}`,
+      postDate:`${data?.postDate}`,
+      email:`${data?.email}`,
+      photo:`${data?.photo}`,
+      deadline:`${data?.deadline}`,
+      subject:`${data?.subject}`,
+      scholarship:`${data?.scholarship}`,
+      diploma:`${data?.diploma}`,
+      description:`${data?.description==undefined?"":data?.description}`
     },
     onSubmit:value=>{
-      publicRoute.put(`/editData?editId=${container._id}`,value)
-      .then((res)=>{
-        if(res.status===200){
-          toast.success('Update Success', {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            theme: "colored",
-            transition: Slide,
-            });
-        }
-      }).then(()=>{
-        activeModal(false)
-      })
+      // publicRoute.put(`/editData?editId=${data._id}`,value)
+      // .then((res)=>{
+      //   if(res.status===200){
+      //     toast.success('Update Success', {
+      //       position: "top-right",
+      //       autoClose: 3000,
+      //       hideProgressBar: false,
+      //       closeOnClick: true,
+      //       pauseOnHover: true,
+      //       draggable: true,
+      //       theme: "colored",
+      //       transition: Slide,
+      //       });
+      //   }
+      // }).then(()=>{
+      //   activeModal(false)
+      // })
+      dataUpdate(data._id,value)
     }
   })
 
@@ -94,15 +102,15 @@ export default function EditModal({ activeModal, editId }) {
       formInfo.setFieldValue('description',limitWord)
     }
   }
-  useEffect(() => {
-    async function loadData() {
-      await publicRoute(`/specificId?editId=${editId}`).then((res) => {
-        setContainer(res.data);
-      });
-    }
+  // useEffect(() => {
+  //   async function loadData() {
+  //     await publicRoute(`/specificId?editId=${editId}`).then((res) => {
+  //       setContainer(res.data);
+  //     });
+  //   }
 
-    loadData();
-  }, [editId]);
+  //   loadData();
+  // }, [editId]);
 
   useEffect(() => {
     function loadSelectionData() {
@@ -127,7 +135,15 @@ export default function EditModal({ activeModal, editId }) {
   }, []);
   return (
     <>
-      {container ? (
+      {
+        isPending?
+        <div className="flex h-screen w-full justify-center items-center">
+          <Loader/>
+        </div>:
+        error?
+        <div className="flex h-screen w-full justify-center items-center">
+          <ErrorCompo/>
+        </div>:
         <section className="w-[1200px] mx-auto">
           <div className="flex flex-row justify-end mt-14">
             <button
@@ -149,7 +165,7 @@ export default function EditModal({ activeModal, editId }) {
               </div>
               <div className="h-[350px] w-full relative">
                 <img
-                  src={container?.photo}
+                  src={data?.photo}
                   alt="univerSity Image"
                   className="h-full w-full object-cover absolute"
                 />
@@ -186,7 +202,7 @@ export default function EditModal({ activeModal, editId }) {
                       <input
                         type="text"
                         className="bg-transparent shadow-lg shadow-gray-500 py-2 rounded-xl placeholder:text-gray-500 placeholder:font-bold placeholder:pl-2 placeholder:capitalize"
-                        placeholder={container?.university}
+                        placeholder={data?.university}
                         {...formInfo.getFieldProps('university')}
                       />
                     </div>
@@ -197,7 +213,7 @@ export default function EditModal({ activeModal, editId }) {
                       <input
                         type="text"
                         className="bg-transparent shadow-lg shadow-gray-500 py-2 rounded-xl placeholder:text-gray-500 placeholder:font-bold placeholder:pl-2 placeholder:capitalize"
-                        placeholder={container?.scholarshipName}
+                        placeholder={data?.scholarshipName}
                         {...formInfo.getFieldProps('scholarshipName')}
                       />
                     </div>
@@ -208,7 +224,7 @@ export default function EditModal({ activeModal, editId }) {
                       <input
                         type="text"
                         className="bg-transparent shadow-lg shadow-gray-500 py-2 rounded-xl placeholder:text-gray-500 placeholder:font-bold placeholder:pl-2 placeholder:capitalize"
-                        placeholder={container?.country}
+                        placeholder={data?.country}
                         {...formInfo.getFieldProps('country')}
                       />
                     </div>
@@ -222,7 +238,7 @@ export default function EditModal({ activeModal, editId }) {
                       <input
                         type="text"
                         className="bg-transparent shadow-lg shadow-gray-500 py-2 rounded-xl placeholder:text-gray-500 placeholder:font-bold placeholder:pl-2 placeholder:capitalize"
-                        placeholder={container?.city}
+                        placeholder={data?.city}
                         {...formInfo.getFieldProps('city')}
                       />
                     </div>
@@ -233,7 +249,7 @@ export default function EditModal({ activeModal, editId }) {
                       <input
                         type="text"
                         className="bg-transparent shadow-lg shadow-gray-500 py-2 rounded-xl placeholder:text-gray-500 placeholder:font-bold placeholder:pl-2 placeholder:capitalize"
-                        placeholder={container?.rank}
+                        placeholder={data?.rank}
                         {...formInfo.getFieldProps('rank')}
                       />
                     </div>
@@ -244,7 +260,7 @@ export default function EditModal({ activeModal, editId }) {
                       <input
                         type="text"
                         className="bg-transparent shadow-lg shadow-gray-500 py-2 rounded-xl placeholder:text-gray-500 placeholder:font-bold placeholder:pl-2 placeholder:capitalize"
-                        placeholder={container?.tuition}
+                        placeholder={data?.tuition}
                         {...formInfo.getFieldProps('tuition')}
                       />
                     </div>
@@ -278,8 +294,8 @@ export default function EditModal({ activeModal, editId }) {
                           
                           {...formInfo.getFieldProps('subject')}
                         >
-                        <option defaultValue={container?.subject}>
-                          {container?.subject}
+                        <option defaultValue={data?.subject}>
+                          {data?.subject}
                         </option>
                           {wrapObject.subjectCategory.map((value, index) => {
                             return (
@@ -303,8 +319,8 @@ export default function EditModal({ activeModal, editId }) {
                           className="bg-transparent shadow-xl shadow-gray-600 rounded-md w-full py-2 px-3 placeholder:font-mono placeholder:font-bold placeholder:capitalize font-mono text-gray-600 font-bold"
                           {...formInfo.getFieldProps('scholarship')}
                         >
-                        <option defaultValue={container?.scholarship}>
-                          {container?.scholarship}
+                        <option defaultValue={data?.scholarship}>
+                          {data?.scholarship}
                         </option>
                           {wrapObject.scholarCategory.map((value, index) => {
                             return (
@@ -327,8 +343,8 @@ export default function EditModal({ activeModal, editId }) {
                         <select className="bg-transparent shadow-xl shadow-gray-600 rounded-md w-full py-2 px-3 placeholder:font-mono placeholder:font-bold placeholder:capitalize font-mono text-gray-600 font-bold"
                         {...formInfo.getFieldProps('diploma')}
                         >
-                        <option defaultValue={container?.diploma}>
-                          {container?.diploma}
+                        <option defaultValue={data?.diploma}>
+                          {data?.diploma}
                         </option>
                           {wrapObject.degreeCategory.map((value, index) => {
                             return (
@@ -360,7 +376,7 @@ export default function EditModal({ activeModal, editId }) {
                       <input
                         type="text"
                         className="bg-transparent shadow-lg shadow-gray-500 py-2 rounded-xl placeholder:text-gray-500 placeholder:font-bold placeholder:pl-2 placeholder:capitalize"
-                        placeholder={container?.application}
+                        placeholder={data?.application}
                         {...formInfo.getFieldProps('application')}
                       />
                     </div>
@@ -371,7 +387,7 @@ export default function EditModal({ activeModal, editId }) {
                       <input
                         type="text"
                         className="bg-transparent shadow-lg shadow-gray-500 py-2 rounded-xl placeholder:text-gray-500 placeholder:font-bold placeholder:pl-2 placeholder:capitalize"
-                        placeholder={container?.service}
+                        placeholder={data?.service}
                         {...formInfo.getFieldProps('service')}
                       />
                     </div>
@@ -382,7 +398,7 @@ export default function EditModal({ activeModal, editId }) {
                       <input
                         type="text"
                         className="bg-transparent shadow-lg shadow-gray-500 py-2 rounded-xl placeholder:text-gray-500 placeholder:font-bold placeholder:pl-2 placeholder:capitalize"
-                        placeholder={container?.email}
+                        placeholder={data?.email}
                         {...formInfo.getFieldProps('email')}
                       />
                     </div>
@@ -400,7 +416,7 @@ export default function EditModal({ activeModal, editId }) {
                       />
                     </div>
                     <div>
-                      <Calendar onChange={onChange} value={datePicker} defaultActiveStartDate={new Date(container?.deadline)}/>
+                      <Calendar onChange={onChange} value={datePicker} defaultActiveStartDate={new Date(data?.deadline)}/>
                     </div>
                   </div>
                 </div>
@@ -416,11 +432,7 @@ export default function EditModal({ activeModal, editId }) {
           </div>
           </form>
         </section>
-      ) : (
-        <div className="h-screen w-full flex justify-center items-center">
-          <Loader />
-        </div>
-      )}
+      }
       {
         modal?
         <div className="w-[30%] absolute top-[50%] left-[50%] selectionModal py-5 px-5 z-40">

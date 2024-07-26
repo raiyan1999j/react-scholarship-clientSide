@@ -8,12 +8,14 @@ import EditModal from "./EditModal";
 import ManagePagination from "./ManagePagination";
 import { FaPlus } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Loader from "../../Loader/Loader";
+import ErrorCompo from "../../ErrorCompo/ErrorCompo";
+import { Slide, toast, ToastContainer } from "react-toastify";
 
 const optArray = [8,12,14];
 
 export default function ManageScholar() {
-  const [allInfo, setAllInfo] = useState(null);
-  const [totalPage, setTotal] = useState(1);
   const [pageNumber, setPage] = useState(1);
   const [limitation,setLimitation] = useState(8);
   const [box, setBox] = useState(false);
@@ -24,6 +26,36 @@ export default function ManageScholar() {
   const pageRef = useRef();
   const searchBox = useRef();
   const pageArray = [];
+  const queryClient = useQueryClient();
+  
+  const {isPending,error,data} = useQuery({
+    queryKey:['allScholarData',pageNumber,limitation,searchItem],
+    queryFn:()=>{
+      return publicRoute(`/getScholarData?pageNumber=${pageNumber}&&limitation=${limitation}&&searchItem=${searchItem}`)
+      .then(res=>res.data)
+    }
+  });
+
+  const editedData = useMutation({
+    mutationFn:(value)=>{
+      return publicRoute.put(`/editData?editId=${value.infoId}`,value.info)
+    },
+    onSuccess:(data)=>{
+      queryClient.invalidateQueries(['allScholarData'])
+      if(data.status === 200){
+        toast.success('Update Success', {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "colored",
+          transition: Slide,
+          });
+      }
+    }
+  })
 
   const optionActive = (value) => {
     setBox(!box);
@@ -39,14 +71,13 @@ export default function ManageScholar() {
     setCondition(true);
     optArray.push(pageRef.current.value);
   }
-  useEffect(() => {
-    publicRoute(`/getScholarData?pageNumber=${pageNumber}&&limitation=${limitation}&&searchItem=${searchItem}`).then((res) => {
-      setAllInfo(res.data.result);
-      setTotal(res.data.totalPage);
-    });
-  }, [allInfo, pageNumber,limitation,searchItem]);
 
-  for (let repeat = 1; repeat <= totalPage; repeat++) {
+  const updateData=(dataId,value)=>{
+    editedData.mutate({infoId:dataId,info:value});
+    modalActive(false)
+  }
+
+  for (let repeat = 1; repeat <= data?.totalPage; repeat++) {
     pageArray.push(repeat);
   }
   return (
@@ -76,7 +107,7 @@ export default function ManageScholar() {
             </tr>
           </thead>
           <tbody>
-            {allInfo?.map((value, index) => {
+            {data?.result?.map((value, index) => {
               return (
                 <CollectionData
                   key={index}
@@ -88,6 +119,17 @@ export default function ManageScholar() {
             })}
           </tbody>
         </table>
+        {
+          isPending?
+          <div className="flex w-full justify-center items-center my-8">
+            <Loader/>
+          </div>:
+          error?
+          <div className="flex w-full justify-center items-center my-8">
+            <ErrorCompo/>
+          </div>:
+          ""
+        }
 
         <div
           className={`fixed top-[50%] right-0 ${
@@ -98,7 +140,7 @@ export default function ManageScholar() {
         </div>
         {modal ? (
           <div className="fixed top-0 left-0 h-full w-full editScholar overflow-y-scroll">
-            <EditModal editId={id} activeModal={modalActive} />
+            <EditModal editId={id} activeModal={modalActive} dataUpdate={updateData} />
           </div>
         ) : (
           ""
@@ -148,6 +190,7 @@ export default function ManageScholar() {
           </div>
         </div>
       </section>
+      <ToastContainer/>
     </>
   );
 }

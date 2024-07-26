@@ -7,25 +7,25 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import StudentReview from "./StudentReview";
 import Loader from "../../Loader/Loader";
+import { useQuery } from "@tanstack/react-query";
+import ErrorCompo from "../../ErrorCompo/ErrorCompo";
 
 export default function Home() {
-  const [info, setInfo] = useState(null);
-  const [reviewData,setData] = useState([]);
-  const [condition,setCondition] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setCondition(true)
-    publicRoute("/latestData").then((res) => {
-      setInfo(res.data);
-      setCondition(false)
-    });
-  }, []);
-
-  useEffect(()=>{
-    publicRoute('/reviewData')
-    .then((res)=>{setData(res.data)})
-  },[])
+  const {isPending:infoPending,error:infoError,data:infoData} = useQuery({
+    queryKey:["info"],
+    queryFn: ()=>{
+      return publicRoute("/latestData").then(res=>res.data);
+    }
+  })
+  
+  const {isPending:reviewPending,error:reviewError,data:reviewData} = useQuery({
+    queryKey:["review"],
+    queryFn: ()=>{
+      return publicRoute("/reviewData").then(res=>res.data)
+    }
+  })
   return (
     <>
       <section className="w-full bg-blue-100/50">
@@ -47,14 +47,14 @@ export default function Home() {
             top Scholarship
           </h2>
         </div>
-
         {
-          condition?<div className="flex justify-center items-center w-full h-[150px]">
-            <Loader/>
+          infoPending?<div className="flex justify-center items-center w-full h-[150px]">
+            <Loader width="150"/>
           </div>:
+          infoError? <ErrorCompo/>:
           <div className="w-[90%] mx-auto overflow-hidden topScholarBox rounded-xl py-8">
           <div className="grid grid-cols-[600px_600px_600px_600px_600px_600px_600px] gap-x-6 w-[95%] mx-auto overflow-x-scroll topScholarScrollbar rounded-xl">
-            {info?.map((value, index) => {
+            {infoData?.map((value, index) => {
               return <TopScholar allData={value} key={index} />;
             })}
             <div className="h-[350px] w-full flex justify-center items-center">
@@ -73,7 +73,12 @@ export default function Home() {
         
 
         <div className="w-[90%] mx-auto py-8 px-3 shadow-inner shadow-slate-500/50 rounded-lg mt-[100px]">
-          <div className="w-[90%]">
+          <div className="w-[90%] mx-auto">
+          {
+            reviewPending?<div className="flex w-full justify-center items-center ">
+              <Loader width="150"/>
+            </div>:
+            reviewError?<ErrorCompo/>:
             <Swiper className="mySwiper" modules={[Pagination]} grabCursor={true} pagination={{clickable:true}}>
               {
                 reviewData.map((value,index)=>{
@@ -83,6 +88,8 @@ export default function Home() {
                 })
               }
             </Swiper>
+          } 
+            
           </div>
         </div>
       </section>

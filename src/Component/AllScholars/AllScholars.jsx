@@ -5,22 +5,36 @@ import { useEffect, useRef, useState } from "react";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
 import { FaPlus } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
+import { useQuery } from "@tanstack/react-query";
+import ErrorCompo from "../../ErrorCompo/ErrorCompo";
+import Loader from "../../Loader/Loader";
 
 const optArray = [4,8,12];
 
 export default function AllScholars() {
   const [pagination, setPage] = useState(1);
-  const [totalPage, setTotal] = useState(1);
   const [limitation,setLimit] = useState(4);
-  const [allInfo, setInfo] = useState(null);
   const [searchItem,setItem] = useState("");
   const [condition,setCondition] = useState(true);
-  const [mainPageLoad,setMainPageLoad] = useState(false);
   const customPageNum = useRef();
   const limitPerPage = useRef(4);
   const searchBox = useRef();
   const pageArray = [];
-  
+  const {isLoading,error,data} = useQuery({
+    queryKey:["scholarsInfo",pagination,limitation,searchItem],
+    queryFn:()=>{
+      return publicRoute(`/allScholarData?pageNumber=${pagination}&&limitation=${limitation}&&searchItem=${searchItem}`)
+      .then((res)=>{
+        const wrap = {
+          total: res.data.totalPage,
+          info: res.data.result
+        }
+
+        return wrap;
+      })
+    }
+  })
+
   const setPageNumber = (value) => {
     setPage(value);
   };
@@ -38,26 +52,11 @@ export default function AllScholars() {
     setItem(items)
   }
 
-  for (let repeat = 1; repeat <= totalPage; repeat++) {
+  for (let repeat = 1; repeat <= data?.total; repeat++) {
     pageArray.push(repeat);
   }
-
-  useEffect(() => {
-    setMainPageLoad(true);
-
-      publicRoute(`/allScholarData?pageNumber=${pagination}&&limitation=${limitation}&&searchItem=${searchItem}`).then((res) => {
-        setTotal(res.data.totalPage);
-        setInfo(res.data.result);
-        setMainPageLoad(false)
-      });
-  }, [pagination,limitation,searchItem]);
   return (
     <>
-    {
-      mainPageLoad?
-      <div className="h-screen w-full flex justify-center items-center">
-      <span className="loading loading-ring loading-lg"></span>
-      </div>:
       <section className="bg-dashNav bg-no-repeat bg-cover">
         <section className="w-[1200px] mx-auto pt-[100px]">
           <div className="w-[30%] mx-auto rounded-xl shadow-xl shadow-black/50 flex flex-row py-2 px-4">
@@ -76,9 +75,17 @@ export default function AllScholars() {
         </section>
 
         <section className="w-[1200px] mx-auto mt-[100px]">
-          {allInfo?.map((value, index) => {
+        {
+          isLoading?
+          <div className="flex w-full justify-center items-center">
+            <Loader/>
+          </div>:
+          error?
+          <ErrorCompo/>:
+          data.info?.map((value, index) => {
             return <ScholarCard allData={value} key={index} />;
-          })}
+          })
+        }
         </section>
 
         <section className="w-[1200px] mx-auto grid grid-cols-[50%_50%] justify-between">
@@ -122,8 +129,6 @@ export default function AllScholars() {
           </div>
         </section>
       </section>
-    }
-      
     </>
   );
 }
