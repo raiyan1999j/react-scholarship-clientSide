@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
 import { FaUser } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -9,11 +9,13 @@ import Swal from "sweetalert2";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loader from "../../Loader/Loader";
 import ErrorCompo from "../../ErrorCompo/ErrorCompo";
+import { InfoContainer } from "../../AuthProvider/AuthProvider";
 
 const userOperator =['admin','moderator','user'];
 
 export default function ManageUser() {
   const queryClient = useQueryClient();
+  const {user} = useContext(InfoContainer)
 
   const {isPending,error,data} = useQuery({
     queryKey:['operator'],
@@ -21,7 +23,7 @@ export default function ManageUser() {
       return publicRoute("/getAllUser").then(res=>res.data)
     }
   })
-
+  console.log(data)
   const removeItem = useMutation({
     mutationFn:(userId)=>{
        return publicRoute.delete(`/removeUser?userId=${userId}`)
@@ -90,7 +92,7 @@ export default function ManageUser() {
         </div>
 
         <div className="mt-[50px] w-[95%] mx-auto">
-          <table className="table">
+          <table className="table capitalize font-mono text-base">
             <thead>
               <tr>
                 <th>No.</th>
@@ -108,7 +110,10 @@ export default function ManageUser() {
                     <td>{value.name}</td>
                     <td>{value.gmail}</td>
                     <td>
-                        <select className="select select-bordered" name="authority" id={value._id} onChange={selectAuthority}>
+                    {
+                      user.email == value.gmail?
+                      <h2 className="font-bold text-gray-900 text-xl appliedTxt">{value.operator}</h2>:
+                      <select className="select select-bordered capitalize font-mono text-base" name="authority" id={value._id} onChange={selectAuthority}>
                             <option defaultValue={value.operator}>
                             {value.operator}
                             </option>
@@ -120,14 +125,20 @@ export default function ManageUser() {
                                 })
                             }
                         </select>
+                    }
                     </td>
                     <td>
+                    {
+                      user.email == value.gmail?
+                      "":
                       <button className="flex flex-row items-center bg-rose-500 text-white px-3 py-2 rounded-xl text-base hover:bg-rose-800" onClick={()=>{
                         selectRemove(value._id)
                       }}>
                         Delete
                         <MdDelete className="ml-2" />
                       </button>
+                    }
+                      
                     </td>
                   </tr>
                 );

@@ -41,7 +41,7 @@ const validation = (values) => {
   return errors;
 };
 
-export default function Login({ oldOrNew, conValue }) {
+export default function Register({ oldOrNew, conValue }) {
   const [condition, setCondition] = useState(true);
   const [preview,setPreview] = useState(null);
   const navigate = useNavigate();

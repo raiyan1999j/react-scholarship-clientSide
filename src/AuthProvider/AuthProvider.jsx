@@ -41,7 +41,7 @@ export default function AuthProvider({ children }) {
             transition: Flip,
           });
           setLoading(false)
-          publicRoute.get(`/userOperator?email=${value.email}&&name=${value.userName}`)
+          publicRoute.post(`/userOperator?email=${value.email}&&name=${value.userName}`)
           .then((res)=>{setOperator(res.data)})
         })
       })
@@ -73,7 +73,7 @@ export default function AuthProvider({ children }) {
         setLoading(false);
         publicRoute.post('/createToken',{email:userInfo.user.email},{withCredentials:true})
 
-        publicRoute.get(`/userOperator?email=${value.email}&&name=${userInfo.displayName}`)
+        publicRoute.get(`/loginUserInfo?email=${value.email}&&name=${userInfo.displayName}`)
         .then((res)=>{setOperator(res.data)})
       })
   };
@@ -113,7 +113,7 @@ export default function AuthProvider({ children }) {
     const unMount = onAuthStateChanged(fireAuth, (userInfo) => {
       setUser(userInfo);
       setLoading(false);
-      publicRoute.get(`/userOperator?email=${userInfo?.email}`)
+      publicRoute.get(`/operatorFinder?email=${userInfo?.email}`)
       .then((res)=>{
         setOperator(res?.data)
       })
