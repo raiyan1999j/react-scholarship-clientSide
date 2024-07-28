@@ -23,7 +23,6 @@ export default function ManageUser() {
       return publicRoute("/getAllUser").then(res=>res.data)
     }
   })
-  console.log(data)
   const removeItem = useMutation({
     mutationFn:(userId)=>{
        return publicRoute.delete(`/removeUser?userId=${userId}`)

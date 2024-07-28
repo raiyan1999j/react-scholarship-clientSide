@@ -20,6 +20,7 @@ import Payment from "./Component/Payment/Payment.jsx";
 import MyApplication from "./Dashboard/User/MyApplication/MyApplication.jsx";
 import MyReviews from "./Dashboard/User/MyReviews/MyReviews.jsx";
 import ErrorHandle from "./ErrorHandle/ErrorHandle.jsx";
+import ManageApplied from "./Dashboard/ManageApplied/ManageApplied.jsx";
 
 const queryClient = new QueryClient();
 
@@ -98,6 +99,10 @@ const router = createBrowserRouter([
         path: "/dashboard/myReviews",
         element: <MyReviews />,
       },
+      {
+        path:"/dashboard/manageApplied",
+        element: <ManageApplied/>
+      }
     ],
   },
 ]);
