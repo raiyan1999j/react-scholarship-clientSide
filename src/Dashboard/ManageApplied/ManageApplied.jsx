@@ -8,6 +8,7 @@ import { TiInfoLarge } from "react-icons/ti";
 import { TbMailCancel } from "react-icons/tb";
 import { RiFeedbackLine } from "react-icons/ri";
 import { useEffect, useState } from "react";
+import SelectedOpt from "./SelectedOpt";
 
 export default function ManageApplied() {
   const { isPending, error, data } = useQuery({
@@ -18,10 +19,26 @@ export default function ManageApplied() {
   });
 
   const [menu,setMenu] = useState(false);
+  const [modalCon,setModalCon] = useState(false);
+  const [infoTrack,setInfoTrack] = useState();
+  const [wrapObj,setWrapObj] = useState();
 
   const menuCondition=(value)=>{
-    setMenu(!menu);
-    console.log(value)
+    setMenu(true);
+    setInfoTrack(value);
+  }
+
+  const modalOption=(option="",condition)=>{
+    setModalCon(condition);
+    setMenu(false);
+
+    
+    const wrap ={
+      track : infoTrack,
+      option: option
+    }
+
+    setWrapObj(wrap);
   }
 
   useEffect(()=>{
@@ -91,16 +108,27 @@ export default function ManageApplied() {
         </table>
 
         <div className={`${menu?"w-[300px]":"w-0"} shadow-inner shadow-slate-800/50 py-2 rounded-lg flex flex-row justify-around fixed top-1/2 right-0 bg-white transition-all duration-300 `}>
-            <button className="h-[50px] w-[50px] rounded-full shadow-inner shadow-slate-500 flex justify-center items-center transition-all duration-200 ease-in hover:cursor-pointer hover:shadow-inner hover:shadow-blue-900 hover:bg-blue-300 hover:text-gray-100 tooltip tooltip-top" data-tip="Details" onClick={()=>{menuCondition(false)}}>
+            <button className="h-[50px] w-[50px] rounded-full shadow-inner shadow-slate-500 flex justify-center items-center transition-all duration-200 ease-in hover:cursor-pointer hover:shadow-inner hover:shadow-blue-900 hover:bg-blue-300 hover:text-gray-100 tooltip tooltip-top" data-tip="Details" onClick={()=>{modalOption("details",true)}}>
             <TiInfoLarge />
             </button>
-            <button className="h-[50px] w-[50px] rounded-full shadow-inner shadow-slate-500 flex justify-center items-center transition-all duration-200 ease-in hover:cursor-pointer hover:shadow-inner hover:shadow-lime-900 hover:bg-lime-300 tooltip tooltip-bottom" data-tip="Feedback" onClick={()=>{menuCondition(false)}}>
+            <button className="h-[50px] w-[50px] rounded-full shadow-inner shadow-slate-500 flex justify-center items-center transition-all duration-200 ease-in hover:cursor-pointer hover:shadow-inner hover:shadow-lime-900 hover:bg-lime-300 tooltip tooltip-bottom" data-tip="Feedback" onClick={()=>{modalOption("feedback",true)}}>
             <RiFeedbackLine />
             </button>
-            <button className="h-[50px] w-[50px] rounded-full shadow-inner shadow-slate-500 flex justify-center items-center transition-all duration-200 ease-in hover:cursor-pointer hover:shadow-inner hover:shadow-rose-900 hover:bg-rose-300 hover:text-gray-100 tooltip tooltip-top" data-tip="Cancel" onClick={()=>{menuCondition(false)}}>
+            <button className="h-[50px] w-[50px] rounded-full shadow-inner shadow-slate-500 flex justify-center items-center transition-all duration-200 ease-in hover:cursor-pointer hover:shadow-inner hover:shadow-rose-900 hover:bg-rose-300 hover:text-gray-100 tooltip tooltip-top" data-tip="Cancel" onClick={()=>{modalOption("reject",true)}}>
             <TbMailCancel />
             </button>
         </div>
+
+        {
+          modalCon?
+          <div className="fixed w-full h-screen top-0 left-0 editScholar z-10 scale-up-center rounded-none">
+            <SelectedOpt 
+            info={wrapObj} 
+            optionModal={modalOption}
+            conditionModal={(value)=>{setModalCon(value)}}
+            />
+          </div>:""
+        }
       </section>
       {isPending ? (
         <div className="w-full flex flex-row justify-center items-center">

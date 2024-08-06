@@ -101,7 +101,8 @@ const router = createBrowserRouter([
       },
       {
         path:"/dashboard/manageApplied",
-        element: <ManageApplied/>
+        element: <ManageApplied/>,
+        
       }
     ],
   },
