@@ -10,10 +10,11 @@ export default function SelectedOpt({info,optionModal,conditionModal}){
                     info.option=="details"?
                     <AppliedDetails 
                     trackId={info.track}
-                    modalOption={optionModal}
                     modalCondition={conditionModal}
                     />:
-                    <AppliedFeedback/>
+                    <AppliedFeedback 
+                    modalCondition={conditionModal}
+                    />
                 }
             </div>
         </>

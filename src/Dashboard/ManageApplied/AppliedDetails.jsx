@@ -5,7 +5,7 @@ import ErrorCompo from "../../ErrorCompo/ErrorCompo"
 import { GiCrossMark } from "react-icons/gi"
 import { useEffect, useState } from "react"
 
-export default function AppliedDetails({trackId, modalOption,modalCondition}){
+export default function AppliedDetails({trackId,modalCondition}){
     const [closeModal,setClose] = useState(true)
     const {isPending,error,data} = useQuery({
         queryKey:["information",trackId],
@@ -14,12 +14,12 @@ export default function AppliedDetails({trackId, modalOption,modalCondition}){
            .then(res=>res.data)
         }
     })
-    console.log(trackId)
+
     const modalOperation=()=>{
         setClose(false)
         setTimeout(()=>{
             modalCondition(false)
-        },1000)
+        },500)
     }
     return(
         <>
