@@ -1,11 +1,24 @@
+import { useMutation } from "@tanstack/react-query";
 import { useRef, useState } from "react";
 import { GiCrossMark } from "react-icons/gi";
+import { publicRoute } from "../../PublicRoute/PublicRoute";
 
-export default function AppliedFeedback({modalCondition}) {
+export default function AppliedFeedback({modalCondition,modalOption,trackId}) {
   const textRef = useRef();
   const [closeModal,setClose] = useState(true);
   const [wordCount, setWord] = useState(0);
   const [wordWarn, setWarn] = useState();
+  const appFeedback = useMutation({
+    mutationFn:(value)=>{
+      const wrap = {
+        trackId: value[0],
+        feedback: value[1]
+      }
+
+      return publicRoute.post(`/workStatus?trackId=${wrap.trackId}`,wrap);
+    }
+  })
+
   const limitedText = () => {
     const separate = textRef.current.value.split(" ");
     const count = separate.length;
@@ -26,6 +39,7 @@ export default function AppliedFeedback({modalCondition}) {
         modalCondition(false);
     },500)
   }
+
   return (
     <>
       <div className={`w-[60%] mx-auto shadow-xl shadow-gray-600 appliedFeedbackBg py-4 ${closeModal?"slide-in-right":"scale-out-center"}`}>
@@ -57,8 +71,14 @@ export default function AppliedFeedback({modalCondition}) {
             </div>
           </div>
         </div>
-        <div className="w-[90%] mx-auto flex justify-end py-4">
-          <button className="capitalize rejectApplied py-2 px-8 font-mono text-xl">
+        <div className="w-[90%] mx-auto flex justify-between py-4">
+          <button className="capitalize py-2 px-8 font-mono text-xl bg-green-500 text-white rounded-lg transition-all ease-linear duration-150 hover:cursor-point hover:shadow-inner hover:shadow-green-950" onClick={()=>{modalOption('details',true)}}>
+            Details
+          </button>
+          <button className="capitalize scholarsBtn py-2" onClick={()=>{
+            appFeedback.mutate([trackId,textRef.current.value]);
+            modalOperation();
+          }}>
             Send
           </button>
         </div>

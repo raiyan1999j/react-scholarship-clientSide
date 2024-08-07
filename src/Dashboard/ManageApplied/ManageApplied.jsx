@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { SiLibreofficewriter } from "react-icons/si";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
 import Loader from "../../Loader/Loader";
@@ -22,6 +22,16 @@ export default function ManageApplied() {
   const [modalCon,setModalCon] = useState(false);
   const [infoTrack,setInfoTrack] = useState();
   const [wrapObj,setWrapObj] = useState();
+  const appStatus = useMutation({
+    mutationFn:(value)=>{
+      const wrap ={
+        trackId : value[0],
+        userMail: value[1],
+        status : value[2].target.value
+      }
+      return publicRoute.post(`/workStatus?trackId=${wrap.trackId}`,wrap)
+    }
+  })
 
   const menuCondition=(value)=>{
     setMenu(true);
@@ -90,7 +100,7 @@ export default function ManageApplied() {
                   <td>{value.application}</td>
                   <td>{value.service}</td>
                   <td>
-                    <select className="select select-bordered capitalize">
+                    <select className="select select-bordered capitalize" onChange={()=>{appStatus.mutate([value._id,value.user_email,event])}}>
                       <option value="pending">pending</option>
                       <option value="processing">processing</option>
                       <option value="completed">completed</option>

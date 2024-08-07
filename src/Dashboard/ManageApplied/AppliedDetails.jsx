@@ -5,7 +5,7 @@ import ErrorCompo from "../../ErrorCompo/ErrorCompo"
 import { GiCrossMark } from "react-icons/gi"
 import { useEffect, useState } from "react"
 
-export default function AppliedDetails({trackId,modalCondition}){
+export default function AppliedDetails({trackId,modalCondition,modalOption}){
     const [closeModal,setClose] = useState(true)
     const {isPending,error,data} = useQuery({
         queryKey:["information",trackId],
@@ -23,7 +23,7 @@ export default function AppliedDetails({trackId,modalCondition}){
     }
     return(
         <>
-        <div className={`w-[60%] mx-auto bg-white shadow-xl shadow-slate-500 ${closeModal?"slide-in-right":"scale-out-center"}`}>
+        <div className={`w-[60%] mx-auto bg-white shadow-xl shadow-slate-500 rounded-lg ${closeModal?"slide-in-left":"scale-out-center"}`}>
         {
             isPending?
             <Loader/>:
@@ -69,14 +69,13 @@ export default function AppliedDetails({trackId,modalCondition}){
                         <button className="rejectApplied capitalize py-2 px-4 mr-6">
                             reject
                         </button>
-                        <button className="scholarsBtn capitalize py-2 px-2 text-sm">
+                        <button className="scholarsBtn capitalize py-2 px-2 text-sm" onClick={()=>{modalOption('feedback',true)}}>
                             feedback
                         </button>
                     </div>
                 </div>
             </div>
         }
-            
         </div>
         </>
     )
