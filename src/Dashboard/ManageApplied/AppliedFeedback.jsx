@@ -10,12 +10,10 @@ export default function AppliedFeedback({modalCondition,modalOption,trackId}) {
   const [wordWarn, setWarn] = useState();
   const appFeedback = useMutation({
     mutationFn:(value)=>{
-      const wrap = {
-        trackId: value[0],
-        feedback: value[1]
-      }
+      const userId = value[0];
+      const feedback= value[1];
 
-      return publicRoute.post(`/workStatus?trackId=${wrap.trackId}`,wrap);
+      return publicRoute.put(`/workStatus?trackId=${userId}`,{feedback})
     }
   })
 

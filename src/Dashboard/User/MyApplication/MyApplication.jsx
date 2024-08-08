@@ -4,13 +4,28 @@ import { publicRoute } from "../../../PublicRoute/PublicRoute";
 import TableGroupBtn from './TableGroupBtn';
 import { CiMenuKebab } from "react-icons/ci";
 import Review from "./Review";
+import { useQuery } from "@tanstack/react-query";
+import Loader from "../../../Loader/Loader";
+import ErrorCompo from "../../../ErrorCompo/ErrorCompo";
 
 export default function MyApplication() {
-  const [allInfo, setAllInfo] = useState([]);
   const { user } = useContext(InfoContainer);
   const [box,setBox] = useState(false);
   const [review,setReview] = useState(false);
   const [tracking,setTracking] = useState(null);
+
+  const {isPending:userPending,error:userError,data:userData} = useQuery({
+    queryKey:["userApplied"],
+    queryFn:()=>{
+      return publicRoute(`/userApplied/${user?.email}`,{withCredentials:true}).then((res)=>{
+        if(res.status == 200){
+          return res.data
+        }else{
+          console.log('bad request')
+        }
+      })
+    }
+  })
 
   const menuTab=(value)=>{
     setTracking(value);
@@ -23,15 +38,6 @@ export default function MyApplication() {
   const reviewModal=(value)=>{
     setReview(value)
   }
-  useEffect(() => {
-    publicRoute(`/userApplied/${user?.email}`,{withCredentials:true}).then((res) => {
-      if(res.status == 200){
-        setAllInfo(res.data)
-      }else{
-        console.log('bad request');
-      }
-    });
-  }, []);
 
   useEffect(()=>{
     const clickHandler=(event)=>{
@@ -72,7 +78,7 @@ export default function MyApplication() {
               </tr>
             </thead>
             <tbody className="capitalize font-medium text-slate-900 font-serif">
-              {allInfo.map((value, index) => {
+              {userData?.map((value, index) => {
                 return (
                   <tr key={index}>
                     <td>{index}</td>
@@ -84,8 +90,8 @@ export default function MyApplication() {
                     <td>{value.degree}</td>
                     <td>{value.application}</td>
                     <td>{value.service}</td>
-                    <td></td>
-                    <td></td>
+                    <td className="font-bold font-serif text-slate-700 text-base">{value.workStatus}</td>
+                    <td>{value.feedback}</td>
                     <td >
                       <button className="btnTest text-xl"
                         onClick={()=>{menuTab(value.scholarship_id)}}
@@ -111,6 +117,16 @@ export default function MyApplication() {
             trackingId={tracking}
             />
         </div>
+        {
+          userPending?
+          <div className="w-full flex justify-center items-center">
+            <Loader/>
+          </div>:
+          userError?
+          <div className="w-full flex justify-center items-center">
+            <ErrorCompo/>
+          </div>:""
+        }
         {
           review?<Review modalReview={reviewModal} idTracking={tracking} />:""
         }

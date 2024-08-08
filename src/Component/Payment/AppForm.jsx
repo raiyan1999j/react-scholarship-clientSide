@@ -45,6 +45,8 @@ export default function AppForm({ preDefined }) {
       scholarship_id: `${preDefined._id}`,
       application: `${preDefined.application}`,
       service: `${preDefined.service}`,
+      workStatus: 'pending',
+      feedback : ""
     },
     onSubmit: (value) => {
       const base = new Date();

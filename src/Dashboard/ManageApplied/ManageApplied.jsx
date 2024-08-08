@@ -23,13 +23,10 @@ export default function ManageApplied() {
   const [infoTrack,setInfoTrack] = useState();
   const [wrapObj,setWrapObj] = useState();
   const appStatus = useMutation({
-    mutationFn:(value)=>{
-      const wrap ={
-        trackId : value[0],
-        userMail: value[1],
-        status : value[2].target.value
-      }
-      return publicRoute.post(`/workStatus?trackId=${wrap.trackId}`,wrap)
+    mutationFn:(info)=>{
+      const userId = info[0];
+      const workStatus = info[1].target.value;
+      return publicRoute.put(`/workStatus?trackId=${userId}`,{workStatus})
     }
   })
 
@@ -100,7 +97,7 @@ export default function ManageApplied() {
                   <td>{value.application}</td>
                   <td>{value.service}</td>
                   <td>
-                    <select className="select select-bordered capitalize" onChange={()=>{appStatus.mutate([value._id,value.user_email,event])}}>
+                    <select className="select select-bordered capitalize" onChange={()=>{appStatus.mutate([value._id,event])}} defaultValue={value.workStatus}>
                       <option value="pending">pending</option>
                       <option value="processing">processing</option>
                       <option value="completed">completed</option>
