@@ -3,11 +3,25 @@ import logo from '../public/logo.png';
 import {NavLink, Outlet, useNavigate} from 'react-router-dom';
 import { InfoContainer } from './AuthProvider/AuthProvider';
 import Loader from './Loader/Loader';
+import { useQuery } from '@tanstack/react-query';
+import { publicRoute } from './PublicRoute/PublicRoute';
+import Notification from './Component/Notification/Notification';
 
 export default function App(){
   const [navScroll,setNav] = useState(false);
+  const [unseen,setUnseen] = useState(0);
+  const [notifyCon,setNotify] = useState(false);
+  const [supportNotify,setSupport] = useState(false);
   const navigate = useNavigate();
   const {userLogout,loading,operator,user} = useContext(InfoContainer);
+
+  const {isPending,error,data} = useQuery({
+    queryKey:['getNotification',user?.email],
+    queryFn:()=>{
+      return publicRoute(`/getNotification?email=${user?.email}`)
+      .then(res=>res.data)
+    }
+  })
 
   const scrollChange=()=>{
     window.scrollY > 50? setNav(true) : setNav(false)
@@ -20,6 +34,30 @@ export default function App(){
     userLogout()
   }
 
+  const notifyManage=(value)=>{
+    setSupport(value)
+
+    if(value){
+      setNotify(value)
+    }else{
+      setTimeout(()=>{
+        setNotify(value)
+      },1000)
+    }
+  }
+
+  useEffect(()=>{
+    const clickHandler=(event)=>{
+      if(supportNotify && !event.target.closest(".notificationBoard") && !event.target.closest(".notificationBtn")){
+        setSupport(false)
+      }
+    }
+
+    document.addEventListener('mousedown',clickHandler);
+
+    return ()=>{document.removeEventListener('mousedown',clickHandler)}
+  },[supportNotify])
+
   useEffect(()=>{
     window.addEventListener('scroll',scrollChange);
 
@@ -27,9 +65,16 @@ export default function App(){
       window.removeEventListener('scroll',scrollChange)
     }
   },[])
+
   useEffect(()=>{
     navigate('/home')
   },[])
+
+  useEffect(()=>{
+    const countNotification = data?.length;
+
+    setUnseen(countNotification)
+  },[data])
   return(
     <>
       <header>
@@ -65,8 +110,19 @@ export default function App(){
             loading? <div><Loader/></div>: 
             user?
             <div>
-              <div className='h-10 w-10 rounded-full border'>
-                <img src={user?.photoURL} alt="profileImg" className='h-full w-full rounded-full object-cover' />
+              <div className='h-10 w-10 rounded-full border relative hover:cursor-pointer notificationBtn' onClick={()=>{notifyManage(!supportNotify)}}>
+                <img src={user?.photoURL} alt="profileImg" className='h-full w-full rounded-full object-cover absolute' />
+                {
+                  isPending?
+                  <div className='absolute h-[15px] w-[15px] right-[-4px] top-[-3px]'>
+                  <span className="loading loading-ring loading-md"></span>
+                  </div>:
+                  <div className='absolute h-[18px] w-[18px] rounded-full bg-sky-400 text-white flex justify-center items-center right-[-4px] top-[-3px]'>
+                  <span className='font-mono text-xs font-bold'>
+                    {unseen}
+                  </span>
+                </div>
+                }
               </div>
             </div>:""
           }
@@ -85,6 +141,17 @@ export default function App(){
             </div>
           </div>
         </nav>
+        
+        <div>
+        {
+          notifyCon?
+          <Notification
+          manageNotify={notifyManage}
+          notifySupport={supportNotify} 
+          info={data} />:""
+        }
+          
+        </div>
 
         <div className='h-[50px] w-[50px] border border-r-0 border-gray-400 fixed top-[50%] right-0 rounded-l-xl flex justify-center items-center'>
         <label className="swap swap-rotate">

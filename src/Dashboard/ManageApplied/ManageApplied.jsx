@@ -26,7 +26,18 @@ export default function ManageApplied() {
     mutationFn:(info)=>{
       const userId = info[0];
       const workStatus = info[1].target.value;
+      const wrap={
+        path: "/dashboard/myApplication",
+        title: "application status",
+        message: "checkout your application status",
+        time: new Date(),
+        user: info[2]
+      }
+
       return publicRoute.put(`/workStatus?trackId=${userId}`,{workStatus})
+      .then(()=>{
+        publicRoute.post('/manageAppNotification',wrap)
+      })
     }
   })
 
@@ -97,7 +108,7 @@ export default function ManageApplied() {
                   <td>{value.application}</td>
                   <td>{value.service}</td>
                   <td>
-                    <select className="select select-bordered capitalize" onChange={()=>{appStatus.mutate([value._id,event])}} defaultValue={value.workStatus}>
+                    <select className="select select-bordered capitalize" onChange={()=>{appStatus.mutate([value._id,event,value.user_email])}} defaultValue={value.workStatus}>
                       <option value="pending">pending</option>
                       <option value="processing">processing</option>
                       <option value="completed">completed</option>
