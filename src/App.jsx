@@ -9,13 +9,13 @@ import Notification from './Component/Notification/Notification';
 
 export default function App(){
   const [navScroll,setNav] = useState(false);
-  const [unseen,setUnseen] = useState(0);
+  const [unseen,setUnseen] = useState(true);
   const [notifyCon,setNotify] = useState(false);
   const [supportNotify,setSupport] = useState(false);
   const navigate = useNavigate();
   const {userLogout,loading,operator,user} = useContext(InfoContainer);
 
-  const {isPending,error,data} = useQuery({
+  const {isPending:notifyPending,error:notifyError,data:notifyData} = useQuery({
     queryKey:['getNotification',user?.email],
     queryFn:()=>{
       return publicRoute(`/getNotification?email=${user?.email}`)
@@ -44,6 +44,8 @@ export default function App(){
         setNotify(value)
       },1000)
     }
+
+    setUnseen(false);
   }
 
   useEffect(()=>{
@@ -69,12 +71,6 @@ export default function App(){
   useEffect(()=>{
     navigate('/home')
   },[])
-
-  useEffect(()=>{
-    const countNotification = data?.length;
-
-    setUnseen(countNotification)
-  },[data])
   return(
     <>
       <header>
@@ -112,17 +108,6 @@ export default function App(){
             <div>
               <div className='h-10 w-10 rounded-full border relative hover:cursor-pointer notificationBtn' onClick={()=>{notifyManage(!supportNotify)}}>
                 <img src={user?.photoURL} alt="profileImg" className='h-full w-full rounded-full object-cover absolute' />
-                {
-                  isPending?
-                  <div className='absolute h-[15px] w-[15px] right-[-4px] top-[-3px]'>
-                  <span className="loading loading-ring loading-md"></span>
-                  </div>:
-                  <div className='absolute h-[18px] w-[18px] rounded-full bg-sky-400 text-white flex justify-center items-center right-[-4px] top-[-3px]'>
-                  <span className='font-mono text-xs font-bold'>
-                    {unseen}
-                  </span>
-                </div>
-                }
               </div>
             </div>:""
           }
@@ -148,7 +133,7 @@ export default function App(){
           <Notification
           manageNotify={notifyManage}
           notifySupport={supportNotify} 
-          info={data} />:""
+          info={notifyData} />:""
         }
           
         </div>
