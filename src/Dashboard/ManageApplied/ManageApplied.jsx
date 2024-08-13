@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { SiLibreofficewriter } from "react-icons/si";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
 import Loader from "../../Loader/Loader";
@@ -22,6 +22,7 @@ export default function ManageApplied() {
   const [modalCon,setModalCon] = useState(false);
   const [infoTrack,setInfoTrack] = useState();
   const [wrapObj,setWrapObj] = useState();
+  const queryClient = useQueryClient();
   const appStatus = useMutation({
     mutationFn:(info)=>{
       const userId = info[0];
@@ -38,6 +39,9 @@ export default function ManageApplied() {
       .then(()=>{
         publicRoute.post('/manageAppNotification',wrap)
       })
+    },
+    onSuccess:()=>{
+      queryClient.invalidateQueries('getNotification')
     }
   })
 

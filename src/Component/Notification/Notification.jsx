@@ -1,12 +1,21 @@
-import { useMutation } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ImCross } from "react-icons/im";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
+import { useEffect, useState } from "react";
 
-export default function Notification({ info,manageNotify,notifySupport }) {
-  const removeNotification = useMutation({
-    mutationFn:(value)=>{
-      
+export default function Notification({ info,notifySupport}) {
+  const queryClient = useQueryClient();
+  const [condition,setCondition] = useState();
+  const [container,setContainer] = useState(info);
+  const removeNotification=useMutation({
+    mutationFn:(trackId)=>{
+      return publicRoute.delete(`/removeNotification?userId=${trackId}`)
+    },
+    onSuccess:(data)=>{
+      setTimeout(()=>{
+        setContainer(data.data)
+      },1000 * 60)
+      queryClient.invalidateQueries(['getNotification'])
     }
   })
 
@@ -43,17 +52,34 @@ export default function Notification({ info,manageNotify,notifySupport }) {
 
     return result;
   }
+
+  const notificationMange=(trackId)=>{
+    removeNotification.mutate(trackId);
+    setCondition(trackId);
+    setTimeout(()=>{
+      const step1 = [...container];
+      const step2 = step1.filter(value => value._id !== trackId);
+
+      setContainer(step2)
+    },500)
+  }
+
+  useEffect(()=>{
+    setTimeout(()=>{
+      setContainer(info)
+    },1000 * 30)
+  },[info])
   return (
     <>
       <div
-        className={`max-h-[250px] w-[300px] bg-white fixed top-[80px] right-[18%] rounded-md overflow-y-scroll notificationScroll z-30
+        className={`max-h-[300px] w-[300px] bg-white fixed top-[80px] right-[18%] rounded-md overflow-y-scroll overflow-x-hidden notificationScroll z-30
         ${notifySupport?"scale-in-top":"fade-out-bck"}  ${
-          info ? "" : "flex justify-center items-center"
+          container ? "" : "flex justify-center items-center"
         } notificationBoard`}
       >
         {info ? (
-          info.map((value, index) => {
-            return <div key={index} className="flex flex-row w-full px-6 py-4">
+          container?.sort((a,b)=>{return new Date(b.time) - new Date(a.time)}).map((value, index) => {
+            return <div key={index} className={`flex flex-row w-full px-6 py-4 ${condition===value._id?"fade-out-right":""}`}>
                 <div className="w-[80%]">
                     <button className="capitalize font-serif text-base text-start font-medium hover:underline hover:underline-offset-4"> 
                         {value.message}
@@ -64,7 +90,7 @@ export default function Notification({ info,manageNotify,notifySupport }) {
                 </div>
                 <div className="flex justify-end items-center w-[20%]">
                     <button className="transition-all duration-200 hover:text-rose-600" onClick={()=>{
-                      removeNotification.mutate(value._id)
+                       notificationMange(value._id)
                     }}>
                     <ImCross className="text-xs"/>
                     </button>

@@ -20,9 +20,9 @@ export default function App(){
     queryFn:()=>{
       return publicRoute(`/getNotification?email=${user?.email}`)
       .then(res=>res.data)
-    }
+    },
+    refetchInterval:1000 * 30
   })
-
   const scrollChange=()=>{
     window.scrollY > 50? setNav(true) : setNav(false)
   }
@@ -122,7 +122,6 @@ export default function App(){
                 Log in
               </button>
             }
-              
             </div>
           </div>
         </nav>
@@ -131,9 +130,8 @@ export default function App(){
         {
           notifyCon?
           <Notification
-          manageNotify={notifyManage}
-          notifySupport={supportNotify} 
-          info={notifyData} />:""
+          notifySupport={supportNotify}
+          info={notifyData} />: ""
         }
           
         </div>
