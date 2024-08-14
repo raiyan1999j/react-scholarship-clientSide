@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { GiCrossMark } from "react-icons/gi";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
 
-export default function AppliedFeedback({modalCondition,modalOption,trackId}) {
+export default function AppliedFeedback({modalCondition,modalOption,trackId,userMail}) {
   const textRef = useRef();
   const [closeModal,setClose] = useState(true);
   const [wordCount, setWord] = useState(0);
@@ -12,8 +12,19 @@ export default function AppliedFeedback({modalCondition,modalOption,trackId}) {
     mutationFn:(value)=>{
       const userId = value[0];
       const feedback= value[1];
+      const wrap ={
+        path:"/dashboard/myApplication",
+        subject:"authority",
+        title:"authority feedback",
+        message:"checkout your authority's feedback",
+        time: new Date(),
+        user: userMail
+      }
 
-      return publicRoute.put(`/workStatus?trackId=${userId}`,{feedback})
+      return publicRoute.put(`/workStatus?trackId=${userId}`,{feedback,envelope:false})
+      .then(()=>{
+        publicRoute.post("/manageAppNotification",wrap)
+      })
     }
   })
 

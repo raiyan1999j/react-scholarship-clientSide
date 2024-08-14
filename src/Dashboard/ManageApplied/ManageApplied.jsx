@@ -18,62 +18,74 @@ export default function ManageApplied() {
     },
   });
 
-  const [menu,setMenu] = useState(false);
-  const [modalCon,setModalCon] = useState(false);
-  const [infoTrack,setInfoTrack] = useState();
-  const [wrapObj,setWrapObj] = useState();
+  const [menu, setMenu] = useState(false);
+  const [modalCon, setModalCon] = useState(false);
+  const [infoTrack, setInfoTrack] = useState();
+  const [wrapObj, setWrapObj] = useState();
   const queryClient = useQueryClient();
   const appStatus = useMutation({
-    mutationFn:(info)=>{
+    mutationFn: (info) => {
       const userId = info[0];
       const workStatus = info[1].target.value;
-      const wrap={
+      const wrap = {
         path: "/dashboard/myApplication",
+        subject:"status",
         title: "application status",
         message: "checkout your application status",
         time: new Date(),
-        user: info[2]
-      }
+        user: info[2],
+      };
 
-      return publicRoute.put(`/workStatus?trackId=${userId}`,{workStatus})
-      .then(()=>{
-        publicRoute.post('/manageAppNotification',wrap)
-      })
+      return publicRoute
+        .put(`/workStatus?trackId=${userId}`, { workStatus })
+        .then(() => {
+          publicRoute.post("/manageAppNotification", wrap);
+        });
     },
-    onSuccess:()=>{
-      queryClient.invalidateQueries('getNotification')
+    onSuccess: () => {
+      queryClient.invalidateQueries("getNotification");
+    },
+  });
+
+  const menuCondition = (id,email) => {
+    const wrap ={
+      userId : id,
+      email : email
     }
-  })
 
-  const menuCondition=(value)=>{
     setMenu(true);
-    setInfoTrack(value);
-  }
+    // setInfoTrack(value);
+    setInfoTrack(wrap)
+  };
 
-  const modalOption=(option="",condition)=>{
+  const modalOption = (option = "", condition) => {
     setModalCon(condition);
     setMenu(false);
 
-    
-    const wrap ={
-      track : infoTrack,
-      option: option
-    }
+    const wrap = {
+      track: infoTrack,
+      option: option,
+    };
 
     setWrapObj(wrap);
-  }
+  };
 
-  useEffect(()=>{
-    const clickHandler=(event)=>{
-      if(event.target.parentElement?.classList.contains('menuCondition') || event.target.parentElement?.classList.contains('ml-[300px]')){
-        setMenu(false)
+  useEffect(() => {
+    const clickHandler = (event) => {
+      if (
+        event.target.parentElement?.classList.contains("menuCondition") ||
+        event.target.parentElement?.classList.contains("ml-[300px]")
+      ) {
+        setMenu(false);
       }
-    }
+    };
 
-    document.addEventListener('click',clickHandler);
+    document.addEventListener("click", clickHandler);
 
-    return ()=>{document.removeEventListener('click',clickHandler)}
-  })
+    return () => {
+      document.removeEventListener("click", clickHandler);
+    };
+  });
   return (
     <>
       <section className="w-full py-8 flex flex-col items-center justify-center menuCondition">
@@ -112,14 +124,24 @@ export default function ManageApplied() {
                   <td>{value.application}</td>
                   <td>{value.service}</td>
                   <td>
-                    <select className="select select-bordered capitalize" onChange={()=>{appStatus.mutate([value._id,event,value.user_email])}} defaultValue={value.workStatus}>
+                    <select
+                      className="select select-bordered capitalize"
+                      onChange={() => {
+                        appStatus.mutate([value._id, event, value.user_email]);
+                      }}
+                      defaultValue={value.workStatus}
+                    >
                       <option value="pending">pending</option>
                       <option value="processing">processing</option>
                       <option value="completed">completed</option>
                     </select>
                   </td>
                   <td>
-                    <button onClick={()=>{menuCondition(value._id)}}>
+                    <button
+                      onClick={() => {
+                        menuCondition(value._id,value.user_email);
+                      }}
+                    >
                       <CiMenuKebab />
                     </button>
                   </td>
@@ -129,28 +151,53 @@ export default function ManageApplied() {
           </tbody>
         </table>
 
-        <div className={`${menu?"w-[300px]":"w-0"} shadow-inner shadow-slate-800/50 py-2 rounded-lg flex flex-row justify-around fixed top-1/2 right-0 bg-white transition-all duration-300 `}>
-            <button className="h-[50px] w-[50px] rounded-full shadow-inner shadow-slate-500 flex justify-center items-center transition-all duration-200 ease-in hover:cursor-pointer hover:shadow-inner hover:shadow-blue-900 hover:bg-blue-300 hover:text-gray-100 tooltip tooltip-top" data-tip="Details" onClick={()=>{modalOption("details",true)}}>
+        <div
+          className={`${
+            menu ? "w-[300px]" : "w-0"
+          } shadow-inner shadow-slate-800/50 py-2 rounded-lg flex flex-row justify-around fixed top-1/2 right-0 bg-white transition-all duration-300 `}
+        >
+          <button
+            className="h-[50px] w-[50px] rounded-full shadow-inner shadow-slate-500 flex justify-center items-center transition-all duration-200 ease-in hover:cursor-pointer hover:shadow-inner hover:shadow-blue-900 hover:bg-blue-300 hover:text-gray-100 tooltip tooltip-top"
+            data-tip="Details"
+            onClick={() => {
+              modalOption("details", true);
+            }}
+          >
             <TiInfoLarge />
-            </button>
-            <button className="h-[50px] w-[50px] rounded-full shadow-inner shadow-slate-500 flex justify-center items-center transition-all duration-200 ease-in hover:cursor-pointer hover:shadow-inner hover:shadow-lime-900 hover:bg-lime-300 tooltip tooltip-bottom" data-tip="Feedback" onClick={()=>{modalOption("feedback",true)}}>
+          </button>
+          <button
+            className="h-[50px] w-[50px] rounded-full shadow-inner shadow-slate-500 flex justify-center items-center transition-all duration-200 ease-in hover:cursor-pointer hover:shadow-inner hover:shadow-lime-900 hover:bg-lime-300 tooltip tooltip-bottom"
+            data-tip="Feedback"
+            onClick={() => {
+              modalOption("feedback", true);
+            }}
+          >
             <RiFeedbackLine />
-            </button>
-            <button className="h-[50px] w-[50px] rounded-full shadow-inner shadow-slate-500 flex justify-center items-center transition-all duration-200 ease-in hover:cursor-pointer hover:shadow-inner hover:shadow-rose-900 hover:bg-rose-300 hover:text-gray-100 tooltip tooltip-top" data-tip="Cancel" onClick={()=>{modalOption("reject",true)}}>
+          </button>
+          <button
+            className="h-[50px] w-[50px] rounded-full shadow-inner shadow-slate-500 flex justify-center items-center transition-all duration-200 ease-in hover:cursor-pointer hover:shadow-inner hover:shadow-rose-900 hover:bg-rose-300 hover:text-gray-100 tooltip tooltip-top"
+            data-tip="Cancel"
+            onClick={() => {
+              modalOption("reject", true);
+            }}
+          >
             <TbMailCancel />
-            </button>
+          </button>
         </div>
 
-        {
-          modalCon?
+        {modalCon ? (
           <div className="fixed w-full h-screen top-0 left-0 editScholar z-10 scale-up-center rounded-none">
-            <SelectedOpt 
-            info={wrapObj} 
-            optionModal={modalOption}
-            conditionModal={(value)=>{setModalCon(value)}}
+            <SelectedOpt
+              info={wrapObj}
+              optionModal={modalOption}
+              conditionModal={(value) => {
+                setModalCon(value);
+              }}
             />
-          </div>:""
-        }
+          </div>
+        ) : (
+          ""
+        )}
       </section>
       {isPending ? (
         <div className="w-full flex flex-row justify-center items-center">

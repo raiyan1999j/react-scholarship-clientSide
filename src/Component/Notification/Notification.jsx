@@ -2,9 +2,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ImCross } from "react-icons/im";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Notification({ info,notifySupport}) {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [condition,setCondition] = useState();
   const [container,setContainer] = useState(info);
   const removeNotification=useMutation({
@@ -53,6 +55,9 @@ export default function Notification({ info,notifySupport}) {
     return result;
   }
 
+  const navigateToPage=(value)=>{
+    navigate({pathname:`${value}`})
+  }
   const notificationMange=(trackId)=>{
     removeNotification.mutate(trackId);
     setCondition(trackId);
@@ -81,7 +86,10 @@ export default function Notification({ info,notifySupport}) {
           container?.sort((a,b)=>{return new Date(b.time) - new Date(a.time)}).map((value, index) => {
             return <div key={index} className={`flex flex-row w-full px-6 py-4 ${condition===value._id?"fade-out-right":""}`}>
                 <div className="w-[80%]">
-                    <button className="capitalize font-serif text-base text-start font-medium hover:underline hover:underline-offset-4"> 
+                  <h4 className={`capitalize ${value.subject=="status"?"badge badge-info":"badge badge-secondary"} text-white font-mono font-bold mb-4`}>
+                    {value.title}
+                  </h4>
+                    <button className="capitalize font-serif text-base text-start font-medium hover:underline hover:underline-offset-4" onClick={()=>{navigateToPage(value.path)}}> 
                         {value.message}
                     </button>
                     <p className="font-bold text-sky-400 font-sans text-sm mt-2">

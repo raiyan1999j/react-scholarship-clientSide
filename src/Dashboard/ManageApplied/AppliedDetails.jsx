@@ -14,7 +14,7 @@ export default function AppliedDetails({trackId,modalCondition,modalOption}){
            .then(res=>res.data)
         }
     })
-
+    
     const modalOperation=()=>{
         setClose(false)
         setTimeout(()=>{
@@ -23,7 +23,7 @@ export default function AppliedDetails({trackId,modalCondition,modalOption}){
     }
     return(
         <>
-        <div className={`w-[60%] mx-auto bg-white shadow-xl shadow-slate-500 rounded-lg ${closeModal?"slide-in-left":"scale-out-center"}`}>
+        <div className={`w-[60%] flex justify-center mx-auto bg-white shadow-xl shadow-slate-500 rounded-lg ${closeModal?"slide-in-left":"scale-out-center"}`}>
         {
             isPending?
             <Loader/>:

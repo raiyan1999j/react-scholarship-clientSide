@@ -452,7 +452,7 @@ box-shadow: 0 0 20px 0px #c0c0c0 inset;
   cursor: pointer;
 }
 /* review modal */
-.reviewModal{
+.reviewModal,.messageModal{
 /* From https://css.glass */
 background: rgba(255, 255, 255, 0.21);
 border-radius: 16px;

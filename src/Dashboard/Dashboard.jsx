@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { InfoContainer } from "../AuthProvider/AuthProvider";
 import { FaEnvelope, FaPaperPlane, FaUser } from "react-icons/fa";
 import {
@@ -14,10 +14,11 @@ import Loader from "../Loader/Loader";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const location = useLocation()
   const { operator, user } = useContext(InfoContainer);
 
   useEffect(()=>{
-    navigate('/dashboard/profile')
+    navigate(location.pathname=="/dashboard"?"/dashboard/profile":location)
   },[])
   return (
     <>

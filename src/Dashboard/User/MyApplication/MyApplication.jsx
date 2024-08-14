@@ -1,57 +1,89 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { InfoContainer } from "../../../AuthProvider/AuthProvider";
 import { publicRoute } from "../../../PublicRoute/PublicRoute";
-import TableGroupBtn from './TableGroupBtn';
+import TableGroupBtn from "./TableGroupBtn";
 import { CiMenuKebab } from "react-icons/ci";
 import Review from "./Review";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loader from "../../../Loader/Loader";
 import ErrorCompo from "../../../ErrorCompo/ErrorCompo";
+import { FaEnvelope, FaEnvelopeOpen } from "react-icons/fa";
+import MessageModal from "./MessageModal";
 
 export default function MyApplication() {
   const { user } = useContext(InfoContainer);
-  const [box,setBox] = useState(false);
-  const [review,setReview] = useState(false);
-  const [tracking,setTracking] = useState(null);
+  const [box, setBox] = useState(false);
+  const [review, setReview] = useState(false);
+  const [tracking, setTracking] = useState(null);
+  const [messageCon,setMessage] = useState(false);
+  const [feedbackContain,setFeedback] = useState("");
+  const queryClient = useQueryClient();
 
-  const {isPending:userPending,error:userError,data:userData} = useQuery({
-    queryKey:["userApplied"],
-    queryFn:()=>{
-      return publicRoute(`/userApplied/${user?.email}`,{withCredentials:true}).then((res)=>{
-        if(res.status == 200){
-          return res.data
-        }else{
-          console.log('bad request')
+  const {
+    isPending: userPending,
+    error: userError,
+    data: userData,
+  } = useQuery({
+    queryKey: ["userApplied",messageCon],
+    queryFn: () => {
+      return publicRoute(`/userApplied/${user?.email}`, {
+        withCredentials: true,
+      }).then((res) => {
+        if (res.status == 200) {
+          return res.data;
+        } else {
+          console.log("bad request");
         }
-      })
-    }
-  })
+      });
+    },
+  });
 
-  const menuTab=(value)=>{
-    setTracking(value);
-  }
-
-  const boxHandle=(value)=>{
-    setBox(value);
-  }
-
-  const reviewModal=(value)=>{
-    setReview(value)
-  }
-
-  useEffect(()=>{
-    const clickHandler=(event)=>{
-      if(event.target.parentElement.classList.contains('btnTest')){
-        setBox(true)
-      }else{
-        setBox(false)
+  const messageCondition=useMutation({
+    mutationFn:(value)=>{
+      const wrap={
+        trackId : value[0],
+        condition: value[1]
       }
+      return publicRoute.put(`/envelopeCondition?userId=${wrap.trackId}`,{condition:wrap.condition})
+    },
+    onSuccess:()=>{
+      queryClient.invalidateQueries(["userApplied"])
     }
-
-   document.addEventListener('click',clickHandler);
-   
-   return ()=>{document.removeEventListener('click',clickHandler)}
   })
+
+  const menuTab = (value) => {
+    setTracking(value);
+  };
+
+  const boxHandle = (value) => {
+    setBox(value);
+  };
+
+  const reviewModal = (value) => {
+    setReview(value);
+  };
+
+  const openMessage=(condition,userId,feedback)=>{
+    setMessage(condition)
+    setFeedback(feedback)
+    messageCondition.mutate([userId,messageCon])
+  }
+
+  useEffect(() => {
+    const clickHandler = (event) => {
+      if (event.target.parentElement.classList.contains("btnTest")) {
+        setBox(true);
+      } else {
+        setBox(false);
+      }
+    };
+
+    document.addEventListener("click", clickHandler);
+
+    return () => {
+      document.removeEventListener("click", clickHandler);
+    };
+  });
   return (
     <>
       <section className="w-[90%] mx-auto" id="boxElem">
@@ -90,11 +122,24 @@ export default function MyApplication() {
                     <td>{value.degree}</td>
                     <td>{value.application}</td>
                     <td>{value.service}</td>
-                    <td className="font-bold font-serif text-slate-700 text-base">{value.workStatus}</td>
-                    <td>{value.feedback}</td>
-                    <td >
-                      <button className="btnTest text-xl"
-                        onClick={()=>{menuTab(value.scholarship_id)}}
+                    <td className="font-bold font-serif text-slate-700 text-base">
+                      {value.workStatus}
+                    </td>
+                    <td className="text-center">
+                      <button onClick={()=>{openMessage(true,value._id,value.feedback)}}>
+                        {
+                          messageCon?
+                          <FaEnvelopeOpen className="text-4xl text-sky-400"/>:
+                          <FaEnvelope className="text-4xl text-green-400"/>
+                        }
+                      </button>
+                    </td>
+                    <td>
+                      <button
+                        className="btnTest text-xl"
+                        onClick={() => {
+                          menuTab(value.scholarship_id);
+                        }}
                       >
                         <CiMenuKebab />
                       </button>
@@ -110,26 +155,35 @@ export default function MyApplication() {
             box ? "w-[20%]" : "w-[0%] right-[-5%]"
           } transition-all duration-200 ease-in bg-white rounded-lg py-2 px-2`}
         >
-            <TableGroupBtn
-            modalReview={reviewModal} 
+          <TableGroupBtn
+            modalReview={reviewModal}
             handleBox={boxHandle}
             trackingEmail={user?.email}
             trackingId={tracking}
-            />
+          />
         </div>
         {
-          userPending?
-          <div className="w-full flex justify-center items-center">
-            <Loader/>
-          </div>:
-          userError?
-          <div className="w-full flex justify-center items-center">
-            <ErrorCompo/>
+          messageCon?
+          <div className="fixed top-0 left-0 h-screen w-full messageModal flex justify-center items-center flex-col">
+            <MessageModal containFeedback={feedbackContain}/>
           </div>:""
         }
-        {
-          review?<Review modalReview={reviewModal} idTracking={tracking} />:""
-        }
+        {userPending ? (
+          <div className="w-full flex justify-center items-center">
+            <Loader />
+          </div>
+        ) : userError ? (
+          <div className="w-full flex justify-center items-center">
+            <ErrorCompo />
+          </div>
+        ) : (
+          ""
+        )}
+        {review ? (
+          <Review modalReview={reviewModal} idTracking={tracking} />
+        ) : (
+          ""
+        )}
       </section>
     </>
   );

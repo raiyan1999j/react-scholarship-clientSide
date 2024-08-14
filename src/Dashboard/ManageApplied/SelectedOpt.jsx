@@ -9,14 +9,15 @@ export default function SelectedOpt({info,optionModal,conditionModal,getFeedback
                 {
                     info.option=="details"?
                     <AppliedDetails 
-                    trackId={info.track}
+                    trackId={info.track.userId}
                     modalCondition={conditionModal}
                     modalOption={optionModal}
                     />:
                     <AppliedFeedback 
                     modalCondition={conditionModal}
                     modalOption={optionModal}
-                    trackId={info.track}
+                    trackId={info.track.userId}
+                    userMail={info.track.email}
                     />
                 }
             </div>
