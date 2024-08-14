@@ -16,6 +16,7 @@ export default function MyApplication() {
   const [review, setReview] = useState(false);
   const [tracking, setTracking] = useState(null);
   const [messageCon,setMessage] = useState(false);
+  const [readingStatus,setRead] = useState(false);
   const [feedbackContain,setFeedback] = useState("");
   const queryClient = useQueryClient();
 
@@ -63,10 +64,15 @@ export default function MyApplication() {
     setReview(value);
   };
 
-  const openMessage=(condition,userId,feedback)=>{
+  const openMessage=(condition,userId,feedback="")=>{
+    const wrap ={
+      feedback: feedback,
+      userId: userId
+    }
     setMessage(condition)
-    setFeedback(feedback)
-    messageCondition.mutate([userId,messageCon])
+    setRead(condition)
+    setFeedback(wrap)
+    messageCondition.mutate([userId,condition])
   }
 
   useEffect(() => {
@@ -128,7 +134,7 @@ export default function MyApplication() {
                     <td className="text-center">
                       <button onClick={()=>{openMessage(true,value._id,value.feedback)}}>
                         {
-                          messageCon?
+                          value.envelope?
                           <FaEnvelopeOpen className="text-4xl text-sky-400"/>:
                           <FaEnvelope className="text-4xl text-green-400"/>
                         }
@@ -164,8 +170,12 @@ export default function MyApplication() {
         </div>
         {
           messageCon?
-          <div className="fixed top-0 left-0 h-screen w-full messageModal flex justify-center items-center flex-col">
-            <MessageModal containFeedback={feedbackContain}/>
+          <div className="fixed top-0 left-0 h-screen w-full messageModal flex justify-center items-center flex-col scale-in-br">
+            <MessageModal
+            closeMessage={(value)=>{setMessage(value)}}
+            unreadMessage={(value)=>{setRead(value)}}
+            messageOpen={(condition,userId)=>{openMessage(condition,userId)}} 
+            containFeedback={feedbackContain}/>
           </div>:""
         }
         {userPending ? (
