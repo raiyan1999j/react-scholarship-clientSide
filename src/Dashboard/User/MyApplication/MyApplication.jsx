@@ -16,7 +16,7 @@ export default function MyApplication() {
   const [review, setReview] = useState(false);
   const [tracking, setTracking] = useState(null);
   const [messageCon,setMessage] = useState(false);
-  const [readingStatus,setRead] = useState(false);
+  const [modalCondition,setModalCon] = useState(false);
   const [feedbackContain,setFeedback] = useState("");
   const queryClient = useQueryClient();
 
@@ -70,7 +70,7 @@ export default function MyApplication() {
       userId: userId
     }
     setMessage(condition)
-    setRead(condition)
+    setModalCon(condition)
     setFeedback(wrap)
     messageCondition.mutate([userId,condition])
   }
@@ -128,10 +128,12 @@ export default function MyApplication() {
                     <td>{value.degree}</td>
                     <td>{value.application}</td>
                     <td>{value.service}</td>
-                    <td className="font-bold font-serif text-slate-700 text-base">
+                    <td className={`font-bold font-serif text-slate-700 text-base ${value.workStatus=="pending"?"text-[#ff4757]":value.workStatus=="processing"?"text-[#ffa502]":"text-[#2ed573]"}`}>
                       {value.workStatus}
                     </td>
                     <td className="text-center">
+                    {
+                      value.feedback==""?"":
                       <button onClick={()=>{openMessage(true,value._id,value.feedback)}}>
                         {
                           value.envelope?
@@ -139,6 +141,7 @@ export default function MyApplication() {
                           <FaEnvelope className="text-4xl text-green-400"/>
                         }
                       </button>
+                    }
                     </td>
                     <td>
                       <button
@@ -170,11 +173,11 @@ export default function MyApplication() {
         </div>
         {
           messageCon?
-          <div className="fixed top-0 left-0 h-screen w-full messageModal flex justify-center items-center flex-col scale-in-br">
+          <div className={`fixed top-0 left-0 h-screen w-full messageModal flex justify-center items-center flex-col  ${modalCondition?"scale-in-br":"scale-out-br"}`}>
             <MessageModal
             closeMessage={(value)=>{setMessage(value)}}
-            unreadMessage={(value)=>{setRead(value)}}
             messageOpen={(condition,userId)=>{openMessage(condition,userId)}} 
+            conditionModal={(value)=>{setModalCon(value)}}
             containFeedback={feedbackContain}/>
           </div>:""
         }

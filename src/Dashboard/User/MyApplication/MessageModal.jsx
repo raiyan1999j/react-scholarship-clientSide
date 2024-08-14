@@ -1,5 +1,13 @@
 
-export default function MessageModal({containFeedback,closeMessage,unreadMessage,messageOpen}){
+export default function MessageModal({containFeedback,closeMessage,messageOpen,conditionModal}){
+
+    const wrapFunction=()=>{
+        conditionModal(false);
+        setTimeout(()=>{
+            closeMessage(false)
+            messageOpen(false,containFeedback.userId)
+        },1000)
+    }
     return(
         <>
             <div className="h-[350px] w-[60%] py-6 px-6 bg-white/50 rounded-lg">
@@ -12,14 +20,15 @@ export default function MessageModal({containFeedback,closeMessage,unreadMessage
                 </div>
             </div>
             <div className="w-[60%] flex flex-row mt-4">
-                <button className="bg-green-400 text-white font-serif capitalize mx-8 px-8 py-1 rounded-lg hover:bg-green-900 hover:cursor-pointer transition-all duration-300" onClick={()=>{closeMessage(false)}}>
+                <button className="bg-green-400 text-white font-serif capitalize mx-8 px-8 py-1 rounded-lg hover:bg-green-900 hover:cursor-pointer transition-all duration-300" onClick={()=>{
+                    conditionModal(false)
+                    setTimeout(()=>{
+                        closeMessage(false)
+                    },1000)
+                }}>
                     done
                 </button>
-                <button className="bg-rose-400 text-white font-serif capitalize px-8 py-1 rounded-lg hover:bg-rose-900 hover:cursor-pointer transition-all duration-300" onClick={()=>{
-                    unreadMessage(false)
-                    closeMessage(false)
-                    messageOpen(false,containFeedback.userId)
-                }}>
+                <button className="bg-rose-400 text-white font-serif capitalize px-8 py-1 rounded-lg hover:bg-rose-900 hover:cursor-pointer transition-all duration-300" onClick={wrapFunction}>
                     mark as unread
                 </button>
             </div>
