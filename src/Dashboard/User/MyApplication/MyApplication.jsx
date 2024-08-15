@@ -15,9 +15,9 @@ export default function MyApplication() {
   const [box, setBox] = useState(false);
   const [review, setReview] = useState(false);
   const [tracking, setTracking] = useState(null);
-  const [messageCon,setMessage] = useState(false);
-  const [modalCondition,setModalCon] = useState(false);
-  const [feedbackContain,setFeedback] = useState("");
+  const [messageCon, setMessage] = useState(false);
+  const [modalCondition, setModalCon] = useState(false);
+  const [feedbackContain, setFeedback] = useState("");
   const queryClient = useQueryClient();
 
   const {
@@ -25,7 +25,7 @@ export default function MyApplication() {
     error: userError,
     data: userData,
   } = useQuery({
-    queryKey: ["userApplied",messageCon],
+    queryKey: ["userApplied", messageCon],
     queryFn: () => {
       return publicRoute(`/userApplied/${user?.email}`, {
         withCredentials: true,
@@ -39,18 +39,20 @@ export default function MyApplication() {
     },
   });
 
-  const messageCondition=useMutation({
-    mutationFn:(value)=>{
-      const wrap={
-        trackId : value[0],
-        condition: value[1]
-      }
-      return publicRoute.put(`/envelopeCondition?userId=${wrap.trackId}`,{condition:wrap.condition})
+  const messageCondition = useMutation({
+    mutationFn: (value) => {
+      const wrap = {
+        trackId: value[0],
+        condition: value[1],
+      };
+      return publicRoute.put(`/envelopeCondition?userId=${wrap.trackId}`, {
+        condition: wrap.condition,
+      });
     },
-    onSuccess:()=>{
-      queryClient.invalidateQueries(["userApplied"])
-    }
-  })
+    onSuccess: () => {
+      queryClient.invalidateQueries(["userApplied"]);
+    },
+  });
 
   const menuTab = (value) => {
     setTracking(value);
@@ -64,16 +66,16 @@ export default function MyApplication() {
     setReview(value);
   };
 
-  const openMessage=(condition,userId,feedback="")=>{
-    const wrap ={
+  const openMessage = (condition, userId, feedback = "") => {
+    const wrap = {
       feedback: feedback,
-      userId: userId
-    }
-    setMessage(condition)
-    setModalCon(condition)
-    setFeedback(wrap)
-    messageCondition.mutate([userId,condition])
-  }
+      userId: userId,
+    };
+    setMessage(condition);
+    setModalCon(condition);
+    setFeedback(wrap);
+    messageCondition.mutate([userId, condition]);
+  };
 
   useEffect(() => {
     const clickHandler = (event) => {
@@ -99,77 +101,94 @@ export default function MyApplication() {
           </h2>
         </div>
 
-        
         <div className="w-full">
-        {userPending ? (
-          <div className="w-full flex justify-center items-center">
-            <Loader />
-          </div>
-        ) : userError ? (
-          <div className="w-full flex justify-center items-center">
-            <ErrorCompo />
-          </div>
-        ) : (
-          <table className="table table-zebra">
-            <thead className="font-serif font-bold capitalize">
-              <tr>
-                <th>Sr no.</th>
-                <th>university name</th>
-                <th>address</th>
-                <th>subject</th>
-                <th>degree</th>
-                <th>app. Fees</th>
-                <th>Service Char.</th>
-                <th>app. status</th>
-                <th>app. feedback</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody className="capitalize font-medium text-slate-900 font-serif">
-              {userData?.map((value, index) => {
-                return (
-                  <tr key={index}>
-                    <td>{index}</td>
-                    <td>{value.university}</td>
-                    <td>
-                      {value.country},{value.district}
-                    </td>
-                    <td>{value.subject}</td>
-                    <td>{value.degree}</td>
-                    <td>{value.application}</td>
-                    <td>{value.service}</td>
-                    <td className={`font-bold font-serif text-slate-700 text-base ${value.workStatus=="pending"?"text-[#ff4757]":value.workStatus=="processing"?"text-[#ffa502]":"text-[#2ed573]"}`}>
-                      {value.workStatus}
-                    </td>
-                    <td className="text-center">
-                    {
-                      value.feedback==""?"":
-                      <button onClick={()=>{openMessage(true,value._id,value.feedback)}}>
-                        {
-                          value.envelope?
-                          <FaEnvelopeOpen className="text-4xl text-sky-400"/>:
-                          <FaEnvelope className="text-4xl text-green-400"/>
-                        }
-                      </button>
-                    }
-                    </td>
-                    <td>
-                      <button
-                        className="btnTest text-xl"
-                        onClick={() => {
-                          menuTab(value.scholarship_id);
-                        }}
+          {userPending ? (
+            <div className="w-full flex justify-center items-center">
+              <Loader />
+            </div>
+          ) : userError ? (
+            <div className="w-full flex justify-center items-center">
+              <ErrorCompo />
+            </div>
+          ) : (
+            <table className="table table-zebra">
+              <thead className="font-serif font-bold capitalize">
+                <tr>
+                  <th>Sr no.</th>
+                  <th>university name</th>
+                  <th>address</th>
+                  <th>subject</th>
+                  <th>degree</th>
+                  <th>app. Fees</th>
+                  <th>Service Char.</th>
+                  <th>app. status</th>
+                  <th>app. feedback</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody className="capitalize font-medium text-slate-900 font-serif">
+                {userData?.map((value, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{index}</td>
+                      <td>{value.university}</td>
+                      <td>
+                        {value.country},{value.district}
+                      </td>
+                      <td>{value.subject}</td>
+                      <td>{value.degree}</td>
+                      <td>{value.application}</td>
+                      <td>{value.service}</td>
+                      <td
+                        className={`font-bold font-serif text-slate-700 text-base ${
+                          value.workStatus == "pending"
+                            ? "text-[#ff4757]"
+                            : value.workStatus == "processing"
+                            ? "text-[#ffa502]"
+                            : "text-[#2ed573]"
+                        }`}
                       >
-                        <CiMenuKebab />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        )}
-          
+                        {value.workStatus}
+                      </td>
+                      <td className="text-center">
+                      {
+                        value.rejected?
+                        <h4 className="capitalize text-rose-500 font-serif text-xl font-bold">
+                          rejected
+                        </h4>:
+                        value.feedback == "" ? (
+                          ""
+                        ) : (
+                          <button
+                            onClick={() => {
+                              openMessage(true, value._id, value.feedback);
+                            }}
+                          >
+                            {value.envelope ? (
+                              <FaEnvelopeOpen className="text-4xl text-sky-400" />
+                            ) : (
+                              <FaEnvelope className="text-4xl text-green-400" />
+                            )}
+                          </button>
+                        )
+                      }
+                      </td>
+                      <td>
+                        <button
+                          className="btnTest text-xl"
+                          onClick={() => {
+                            menuTab(value.scholarship_id);
+                          }}
+                        >
+                          <CiMenuKebab />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
         </div>
         <div
           className={`fixed top-[50%] right-0 ${
@@ -183,16 +202,28 @@ export default function MyApplication() {
             trackingId={tracking}
           />
         </div>
-        {
-          messageCon?
-          <div className={`fixed top-0 left-0 h-screen w-full messageModal flex justify-center items-center flex-col  ${modalCondition?"scale-in-br":"scale-out-br"}`}>
+        {messageCon ? (
+          <div
+            className={`fixed top-0 left-0 h-screen w-full messageModal flex justify-center items-center flex-col  ${
+              modalCondition ? "scale-in-br" : "scale-out-br"
+            }`}
+          >
             <MessageModal
-            closeMessage={(value)=>{setMessage(value)}}
-            messageOpen={(condition,userId)=>{openMessage(condition,userId)}} 
-            conditionModal={(value)=>{setModalCon(value)}}
-            containFeedback={feedbackContain}/>
-          </div>:""
-        }
+              closeMessage={(value) => {
+                setMessage(value);
+              }}
+              messageOpen={(condition, userId) => {
+                openMessage(condition, userId);
+              }}
+              conditionModal={(value) => {
+                setModalCon(value);
+              }}
+              containFeedback={feedbackContain}
+            />
+          </div>
+        ) : (
+          ""
+        )}
         {review ? (
           <Review modalReview={reviewModal} idTracking={tracking} />
         ) : (
