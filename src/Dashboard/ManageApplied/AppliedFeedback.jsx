@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { GiCrossMark } from "react-icons/gi";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
 
-export default function AppliedFeedback({modalCondition,modalOption,trackId,userMail}) {
+export default function AppliedFeedback({modalCondition,modalOption,trackId,userMail,statusFeedback}) {
   const textRef = useRef();
   const [closeModal,setClose] = useState(true);
   const [wordCount, setWord] = useState(0);
@@ -65,8 +65,9 @@ export default function AppliedFeedback({modalCondition,modalOption,trackId,user
         <div className="py-4 w-[90%] mx-auto ">
           <textarea
             className="w-full h-[250px] appliedFeedbackText resize-none py-4 px-4 text-slate-950 capitalize font-serif font-semibold placeholder:capitalize placeholder:py-4 placeholder:px-4 placeholder:text-slate-800/50 placeholder:font-medium placeholder:font-serif"
-            placeholder="write your feedback"
+            placeholder={statusFeedback?"":"Feedback not set yet"}
             onChange={limitedText}
+            defaultValue={statusFeedback?statusFeedback:""}
             ref={textRef}
           ></textarea>
           <div className="flex flex-row justify-between font-mono py-2">

@@ -1,7 +1,7 @@
 import AppliedDetails from "./AppliedDetails";
 import AppliedFeedback from "./AppliedFeedback";
 
-export default function SelectedOpt({info,optionModal,conditionModal,appReject}){
+export default function SelectedOpt({info,optionModal,conditionModal,appReject,feedbackStatus}){
 
     return(
         <>
@@ -13,12 +13,14 @@ export default function SelectedOpt({info,optionModal,conditionModal,appReject})
                     modalCondition={conditionModal}
                     modalOption={optionModal}
                     rejectApp={appReject}
+                    
                     />:
                     <AppliedFeedback 
                     modalCondition={conditionModal}
                     modalOption={optionModal}
                     trackId={info.track.userId}
                     userMail={info.track.email}
+                    statusFeedback={feedbackStatus}
                     />
                 }
             </div>

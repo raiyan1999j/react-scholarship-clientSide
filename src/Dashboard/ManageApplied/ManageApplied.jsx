@@ -22,6 +22,7 @@ export default function ManageApplied() {
   const [modalCon, setModalCon] = useState(false);
   const [infoTrack, setInfoTrack] = useState();
   const [wrapObj, setWrapObj] = useState();
+  const [feedbackInfo,setFeedback] = useState("");
   const queryClient = useQueryClient();
   const appStatus = useMutation({
     mutationFn: (info) => {
@@ -77,6 +78,14 @@ export default function ManageApplied() {
   const rejectApp=()=>{
     setMenu(false)
     applicationReject.mutate([infoTrack.userId,"rejected"]);
+  }
+
+  const checkFeedback=(value)=>{
+    if(value == ""){
+      setFeedback("")
+    }else{
+      setFeedback(value)
+    }
   }
   useEffect(() => {
     const clickHandler = (event) => {
@@ -148,6 +157,7 @@ export default function ManageApplied() {
                     <button
                       onClick={() => {
                         menuCondition(value._id,value.user_email);
+                        checkFeedback(value.feedback)
                       }}
                     >
                       <CiMenuKebab />
@@ -197,6 +207,7 @@ export default function ManageApplied() {
               info={wrapObj}
               optionModal={modalOption}
               appReject={rejectApp}
+              feedbackStatus={feedbackInfo}
               conditionModal={(value) => {
               setModalCon(value);
               }}
