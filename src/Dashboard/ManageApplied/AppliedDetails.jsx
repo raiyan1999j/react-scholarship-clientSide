@@ -5,7 +5,7 @@ import ErrorCompo from "../../ErrorCompo/ErrorCompo"
 import { GiCrossMark } from "react-icons/gi"
 import { useEffect, useState } from "react"
 
-export default function AppliedDetails({trackId,modalCondition,modalOption}){
+export default function AppliedDetails({trackId,modalCondition,modalOption,rejectApp}){
     const [closeModal,setClose] = useState(true)
     const {isPending,error,data} = useQuery({
         queryKey:["information",trackId],
@@ -66,7 +66,7 @@ export default function AppliedDetails({trackId,modalCondition,modalOption}){
                         <img src={data.photo} alt="profileImage" className="h-full w-full object-cover rounded-md" />
                     </div>
                     <div className="flex flex-row mt-6 w-full justify-center">
-                        <button className="rejectApplied capitalize py-2 px-4 mr-6">
+                        <button className="rejectApplied capitalize py-2 px-4 mr-6" onClick={()=>{rejectApp()}}>
                             reject
                         </button>
                         <button className="scholarsBtn capitalize py-2 px-2 text-sm" onClick={()=>{modalOption('feedback',true)}}>

@@ -99,7 +99,17 @@ export default function MyApplication() {
           </h2>
         </div>
 
-        <div>
+        
+        <div className="w-full">
+        {userPending ? (
+          <div className="w-full flex justify-center items-center">
+            <Loader />
+          </div>
+        ) : userError ? (
+          <div className="w-full flex justify-center items-center">
+            <ErrorCompo />
+          </div>
+        ) : (
           <table className="table table-zebra">
             <thead className="font-serif font-bold capitalize">
               <tr>
@@ -158,6 +168,8 @@ export default function MyApplication() {
               })}
             </tbody>
           </table>
+        )}
+          
         </div>
         <div
           className={`fixed top-[50%] right-0 ${
@@ -181,17 +193,6 @@ export default function MyApplication() {
             containFeedback={feedbackContain}/>
           </div>:""
         }
-        {userPending ? (
-          <div className="w-full flex justify-center items-center">
-            <Loader />
-          </div>
-        ) : userError ? (
-          <div className="w-full flex justify-center items-center">
-            <ErrorCompo />
-          </div>
-        ) : (
-          ""
-        )}
         {review ? (
           <Review modalReview={reviewModal} idTracking={tracking} />
         ) : (

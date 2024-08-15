@@ -47,6 +47,11 @@ export default function ManageApplied() {
     },
   });
 
+  const applicationReject = useMutation({
+    mutationFn:(value)=>{
+      return publicRoute.put(`workStatus?trackId=${value[0]}`,{rejected:value[1]})
+    }
+  })
   const menuCondition = (id,email) => {
     const wrap ={
       userId : id,
@@ -54,7 +59,6 @@ export default function ManageApplied() {
     }
 
     setMenu(true);
-    // setInfoTrack(value);
     setInfoTrack(wrap)
   };
 
@@ -70,6 +74,10 @@ export default function ManageApplied() {
     setWrapObj(wrap);
   };
 
+  const rejectApp=()=>{
+    setMenu(false)
+    applicationReject.mutate([infoTrack.userId,"rejected"]);
+  }
   useEffect(() => {
     const clickHandler = (event) => {
       if (
@@ -177,9 +185,7 @@ export default function ManageApplied() {
           <button
             className="h-[50px] w-[50px] rounded-full shadow-inner shadow-slate-500 flex justify-center items-center transition-all duration-200 ease-in hover:cursor-pointer hover:shadow-inner hover:shadow-rose-900 hover:bg-rose-300 hover:text-gray-100 tooltip tooltip-top"
             data-tip="Cancel"
-            onClick={() => {
-              modalOption("reject", true);
-            }}
+            onClick={rejectApp}
           >
             <TbMailCancel />
           </button>
@@ -190,8 +196,9 @@ export default function ManageApplied() {
             <SelectedOpt
               info={wrapObj}
               optionModal={modalOption}
+              appReject={rejectApp}
               conditionModal={(value) => {
-                setModalCon(value);
+              setModalCon(value);
               }}
             />
           </div>
