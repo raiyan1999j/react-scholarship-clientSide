@@ -4,11 +4,13 @@ import { LuClipboardEdit } from "react-icons/lu";
 import { MdOutlineCancel, MdRateReview } from "react-icons/md";
 import { publicRoute } from "../../../PublicRoute/PublicRoute";
 import { Bounce, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
-export default function TableGroupBtn({handleBox,modalReview,trackingEmail,trackingId}){
+export default function TableGroupBtn({handleBox,modalReview,trackingEmail,trackingId, editModal}){
+    const navigate = useNavigate();
+
     const reviewOpt=()=>{
         handleBox(false)
-        // modalReview(true)
 
         publicRoute(`/checkExistence?trackEmail=${trackingEmail}&&trackId=${trackingId}`)
         .then((res)=>{
@@ -30,13 +32,16 @@ export default function TableGroupBtn({handleBox,modalReview,trackingEmail,track
         })
     }
 
+    const detailsTrackId=(value)=>{
+        navigate(`/details/${value}`)
+    }
     return(
         <>
         <div className="flex flex-row justify-between">
-        <button className="h-[50px] w-[50px] rounded-full bg-gray-300 flex justify-center items-center transition-all duration-150 ease-in hover:bg-sky-400 hover:text-white tooltip tooltip-top" data-tip="details">
+        <button className="h-[50px] w-[50px] rounded-full bg-gray-300 flex justify-center items-center transition-all duration-150 ease-in hover:bg-sky-400 hover:text-white tooltip tooltip-top" data-tip="details" onClick={()=>{detailsTrackId(trackingId)}}>
         <FaInfo />
         </button>
-        <button className="h-[50px] w-[50px] rounded-full bg-gray-300 flex justify-center items-center transition-all duration-150 ease-in hover:bg-green-400 hover:text-white tooltip tooltip-bottom" data-tip="edit">
+        <button className="h-[50px] w-[50px] rounded-full bg-gray-300 flex justify-center items-center transition-all duration-150 ease-in hover:bg-green-400 hover:text-white tooltip tooltip-bottom" data-tip="edit" onClick={()=>{editModal(true)}}>
         <LuClipboardEdit />
         </button>
         <button className="h-[50px] w-[50px] rounded-full bg-gray-300 flex justify-center items-center transition-all duration-150 ease-in hover:bg-rose-400 hover:text-white tooltip tooltip-top" data-tip="Cancel">

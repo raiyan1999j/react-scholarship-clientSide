@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import logo from '../public/logo.png';
-import {NavLink, Outlet, useNavigate} from 'react-router-dom';
+import {NavLink, Outlet, useLocation, useNavigate} from 'react-router-dom';
 import { InfoContainer } from './AuthProvider/AuthProvider';
 import Loader from './Loader/Loader';
 import { useQuery } from '@tanstack/react-query';
@@ -13,6 +13,7 @@ export default function App(){
   const [notifyCon,setNotify] = useState(false);
   const [supportNotify,setSupport] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const {userLogout,loading,operator,user} = useContext(InfoContainer);
 
   const {isPending:notifyPending,error:notifyError,data:notifyData} = useQuery({
@@ -69,7 +70,7 @@ export default function App(){
   },[])
 
   useEffect(()=>{
-    navigate('/home')
+    navigate(location.pathname?location.pathname:"/home")
   },[])
   return(
     <>

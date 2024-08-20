@@ -9,6 +9,7 @@ import Loader from "../../../Loader/Loader";
 import ErrorCompo from "../../../ErrorCompo/ErrorCompo";
 import { FaEnvelope, FaEnvelopeOpen } from "react-icons/fa";
 import MessageModal from "./MessageModal";
+import EditModal from "./EditModal";
 
 export default function MyApplication() {
   const { user } = useContext(InfoContainer);
@@ -18,6 +19,7 @@ export default function MyApplication() {
   const [messageCon, setMessage] = useState(false);
   const [modalCondition, setModalCon] = useState(false);
   const [feedbackContain, setFeedback] = useState("");
+  const [editModalCon,setEditCon] = useState(false);
   const queryClient = useQueryClient();
 
   const {
@@ -101,7 +103,7 @@ export default function MyApplication() {
           </h2>
         </div>
 
-        <div className="w-full">
+        <div className="w-full overflow-x-scroll py-8 myApplicationScroll">
           {userPending ? (
             <div className="w-full flex justify-center items-center">
               <Loader />
@@ -200,6 +202,7 @@ export default function MyApplication() {
             handleBox={boxHandle}
             trackingEmail={user?.email}
             trackingId={tracking}
+            editModal={(value)=>{setEditCon(value)}}
           />
         </div>
         {messageCon ? (
@@ -224,6 +227,15 @@ export default function MyApplication() {
         ) : (
           ""
         )}
+        {editModalCon?
+        <div className="fixed top-0 left-0 h-screen w-full flex justify-center items-center editModal">
+          <EditModal 
+          closeModal={(value)=>{setEditCon(value)}}
+          trackId={tracking}
+          />
+        </div>:
+        ""
+        }
         {review ? (
           <Review modalReview={reviewModal} idTracking={tracking} />
         ) : (

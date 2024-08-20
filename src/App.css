@@ -452,7 +452,7 @@ box-shadow: 0 0 20px 0px #c0c0c0 inset;
   cursor: pointer;
 }
 /* review modal */
-.reviewModal,.messageModal{
+.reviewModal,.messageModal,.editModal{
 /* From https://css.glass */
 background: rgba(255, 255, 255, 0.21);
 border-radius: 16px;
@@ -739,7 +739,7 @@ backdrop-filter: blur(8.3px);
   width:5px;
   background: #dfe6e9;
 }
-.notificationScroll::-webkit-scrollbar-thumb{
+.notificationScroll::-webkit-scrollbar-thumb,.myApplicationScroll::-webkit-scrollbar-thumb{
   background:#636e72;
   border-radius:12px;
   -webkit-border-radius:12px;
@@ -841,4 +841,15 @@ backdrop-filter: blur(8.3px);
             transform: translateX(50px);
     opacity: 0;
   }
+}
+/* my application scrollbar */
+.myApplicationScroll::-webkit-scrollbar{
+  height: 5px;
+  width: 5px;
+  background:rgb(201, 199, 212);
+  border-radius: 12px;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  -ms-border-radius: 12px;
+  -o-border-radius: 12px;
 }
