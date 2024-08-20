@@ -19,7 +19,7 @@ export default function MyApplication() {
   const [messageCon, setMessage] = useState(false);
   const [modalCondition, setModalCon] = useState(false);
   const [feedbackContain, setFeedback] = useState("");
-  const [editModalCon,setEditCon] = useState(false);
+  const [editModalCon, setEditCon] = useState(false);
   const queryClient = useQueryClient();
 
   const {
@@ -153,12 +153,11 @@ export default function MyApplication() {
                         {value.workStatus}
                       </td>
                       <td className="text-center">
-                      {
-                        value.rejected?
-                        <h4 className="capitalize text-rose-500 font-serif text-xl font-bold">
-                          rejected
-                        </h4>:
-                        value.feedback == "" ? (
+                        {value.rejected ? (
+                          <h4 className="capitalize text-rose-500 font-serif text-xl font-bold">
+                            rejected
+                          </h4>
+                        ) : value.feedback == "" ? (
                           ""
                         ) : (
                           <button
@@ -167,28 +166,26 @@ export default function MyApplication() {
                             }}
                           >
                             {value.envelope ? (
-                              <FaEnvelopeOpen className="text-4xl text-sky-400"/>
+                              <FaEnvelopeOpen className="text-4xl text-sky-400" />
                             ) : (
-                              <FaEnvelope className="text-4xl text-green-400"/>
+                              <FaEnvelope className="text-4xl text-green-400" />
                             )}
                           </button>
-                        )
-                      }
+                        )}
                       </td>
                       <td>
-                      {
-                        value.rejected?
-                        "":
-                        <button
-                          className="btnTest text-xl"
-                          onClick={() => {
-                            menuTab(value.scholarship_id);
-                          }}
-                        >
-                          <CiMenuKebab />
-                        </button>
-                      }
-                        
+                        {value.rejected ? (
+                          ""
+                        ) : (
+                          <button
+                            className="btnTest text-xl"
+                            onClick={() => {
+                              menuTab(value.scholarship_id);
+                            }}
+                          >
+                            <CiMenuKebab />
+                          </button>
+                        )}
                       </td>
                     </tr>
                   );
@@ -207,7 +204,9 @@ export default function MyApplication() {
             handleBox={boxHandle}
             trackingEmail={user?.email}
             trackingId={tracking}
-            editModal={(value)=>{setEditCon(value)}}
+            editModal={(value) => {
+              setEditCon(value);
+            }}
           />
         </div>
         {messageCon ? (
@@ -232,15 +231,18 @@ export default function MyApplication() {
         ) : (
           ""
         )}
-        {editModalCon?
-        <div className="fixed top-0 left-0 h-screen w-full flex justify-center items-center editModal">
-          <EditModal 
-          closeModal={(value)=>{setEditCon(value)}}
-          trackId={tracking}
-          />
-        </div>:
-        ""
-        }
+        {editModalCon ? (
+          <div className="fixed top-0 left-0 h-screen w-full flex justify-center items-center editModal">
+            <EditModal
+              closeModal={(value) => {
+                setEditCon(value);
+              }}
+              trackId={tracking}
+            />
+          </div>
+        ) : (
+          ""
+        )}
         {review ? (
           <Review modalReview={reviewModal} idTracking={tracking} />
         ) : (

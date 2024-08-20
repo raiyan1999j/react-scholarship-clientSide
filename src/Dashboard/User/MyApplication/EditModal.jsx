@@ -1,9 +1,8 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { GiCrossMark } from "react-icons/gi";
 import { publicRoute } from "../../../PublicRoute/PublicRoute";
 import Loader from "../../../Loader/Loader";
-import ErrorCompo from "../../../ErrorCompo/ErrorCompo";
 import { useFormik } from "formik";
 import { FaQuestion } from "react-icons/fa";
 import { MdOutlineAddAPhoto } from "react-icons/md";
@@ -103,6 +102,18 @@ export default function EditModal({closeModal,trackId}) {
         <div className="flex w-full justify-center items-center ">
           <Loader/>
         </div>:
+        data.workStatus=="processing"?
+        <>
+          <div className="text-center">
+            <h2 className="capitalize text-4xl font-bold font-sans text-red-700">Sorry!!</h2>
+            <p className="capitalize font-mono font-semibold appliedTxt text-xl w-[50%] mx-auto my-8">
+              you can not edit your application while authority in processing
+            </p>
+            <button className="bg-rose-500 py-3 px-5 text-white font-bold font-mono rounded-t-full rounded-r-none rounded-b-lg rounded-l-full transition-all duration-300 hover:rounded-tl-none hover:rounded-tr-full hover:rounded-br-full hover:rounded-bl-full" onClick={()=>{modalHandler(false)}}>
+              Close
+            </button>
+          </div>
+        </>:
         <>
         <form onSubmit={formInfo.handleSubmit}>
         <div className="w-full flex flex-row">
