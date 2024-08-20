@@ -167,15 +167,18 @@ export default function MyApplication() {
                             }}
                           >
                             {value.envelope ? (
-                              <FaEnvelopeOpen className="text-4xl text-sky-400" />
+                              <FaEnvelopeOpen className="text-4xl text-sky-400"/>
                             ) : (
-                              <FaEnvelope className="text-4xl text-green-400" />
+                              <FaEnvelope className="text-4xl text-green-400"/>
                             )}
                           </button>
                         )
                       }
                       </td>
                       <td>
+                      {
+                        value.rejected?
+                        "":
                         <button
                           className="btnTest text-xl"
                           onClick={() => {
@@ -184,6 +187,8 @@ export default function MyApplication() {
                         >
                           <CiMenuKebab />
                         </button>
+                      }
+                        
                       </td>
                     </tr>
                   );
