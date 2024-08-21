@@ -12,7 +12,7 @@ export default function CollectionData({information,serial,activeOption}){
                 <td>{subject}</td>
                 <td>{diploma}</td>
                 <td>{application}</td>
-                <td><CiMenuKebab className="hover:cursor-pointer" onClick={()=>{activeOption(_id)}} /></td>
+                <td><CiMenuKebab className="hover:cursor-pointer optionSelection" onClick={()=>{activeOption(_id)}} /></td>
             </tr>
         </>
     )

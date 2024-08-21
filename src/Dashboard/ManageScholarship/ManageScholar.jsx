@@ -115,7 +115,6 @@ export default function ManageScholar() {
       if (result.isConfirmed) {
         removeData.mutate(value)
       } else if (
-        /* Read more about handling dismissals below */
         result.dismiss === Swal.DismissReason.cancel
       ) {
         swalWithBootstrapButtons.fire({
@@ -129,6 +128,18 @@ export default function ManageScholar() {
   for (let repeat = 1; repeat <= data?.totalPage; repeat++) {
     pageArray.push(repeat);
   }
+
+  useEffect(()=>{
+    const clickHandler=(event)=>{
+      if(!event.target.classList.contains('optionSelection')){
+        setBox(false)
+      }
+    }
+
+    document.addEventListener('click',clickHandler);
+
+    return ()=>{document.removeEventListener('click',clickHandler)}
+  })
   return (
     <>
       <section>
