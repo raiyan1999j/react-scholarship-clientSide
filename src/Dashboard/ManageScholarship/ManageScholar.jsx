@@ -12,8 +12,16 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loader from "../../Loader/Loader";
 import ErrorCompo from "../../ErrorCompo/ErrorCompo";
 import { Slide, toast, ToastContainer } from "react-toastify";
+import Swal from "sweetalert2";
 
 const optArray = [8,12,14];
+const swalWithBootstrapButtons = Swal.mixin({
+  customClass: {
+    confirmButton: "scholarsBtn ml-8",
+    cancelButton: "btn-17 text-sm"
+  },
+  buttonsStyling: false
+});
 
 export default function ManageScholar() {
   const [pageNumber, setPage] = useState(1);
@@ -57,6 +65,23 @@ export default function ManageScholar() {
     }
   })
 
+  const removeData = useMutation({
+    mutationFn:(value)=>{
+      return publicRoute.delete(`/removeScholarshipData?trackId=${value}`)
+      .then((res)=>{
+        if(res.status == 200){
+          swalWithBootstrapButtons.fire({
+            title: "Deleted!",
+            text: "Your data has been deleted.",
+            icon: "success"
+          });
+        }
+      })
+    },
+    onSuccess:()=>{
+      queryClient.invalidateQueries(["allScholarData"]);
+    }
+  })
   const optionActive = (value) => {
     setBox(!box);
     setId(value);
@@ -77,6 +102,30 @@ export default function ManageScholar() {
     modalActive(false)
   }
 
+  const removeScholarship=(value)=>{
+    swalWithBootstrapButtons.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, remove it!",
+      cancelButtonText: "No, cancel!",
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        removeData.mutate(value)
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelled",
+          text: "Your imaginary file is safe :)",
+          icon: "error"
+        });
+      }
+    });
+  }
   for (let repeat = 1; repeat <= data?.totalPage; repeat++) {
     pageArray.push(repeat);
   }
@@ -136,7 +185,11 @@ export default function ManageScholar() {
             box ? "w-[20%]" : "w-[0%] right-[-5%]"
           } transition-all duration-200 ease-in bg-white rounded-lg py-2 px-2`}
         >
-          <OptionBox activeOption={optionActive} activeModal={modalActive} />
+          <OptionBox 
+          trackId={id} 
+          activeModal={modalActive}
+          scholarshipRemove={removeScholarship}
+           />
         </div>
         {modal ? (
           <div className="fixed top-0 left-0 h-full w-full editScholar overflow-y-scroll">
