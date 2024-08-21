@@ -10,6 +10,7 @@ import ErrorCompo from "../../../ErrorCompo/ErrorCompo";
 import { FaEnvelope, FaEnvelopeOpen } from "react-icons/fa";
 import MessageModal from "./MessageModal";
 import EditModal from "./EditModal";
+import Swal from "sweetalert2";
 
 export default function MyApplication() {
   const { user } = useContext(InfoContainer);
@@ -21,6 +22,14 @@ export default function MyApplication() {
   const [feedbackContain, setFeedback] = useState("");
   const [editModalCon, setEditCon] = useState(false);
   const queryClient = useQueryClient();
+
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: "scholarsBtn ml-8",
+      cancelButton: "btn-17 text-sm"
+    },
+    buttonsStyling: false
+  });
 
   const {
     isPending: userPending,
@@ -56,6 +65,23 @@ export default function MyApplication() {
     },
   });
 
+  const cancelApplication = useMutation({
+    mutationFn:(value)=>{
+      return publicRoute.delete(`/userApplicationRemoved?trackingId=${value}`).then((res)=>{
+        if(res.status == 200){
+          swalWithBootstrapButtons.fire({
+            title:"Deleted!",
+            text: "Your application has been deleted",
+            icon:"success"
+          })
+        }
+      })
+  },
+  onSuccess:()=>{
+    queryClient.invalidateQueries(['userApplied'])
+  }
+  })
+
   const menuTab = (value) => {
     setTracking(value);
   };
@@ -79,6 +105,29 @@ export default function MyApplication() {
     messageCondition.mutate([userId, condition]);
   };
 
+  const appCancelation=(value)=>{
+    swalWithBootstrapButtons.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel!",
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+      cancelApplication.mutate(value)
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelled",
+          text: "Your application is not canceled :)",
+          icon: "error"
+        });
+      }
+    });
+  }
   useEffect(() => {
     const clickHandler = (event) => {
       if (event.target.parentElement.classList.contains("btnTest")) {
@@ -204,6 +253,7 @@ export default function MyApplication() {
             handleBox={boxHandle}
             trackingEmail={user?.email}
             trackingId={tracking}
+            cancelationApp={appCancelation}
             editModal={(value) => {
               setEditCon(value);
             }}
