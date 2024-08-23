@@ -21,6 +21,7 @@ import MyApplication from "./Dashboard/User/MyApplication/MyApplication.jsx";
 import MyReviews from "./Dashboard/User/MyReviews/MyReviews.jsx";
 import ErrorHandle from "./ErrorHandle/ErrorHandle.jsx";
 import ManageApplied from "./Dashboard/ManageApplied/ManageApplied.jsx";
+import ManageReview from "./Dashboard/ManageReview/ManageReview.jsx";
 
 const queryClient = new QueryClient();
 
@@ -102,7 +103,10 @@ const router = createBrowserRouter([
       {
         path:"/dashboard/manageApplied",
         element: <ManageApplied/>,
-        
+      },
+      {
+        path:"/dashboard/manageReview",
+        element: <ManageReview/>
       }
     ],
   },

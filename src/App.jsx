@@ -70,7 +70,7 @@ export default function App(){
   },[])
 
   useEffect(()=>{
-    navigate(location.pathname?location.pathname:"/home")
+    navigate(location.pathname=="/"?"/home":location.pathname)
   },[])
   return(
     <>

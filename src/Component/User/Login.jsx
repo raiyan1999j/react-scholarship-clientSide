@@ -3,11 +3,12 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import "animate.css"
 import { InfoContainer } from "../../AuthProvider/AuthProvider";
 import { useFormik } from 'formik';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Login({oldOrNew,conValue}) {
     const [condition,setCondition] = useState(true);
     const navigate = useNavigate();
+    const location = useLocation();
     const {loginUser,user} = useContext(InfoContainer);
     
     const formInfo = useFormik({
@@ -19,10 +20,10 @@ export default function Login({oldOrNew,conValue}) {
         loginUser(value)
       }
     })
-
+    
     useEffect(()=>{
       if(user){
-        navigate('/')
+        navigate(location.state==null?"/home":location.state)
       }
     },[user])
   return (

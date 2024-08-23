@@ -47,6 +47,7 @@ export default function Review({ modalReview, idTracking }) {
       value.userName = user.displayName;
       value.image = user.photoURL;
       value.email = user.email;
+      value.subject = addInfo.subject
 
       publicRoute
         .post("/userReview", value)
@@ -80,6 +81,8 @@ export default function Review({ modalReview, idTracking }) {
       setInfo(res.data);
     });
   }, []);
+
+  console.log(addInfo)
   return (
     <>
       <div className="fixed top-0 left-[300px] h-screen w-screen reviewModal transition-all duration-300 ease-in">

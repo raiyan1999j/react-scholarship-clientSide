@@ -10,10 +10,19 @@ import {
 } from "firebase/auth";
 import fireAuth from "../Firebase/Firebase";
 import "react-toastify/dist/ReactToastify.css";
-import { Bounce, Flip, ToastContainer, toast } from "react-toastify";
+import { Bounce, Flip, ToastContainer, cssTransition, toast } from "react-toastify";
 import { publicRoute } from "../PublicRoute/PublicRoute";
+import "animate.css/animate.min.css";
 
 export const InfoContainer = createContext(null);
+
+const customTransition = cssTransition({
+  enter:"animate__animated animate__flipInX",
+  exit:"animate__animated animate__fadeOutRight",
+  appendPosition: false,
+  collapse: true,
+  collapseDuration: 300
+})
 
 export default function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -75,6 +84,14 @@ export default function AuthProvider({ children }) {
 
         publicRoute.get(`/loginUserInfo?email=${value.email}&&name=${userInfo.displayName}`)
         .then((res)=>{setOperator(res.data)})
+      }).catch(()=>{
+        toast.warn('password or username mismatch', {
+          transition: customTransition,
+          autoClose: 2000
+          });
+          setTimeout(()=>{
+            window.location.reload();
+          },3000)
       })
   };
 

@@ -128,6 +128,7 @@ export default function MyApplication() {
       }
     });
   }
+
   useEffect(() => {
     const clickHandler = (event) => {
       if (event.target.parentElement.classList.contains("btnTest")) {
@@ -178,7 +179,14 @@ export default function MyApplication() {
                 </tr>
               </thead>
               <tbody className="capitalize font-medium text-slate-900 font-serif">
-                {userData?.map((value, index) => {
+                {
+                  userData.length==0?
+                  <tr>
+                    <td colSpan="10" className="text-center text-2xl font-sans font-bold text-rose-600 appliedTxt">
+                      you haven't applied yet
+                    </td>
+                  </tr>:
+                  userData?.map((value, index) => {
                   return (
                     <tr key={index}>
                       <td>{index}</td>

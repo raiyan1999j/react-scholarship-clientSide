@@ -4,24 +4,28 @@ import { InfoContainer } from "../../../AuthProvider/AuthProvider";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import  Rating  from "@mui/material/Rating";
 import EditReview from "./EditReview";
+import { useQuery } from "@tanstack/react-query";
+import Loader from "../../../Loader/Loader";
+import ErrorCompo from "../../../ErrorCompo/ErrorCompo";
 
 export default function MyReviews() {
   const { user } = useContext(InfoContainer);
   const [allInfo, setInfo] = useState([]);
   const [reviewBox,setBox] = useState(false);
   const [passData,setPass] = useState();
+  const {isPending,error,data} = useQuery({
+    queryKey:["userReview"],
+    queryFn:()=>{
+      return publicRoute(`/specificReview?email=${user?.email}`)
+      .then(res=>res.data)
+    }
+  })
 
   const reviewModal=(value)=>{
     setBox(true)
 
     setPass(value)
   }
-
-  useEffect(() => {
-    publicRoute(`/specificReview?email=${user?.email}`).then((res) => {
-      setInfo(res.data);
-    });
-  }, []);
   return (
     <>
       <section className="w-[90%] mx-auto">
@@ -32,6 +36,15 @@ export default function MyReviews() {
         </div>
 
         <div>
+        {
+          isPending?
+          <div className="flex justify-center items-center">
+            <Loader/>
+          </div>:
+          error?
+          <div>
+            <ErrorCompo/>
+          </div>:
           <table className="table table-zebra">
             <thead className="font-serif font-bold capitalize">
               <tr>
@@ -44,7 +57,14 @@ export default function MyReviews() {
               </tr>
             </thead>
             <tbody className="capitalize font-medium text-slate-900 font-serif">
-              {allInfo.map((value, index) => {
+              {
+                data.length==0?
+                <tr>
+                  <td colSpan="6" className="text-center font-bold font-sans text-2xl text-rose-600 appliedTxt">
+                    you haven't reviewed yet
+                  </td>
+                </tr>:
+                data.map((value, index) => {
                 return (
                   <tr key={index}>
                     <td className="w-[5%]">
@@ -79,6 +99,8 @@ export default function MyReviews() {
               })}
             </tbody>
           </table>
+        }
+          
         </div>
 
         {
