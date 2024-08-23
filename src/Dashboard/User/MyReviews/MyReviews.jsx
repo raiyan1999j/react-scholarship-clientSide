@@ -4,15 +4,26 @@ import { InfoContainer } from "../../../AuthProvider/AuthProvider";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import  Rating  from "@mui/material/Rating";
 import EditReview from "./EditReview";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loader from "../../../Loader/Loader";
 import ErrorCompo from "../../../ErrorCompo/ErrorCompo";
+import { Bounce, toast } from "react-toastify";
+import Swal from "sweetalert2";
+
+const swalWithBootstrapButtons = Swal.mixin({
+  customClass: {
+    confirmButton: "scholarsBtn ml-4",
+    cancelButton: "btn btn-outline btn-secondary"
+  },
+  buttonsStyling: false
+});
 
 export default function MyReviews() {
   const { user } = useContext(InfoContainer);
-  const [allInfo, setInfo] = useState([]);
   const [reviewBox,setBox] = useState(false);
   const [passData,setPass] = useState();
+  const queryClient = useQueryClient();
+
   const {isPending,error,data} = useQuery({
     queryKey:["userReview"],
     queryFn:()=>{
@@ -21,11 +32,82 @@ export default function MyReviews() {
     }
   })
 
+  const reviewUpdate = useMutation({
+    mutationFn:(info)=>{
+      return publicRoute.put(`/reviewUpdate?track=${info[0]}`,info[1])
+      .then((res)=>{
+        if(res.status == 200){
+          toast.success('Update success!', {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "colored",
+            transition: Bounce,
+            });
+        }
+      })
+    },
+    onSuccess:()=>{
+      queryClient.invalidateQueries(["userReview"])
+    }
+  })
+
+  const reviewRemove=useMutation({
+    mutationFn:(id)=>{
+      return publicRoute.delete(`/reviewRemove?trackId=${id}`)
+      .then((res)=>{
+        if(res.status == 200){
+          swalWithBootstrapButtons.fire({
+            title: "Deleted!",
+            text: "The review has deleted",
+            icon: "success"
+          });
+        }
+      })
+    },
+    onSuccess:()=>{
+      queryClient.invalidateQueries(["userReview"])
+    }
+  })
   const reviewModal=(value)=>{
     setBox(true)
 
     setPass(value)
   }
+
+  const editedReview=(trackId,obj)=>{
+    reviewUpdate.mutate([trackId,obj])
+  }
+
+  const removeReview=(trackId)=>{
+    swalWithBootstrapButtons.fire({
+      title: "Are you sure?",
+      text: "You won't get back this",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel!",
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        reviewRemove.mutate(trackId)
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelled",
+          text: "Your review has not been deleted :)",
+          icon: "error"
+        });
+      }
+    });
+  }
+  console.log(data)
   return (
     <>
       <section className="w-[90%] mx-auto">
@@ -64,7 +146,7 @@ export default function MyReviews() {
                     you haven't reviewed yet
                   </td>
                 </tr>:
-                data.map((value, index) => {
+                data?.map((value, index) => {
                 return (
                   <tr key={index}>
                     <td className="w-[5%]">
@@ -90,6 +172,7 @@ export default function MyReviews() {
                       <button
                         className="text-2xl text-rose-600 transition-all duration-100 hover:text-rose-900 hover:text-xl tooltip"
                         data-tip="Remove"
+                        onClick={()=>{removeReview(value._id)}}
                       >
                         <FaTrash />
                       </button>
@@ -104,7 +187,10 @@ export default function MyReviews() {
         </div>
 
         {
-          reviewBox?<EditReview dataPass={passData} modalBox={(value)=>{setBox(value)}}/>:""
+          reviewBox?<EditReview
+          reviewEdited={editedReview} 
+          dataPass={passData} 
+          modalBox={(value)=>{setBox(value)}}/>:""
         }
       </section>
     </>

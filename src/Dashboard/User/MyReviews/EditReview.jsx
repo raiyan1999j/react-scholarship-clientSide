@@ -2,10 +2,8 @@ import { Rating } from "@mui/material";
 import { useFormik } from "formik";
 import { useEffect, useRef, useState } from "react";
 import { ImCross } from "react-icons/im";
-import { publicRoute } from "../../../PublicRoute/PublicRoute";
-import { Bounce, toast } from "react-toastify";
 
-export default function EditReview({ dataPass, modalBox }) {
+export default function EditReview({ dataPass, modalBox, reviewEdited }) {
   const [dateContainer,setContainer] = useState();
   const [boxCondition,setCondition] = useState(true);
 
@@ -24,23 +22,7 @@ export default function EditReview({ dataPass, modalBox }) {
       feedback:`${dataPass.feedback}`
     },
     onSubmit:value=>{
-      publicRoute.put(`/reviewUpdate?track=${dataPass._id}`,value )
-      .then((res)=>{
-        if(res.status==200){
-          toast.success('Update success!', {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "colored",
-            transition: Bounce,
-            });
-        }
-      })
-
+      reviewEdited(dataPass._id,value);
       boxHandler();
     }
   })

@@ -18,7 +18,7 @@ export default function Applied(){
                 <button className="capitalize btn btn-outline btn-primary mr-4 rounded-tl-[166px] rounded-br-[166px] " onClick={()=>{navigate('/allScholars')}}>
                     go back
                 </button>
-                <button className="capitalize btn btn-outline btn-success rounded-tr-[166px] rounded-bl-[166px]" onClick={()=>{navigate('/dashboard')}}>
+                <button className="capitalize btn btn-outline btn-success rounded-tr-[166px] rounded-bl-[166px]" onClick={()=>{navigate('/dashboard/myApplication')}}>
                     Dashboard
                 </button>
             </div>
