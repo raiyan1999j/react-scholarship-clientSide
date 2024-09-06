@@ -1,73 +1,44 @@
-import { useContext, useEffect, useState } from "react";
-import { useLoaderData } from "react-router-dom"
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { MdAttachMoney } from "react-icons/md";
 import PaymentBox from "./PaymentBox";
-import AppForm from "./AppForm";
-import { InfoContainer } from "../../AuthProvider/AuthProvider";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
-import { Flip, Slide, toast } from "react-toastify";
+import { useContext, useEffect, useState } from "react";
+import Loader from "../../Loader/Loader";
+import { useLoaderData, useLocation } from "react-router-dom";
+import { InfoContainer } from "../../AuthProvider/AuthProvider";
+import PaidAlert from "./PaidAlert";
+import PaymentSection from "./PaymentSection";
 
 export default function Payment(){
-    const [condition,setCondition] = useState(true);
-    const {application} = useLoaderData();
-    const loader = useLoaderData();
+    // const [clientSecret,setClient] = useState("");
+    const location = useLocation();
     const {user} = useContext(InfoContainer);
+    const queryClient = useQueryClient();
 
-    const paymentOpt=(value)=>{
-        setCondition(value);
-
-        const wrap ={
-            email: user.email,
-            track: loader._id,
-            amount: application
+    const {isLoading:checkLoading,error:checkError,data:paymentCheckData} = useQuery({
+        queryKey:["paymentCheck"],
+        queryFn:()=>{
+            return publicRoute(`/paymentCheck?email=${user.email}&&track=${location.state.trackId}`)
+            .then(res=>res.data)
+        },
+        onSuccess:()=>{
+            queryClient.invalidateQueries(["paymentCheck"])
         }
-
-        publicRoute.post('/paymentData',wrap)
-        .then((res)=>{
-            if(res.status == 200){
-                toast.success('Payment Done', {
-                    position: "top-right",
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Slide,
-                    });
-            }
-        })
-    }
-
-    useEffect(()=>{
-        publicRoute(`/paymentCheck?email=${user.email}&&track=${loader._id}`)
-        .then((res)=>{
-            if(!res.data){
-                setCondition(false)
-                toast.info('Already paid', {
-                    position: "top-left",
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "colored",
-                    transition: Flip,
-                    });
-            }
-        })
-    },[])
+    })
     return(
         <>
-            <section className="w-[1200px] mx-auto mt-[100px]">
-                {
-                    condition?
-                    <PaymentBox fees={application} conditionChange={(value)=>{paymentOpt(value)}}/>
-                    :
-                    <AppForm preDefined={loader}/>
-                }
-            </section>
+        {
+            checkLoading?
+            <section className="w-[1200px] mx-auto mt-[100px] h-[250px]  flex justify-center items-center">
+                <Loader width={150}/>
+            </section>:
+            !paymentCheckData?
+            <PaidAlert trackId={location.state.trackId}/>:
+            <PaymentSection/>
+        }
+        
         </>
     )
 }

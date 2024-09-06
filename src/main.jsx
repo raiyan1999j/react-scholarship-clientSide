@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import AuthProvider from "./AuthProvider/AuthProvider.jsx";
+import AuthProvider, { InfoContainer } from "./AuthProvider/AuthProvider.jsx";
 import LoginPage from "./Component/User/LoginPage.jsx";
 import Admin from "./Dashboard/Admin/Admin.jsx";
 import Dashboard from "./Dashboard/Dashboard.jsx";
@@ -22,6 +22,7 @@ import MyReviews from "./Dashboard/User/MyReviews/MyReviews.jsx";
 import ErrorHandle from "./ErrorHandle/ErrorHandle.jsx";
 import ManageApplied from "./Dashboard/ManageApplied/ManageApplied.jsx";
 import ManageReview from "./Dashboard/ManageReview/ManageReview.jsx";
+import AppForm from "./Component/Payment/AppForm.jsx";
 
 const queryClient = new QueryClient();
 
@@ -57,18 +58,17 @@ const router = createBrowserRouter([
         },
       },
       {
-        path: "/payment/:id",
-        loader: ({ params }) => {
-          return publicRoute(`/details/${params.id}`).then((res) => {
-            return res.data;
-          });
-        },
+        path: "/payment",
         element: (
           <Privet>
             <Payment />
           </Privet>
-        ),
+        )
       },
+      {
+        path:"/appForm",
+        element:<AppForm/>
+      }
     ],
   },
   {

@@ -4,9 +4,10 @@ import { FaImages } from "react-icons/fa";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
 import { InfoContainer } from "../../AuthProvider/AuthProvider";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { cssTransition, toast } from "react-toastify";
 import Applied from "./Applied";
+import { useQuery } from "@tanstack/react-query";
 
 const customAnimation = cssTransition({
   enter: "animate__animated animate__fadeInLeft",
@@ -20,9 +21,37 @@ export default function AppForm({ preDefined }) {
   const [profile, setProfile] = useState();
   const [degreeContainer, setDegree] = useState([]);
   const [condition,setCondition] = useState(true);
+  const location = useLocation();
   const navigate = useNavigate();
-
   const { user } = useContext(InfoContainer);
+
+  const {isLoading:appLoading,error:appError,data:appCheck} = useQuery({
+    queryKey:["appCheck",location],
+    queryFn:()=>{
+      return publicRoute(`/appCheck?email=${user?.email}&&track=${location?.state}`).then((res)=>{
+        if(res?.data){
+          setCondition(true)
+        }else{
+          setCondition(false)
+        }
+      })
+    }
+  })
+
+  const {isLoading:instituteLoading,error:instituteError,data:instituteInfo} = useQuery({
+    queryKey:["particularApp",location],
+    queryFn:()=>{
+      return publicRoute(`/particularApplication?trackId=${location?.state}`)
+      .then(res=>res.data)
+    }
+  });
+
+  const {isLoading:degreeLoading,error:degreeError,data:degreeData} = useQuery({
+    queryKey:["degreeData",instituteInfo],
+    queryFn:()=>{
+      return publicRoute(`/universityDegree?institute=${instituteInfo.university}`).then(res=>setDegree(res.data))
+    }
+  })
 
   const formInfo = useFormik({
     enableReinitialize: true,
@@ -37,14 +66,14 @@ export default function AppForm({ preDefined }) {
       ssc: "",
       hsc: "",
       photo: "",
-      subject: `${preDefined.subject}`,
-      scholarship: `${preDefined.scholarshipName}`,
-      university: `${preDefined.university}`,
+      subject: `${instituteInfo?.subject}`,
+      scholarship: `${instituteInfo?.scholarshipName}`,
+      university: `${instituteInfo?.university}`,
       user_name: `${user.displayName}`,
       user_email: `${user.email}`,
-      scholarship_id: `${preDefined._id}`,
-      application: `${preDefined.application}`,
-      service: `${preDefined.service}`,
+      scholarship_id: `${instituteInfo?._id}`,
+      application: `${instituteInfo?.application}`,
+      service: `${instituteInfo?.service}`,
       workStatus: 'pending',
       feedback : ""
     },
@@ -98,24 +127,24 @@ export default function AppForm({ preDefined }) {
     });
   };
 
-  useEffect(() => {
-    publicRoute(`/universityDegree?institute=${preDefined.university}`).then(
-      (res) => {
-        setDegree(res.data);
-      }
-    );
-  }, []);
+  // useEffect(() => {
+  //   publicRoute(`/universityDegree?institute=${instituteInfo.university}`).then(
+  //     (res) => {
+  //       setDegree(res.data);
+  //     }
+  //   );
+  // }, []);
 
-  useEffect(()=>{
-    publicRoute(`/appCheck?email=${user.email}&&track=${preDefined._id}`)
-    .then((res)=>{
-      if(res.data){
-        setCondition(true)
-      }else{
-        setCondition(false)
-      }
-    })
-  },[])
+  // useEffect(()=>{
+  //   publicRoute(`/appCheck?email=${user.email}&&track=${state}`)
+  //   .then((res)=>{
+  //     if(res.data){
+  //       setCondition(true)
+  //     }else{
+  //       setCondition(false)
+  //     }
+  //   })
+  // },[])
   return (
     <>
     {
@@ -298,8 +327,7 @@ export default function AppForm({ preDefined }) {
         </div>
       </form>:
       <Applied/>
-    }
-      
+      }
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
 import Loader from '../../Loader/Loader';
@@ -7,8 +7,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { InfoContainer } from "../../AuthProvider/AuthProvider";
 
 export default function Details() {
+  const {user} = useContext(InfoContainer);
   const [loadCon,setCondition] = useState(true);
   const [reviewData,setData] = useState();
   const {
@@ -26,6 +28,15 @@ export default function Details() {
     description
   } = useLoaderData();
   const navigate = useNavigate();
+
+  const applyScholarship=()=>{
+    const wrap ={
+      trackId : _id,
+      fees: application
+    }
+
+    navigate('/payment',{state:wrap})
+  }
 
   useEffect(()=>{
     publicRoute(`/universityBaseCom?university=${university}`)
@@ -145,7 +156,7 @@ export default function Details() {
                     </h2>
                   </td>
                   <td className="border border-gray-300/90 w-[60%]">
-                    <p className="capitalize font-medium font-mono text-sm text-indigo-950">
+                    <p className="capitalize font-bold font-serif text-xl text-rose-800">
                       {application}
                     </p>
                   </td>
@@ -161,7 +172,7 @@ export default function Details() {
         <div className="grid grid-cols-2 gap-x-5 w-[80%] mx-auto">
           <div></div>
           <div>
-            <button className="w-full border border-black/50 py-4 text-gray-600 font-bold font-sans transition-all duration-500 hover:border-none hover:bg-gray-500/50 hover:text-white hover:scale-95" onClick={()=>{navigate(`/payment/${_id}`)}}>
+            <button className="w-full border border-black/50 py-4 text-gray-600 font-bold font-sans transition-all duration-500 hover:border-none hover:bg-gray-500/50 hover:text-white hover:scale-95" onClick={()=>{applyScholarship()}}>
               Apply scholarship
             </button>
           </div>
