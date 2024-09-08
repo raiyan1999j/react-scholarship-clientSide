@@ -42,38 +42,36 @@ export default function Home() {
       </section>
 
       <section className="w-[1200px] mx-auto mt-[200px] py-[50px]">
-        <div className="w-full text-center mb-8">
-          <h2 className="capitalize text-xl font-bold font-serif">
+        <div className="w-full flex flex-row justify-between items-center mb-8">
+          <h2 className="capitalize text-2xl font-bold font-serif text-blue-900">
             top Scholarship
           </h2>
-        </div>
-        {
-          infoPending?<div className="flex justify-center items-center w-full h-[150px]">
-            <Loader width="150"/>
-          </div>:
-          infoError? <ErrorCompo/>:
-          <div className="w-[90%] mx-auto overflow-hidden topScholarBox rounded-xl py-8">
-          <div className="grid grid-cols-[600px_600px_600px_600px_600px_600px_600px] gap-x-6 w-[95%] mx-auto overflow-x-scroll topScholarScrollbar rounded-xl">
-            {infoData?.map((value, index) => {
-              return <TopScholar allData={value} key={index} />;
-            })}
-            <div className="h-[350px] w-full flex justify-center items-center">
-              <button
+          <div className="w-[40%] flex justify-end">
+          <button
                 className="scholarsBtn w-[80%]"
                 onClick={() => {
                   navigate("/allScholars");
                 }}
               >
                 Show All
-              </button>
-            </div>
+          </button>
+          </div>
+        </div>
+        {
+          infoPending?<div className="flex justify-center items-center w-full h-[150px]">
+            <Loader width="150"/>
+          </div>:
+          infoError? <ErrorCompo/>:
+          <div className="w-full mx-auto overflow-x-scroll rounded-xl py-8 topScholarScrollbar">
+          <div className="grid grid-cols-[700px_700px_700px_700px_700px_700px] gap-x-6 w-full mx-auto rounded-xl">
+            {infoData?.map((value, index) => {
+              return <TopScholar allData={value} key={index} />;
+            })}
           </div>
         </div>
         }
-        
-
-        <div className="w-[90%] mx-auto py-8 px-3 shadow-inner shadow-slate-500/50 rounded-lg mt-[100px]">
-          <div className="w-[90%] mx-auto">
+        <div className="w-[90%] mx-auto py-8 px-3 shadow-inner shadow-slate-500/50 rounded-lg mt-[100px] reviewBackgroundImg">
+          <div className="w-[90%] mx-auto relative">
           {
             reviewPending?<div className="flex w-full justify-center items-center ">
               <Loader width="150"/>
@@ -89,7 +87,6 @@ export default function Home() {
               }
             </Swiper>
           } 
-            
           </div>
         </div>
       </section>
