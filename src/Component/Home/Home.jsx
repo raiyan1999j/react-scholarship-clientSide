@@ -9,6 +9,7 @@ import StudentReview from "./StudentReview";
 import Loader from "../../Loader/Loader";
 import { useQuery } from "@tanstack/react-query";
 import ErrorCompo from "../../ErrorCompo/ErrorCompo";
+import GetInTouch from "./GetInTouch";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -89,6 +90,10 @@ export default function Home() {
           } 
           </div>
         </div>
+      </section>
+
+      <section className="w-[1200px] mx-auto my-[100px]">
+        <GetInTouch/>
       </section>
     </>
   );

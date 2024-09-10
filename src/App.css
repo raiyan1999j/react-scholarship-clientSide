@@ -891,7 +891,7 @@ backdrop-filter: blur(8.3px);
   -ms-transition: all ease-in 1s;
   -o-transition: all ease-in 1s;
 }
-.topScholarsDetails::after{
+.topScholarsDetails::after,.getInTouchBtn::after{
   position:absolute;
   content:"";
   width: 100%;
@@ -916,6 +916,60 @@ backdrop-filter: blur(8.3px);
 .topScholarsDetails:hover{
   -webkit-text-stroke: 0.5px white;
 }
-.reviewBackgroundImg{
-  
+.userMessageBgImg{
+  background:linear-gradient(90deg,rgba(52, 73, 94, 0.3) 32%,rgba(52, 73, 94, 0.4) 40%), url("https://i.ibb.co.com/z88KYff/pexels-abby-chung-371167-1106468.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+}
+.getInTouchTxt,.getInTouchTxtHeader{
+  color:transparent;
+  -webkit-text-stroke: 2px rgb(218, 24, 130);
+}
+.getInTouchTxtHeader{
+  -webkit-text-stroke:4px rgb(218, 24, 130);
+}
+.getInTouchBtn{
+  color:transparent;
+  -webkit-text-stroke: 2px #DA1882;
+}
+.getInTouchBtn::after{
+  top:0%;
+  left:-100%;
+  z-index: -10;
+  background:#DA1882;
+}
+.getInTouchBtn:hover.getInTouchBtn::after{
+  background:#DA1882;
+  left:0%;
+}
+.getInTouchBtn:hover{
+  color:transparent;
+  -webkit-text-stroke:0.5px rgb(241,236,236);
+  z-index: 10;
+}
+.formBackgroundDot::before{
+  content:"";
+  position: absolute;
+  height: 80px;
+  width: 80px;
+  background-image: radial-gradient(#DA1882 3px, transparent 1px);
+  background-size: 15px 15px;
+  right:6%;
+  transition:all ease-in 1s;
+  transform: translateY(-100%);
+  -webkit-transform: translateY(-100%);
+  -moz-transform: translateY(-100%);
+  -ms-transform: translateY(-100%);
+  -o-transform: translateY(-100%);
+  -webkit-transition:all ease-in 1s;
+  -moz-transition:all ease-in 1s;
+  -ms-transition:all ease-in 1s;
+  -o-transition:all ease-in 1s;
+}
+.formBackgroundDot:hover.formBackgroundDot::before{
+  transform:rotate(45deg);
+  -webkit-transform:rotate(45deg);
+  -moz-transform:rotate(45deg);
+  -ms-transform:rotate(45deg);
+  -o-transform:rotate(45deg);
 }
