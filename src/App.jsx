@@ -6,6 +6,7 @@ import Loader from './Loader/Loader';
 import { useQuery } from '@tanstack/react-query';
 import { publicRoute } from './PublicRoute/PublicRoute';
 import Notification from './Component/Notification/Notification';
+import { FaCcApplePay, FaCcMastercard, FaCcVisa, FaFacebookF, FaGithubAlt, FaLinkedinIn } from 'react-icons/fa';
 
 export default function App(){
   const [navScroll,setNav] = useState(false);
@@ -156,6 +157,81 @@ export default function App(){
       <main>
         <Outlet/>
       </main>
+
+      <footer className='paymentBackground'>
+        <section className='w-full mx-auto mt-[250px] border border-b-0 border-r-0 border-l-0 border-t border-gray-400/5 pt-20'>
+          <div className='flex flex-row w-[90%] mx-auto'>
+            <div className='w-[38%]'>
+              <div className='flex flex-row'>
+                <div className='h-[40px] w-[40px]'>
+                  <img src={logo} alt="logoImg" className='h-full w-full object-cover' />
+                </div>
+                <div>
+                  <h2 className='text-4xl font-sans capitalize font-bold text-blue-900'>
+                    study<span className='footerHeader'>abroad</span>
+                  </h2>
+                </div>
+              </div>
+
+              <div className='w-[90%] font-semibold text-base font-mono text-pretty text-slate-800 bg-sky-100/35 rounded-2xl my-8'>
+                <p>
+                Connect with global scholarship opportunities and apply to top universities abroad. We help students access funding and guidance for a brighter academic future
+                </p>
+              </div>
+            </div>
+            <div className='w-[38%]'>
+              <h2 className='capitalize text-4xl font-sans font-bold text-blue-900'>
+                add<span className='text-[#ee5253] lowercase'>ress</span>
+              </h2>
+              <div className='my-8 bg-sky-100/35 rounded-2xl text-slate-800 font-semibold font-mono w-[90%]'>
+              <p>
+                79/A,Mirpur-3,somajkollan road, Dhaka-1200
+              </p>
+              <div className='flex flex-row py-4'>
+                <p className='mr-2'>
+                  01735433906,
+                </p>
+                <p>
+                  01866665158
+                </p>
+              </div>
+              </div>
+            </div>
+            <div className='w-[20%]'>
+              <h2 className='font-sans font-bold capitalize text-3xl text-blue-900'>
+                so<span className='text-[#ee5253] lowercase'>cial</span> con<span className='text-[#ee5253] lowercase'>nects</span> 
+              </h2>
+              <ul className='flex flex-row my-8'>
+                <a className='h-[40px] w-[40px] rounded-full flex justify-center items-center border border-slate-900 transition-all ease-linear duration-200 hover:cursor-pointer relative z-30 after:transition-all after:ease-linear after:duration-150 after:absolute after:h-0 after:w-0 after:rounded-full after:bg-blue-600 after:-z-30 hover:after:h-full hover:after:w-full hover:text-white hover:border-none hover:text-2xl' href='https://www.facebook.com/raiyan.raiyan.31/' target='blank'>
+                <FaFacebookF />
+                </a>
+                <a className='h-[40px] w-[40px] rounded-full flex justify-center items-center border border-slate-900 transition-all ease-linear duration-200 hover:cursor-pointer relative z-30 after:transition-all after:ease-linear after:duration-150 after:absolute after:h-0 after:w-0 after:rounded-full after:bg-[#8395a7] after:-z-30 hover:after:h-full hover:after:w-full hover:text-white hover:border-none hover:text-2xl mx-6' href='https://github.com/raiyan1999j' target='blank'>
+                <FaGithubAlt />
+                </a>
+                <a className='h-[40px] w-[40px] rounded-full flex justify-center items-center border border-slate-900 transition-all ease-linear duration-200 hover:cursor-pointer relative z-30 after:transition-all after:ease-linear after:duration-150 after:absolute after:h-0 after:w-0 after:rounded-full after:bg-sky-400 after:-z-30 hover:after:h-full hover:after:w-full hover:text-white hover:border-none hover:text-2xl' href='https://www.linkedin.com/in/raiyan-khan-756b52304/' target='blank'>
+                <FaLinkedinIn />
+                </a>
+              </ul>
+            </div>
+          </div>
+          <div className='flex flex-row justify-between items-center border border-black/15 border-r-0 border-l-0 border-b-0'>
+            <div className='ml-[5%]'>
+              <h2 className='capitalize font-sans font-bold text-blue-950'>all &#169; copyright reserve</h2>
+            </div>
+            <div className='flex flex-row mr-[5%]'>
+              <span>
+              <FaCcVisa className=' text-gray-400 text-4xl'/>
+              </span>
+              <span>
+              <FaCcMastercard className=' text-gray-400 text-4xl mx-4'/>
+              </span>
+              <span>
+              <FaCcApplePay className=' text-gray-400 text-4xl'/>
+              </span>
+            </div>
+          </div>
+        </section>
+      </footer>
     </>
   )
 }

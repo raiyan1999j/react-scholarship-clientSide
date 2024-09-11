@@ -973,3 +973,7 @@ backdrop-filter: blur(8.3px);
   -ms-transform:rotate(45deg);
   -o-transform:rotate(45deg);
 }
+.footerHeader{
+  color:transparent;
+  -webkit-text-stroke: 2px #ee5253;
+}

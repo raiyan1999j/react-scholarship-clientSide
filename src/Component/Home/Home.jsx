@@ -92,7 +92,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="w-[1200px] mx-auto my-[100px]">
+      <section className="w-[1200px] mx-auto my-[200px]">
         <GetInTouch/>
       </section>
     </>
