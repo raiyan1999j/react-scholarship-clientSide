@@ -13,7 +13,7 @@ export default {
         'dashNav' : 'linear-gradient(to bottom, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 1) 100%), url(https://i.postimg.cc/59TxtPqQ/dashboard-Nav.png)',
         'homeBg':'linear-gradient(to bottom, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 1) 100%),url(https://i.postimg.cc/x1NWPtLx/study-abroad.jpg)',
         'appliedBg':'url(https://i.postimg.cc/6qCfbfr1/blob-scatter-haikei.png)',
-        'loginPageBg':"url('../public/loginPage.png')"
+        'loginPageBg': 'linear-gradient(to bottom, #64b4e7, #71b2e4, #7cb0e0, #86afdb, #8eadd7, #a0afd7, #b0b2d5, #bcb5d3, #d0bfd3, #ddcbd6, #e5d9dc, #e9e7e7);'
       }
     },
   },
