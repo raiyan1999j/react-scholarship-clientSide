@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 import Calendar from "react-calendar";
 import { publicRoute } from "../../PublicRoute/PublicRoute";
 import { Flip, toast } from "react-toastify";
+import { Helmet } from "react-helmet";
 
 
 export default function AddScholarship() {
@@ -123,6 +124,10 @@ export default function AddScholarship() {
   },[datePicker])
   return (
     <>
+    <Helmet>
+    <meta charSet="utf-8" />
+    <title>Dashboard-AddScholarship</title>
+    </Helmet>
       <section className="px-10 mt-[50px]">
       <form onSubmit={formInfo.handleSubmit}>
         <div className="grid grid-cols-[60%_30%] gap-x-6">

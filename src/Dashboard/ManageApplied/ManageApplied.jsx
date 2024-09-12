@@ -9,6 +9,7 @@ import { TbMailCancel } from "react-icons/tb";
 import { RiFeedbackLine } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import SelectedOpt from "./SelectedOpt";
+import { Helmet } from "react-helmet";
 
 export default function ManageApplied() {
   const { isPending, error, data } = useQuery({
@@ -105,6 +106,10 @@ export default function ManageApplied() {
   });
   return (
     <>
+    <Helmet>
+    <meta charSet="utf-8" />
+    <title>Dashboard-ManageApplication</title>
+    </Helmet>
       <section className="w-full py-8 flex flex-col items-center justify-center menuCondition">
         <div className="manageAppliedBorder h-[80px] w-[80px] rounded-full flex justify-center items-center">
           <SiLibreofficewriter className="text-4xl text-slate-800" />

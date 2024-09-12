@@ -4,6 +4,7 @@ import { InfoContainer } from "../../AuthProvider/AuthProvider";
 import { FaCamera } from "react-icons/fa";
 import axios from "axios";
 import Loader from "../../Loader/Loader";
+import { Helmet } from "react-helmet";
 
 export default function Admin() {
   const {operator,user,adminUpdateProfile} = useContext(InfoContainer);
@@ -50,6 +51,10 @@ export default function Admin() {
   }
   return (
     <>
+    <Helmet>
+    <meta charSet="utf-8" />
+    <title>Dashboard-Admin</title>
+    </Helmet>
     {
       user?
       <div className="card py-6 px-4 w-[150px] mt-[20%] mx-auto bg-login-main text-white capitalize font-mono">

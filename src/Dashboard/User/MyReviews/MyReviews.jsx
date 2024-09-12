@@ -9,6 +9,7 @@ import Loader from "../../../Loader/Loader";
 import ErrorCompo from "../../../ErrorCompo/ErrorCompo";
 import { Bounce, toast } from "react-toastify";
 import Swal from "sweetalert2";
+import { Helmet } from "react-helmet";
 
 const swalWithBootstrapButtons = Swal.mixin({
   customClass: {
@@ -107,9 +108,12 @@ export default function MyReviews() {
       }
     });
   }
-  console.log(data)
   return (
     <>
+    <Helmet>
+    <meta charSet="utf-8" />
+    <title>Dashboard-Reviews</title>
+    </Helmet>
       <section className="w-[90%] mx-auto">
         <div className="mt-[50px]">
           <h2 className="capitalize text-3xl font-bold font-mono text-center">

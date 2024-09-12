@@ -3,6 +3,7 @@ import Register from "./Register";
 import Login from "./Login";
 import { FcGoogle } from "react-icons/fc";
 import { InfoContainer } from "../../AuthProvider/AuthProvider";
+import { Helmet } from "react-helmet";
 
 export default function LoginPage() {
   const [condition, setCondition] = useState(true);
@@ -17,9 +18,13 @@ export default function LoginPage() {
   }
   return (
     <>
+    <Helmet>
+    <meta charSet="utf-8" />
+    <title>Login Page</title>
+    </Helmet>
       <section className="w-full">
         <div className="flex flex-row w-full">
-          <div className="h-screen relative bg-login-main bg-no-repeat bg-cover w-[50%] after:absolute after:h-full after:w-full after:bg-login-supp after:bg-no-repeat after:bg-contain after:rotate-[270deg] after:right-[-78.7%] after:top-0 overflow-hidden">
+          <div className="h-screen relative w-[50%] before:absolute before:h-full before:w-full before:bg-loginPageBg before:bg-cover before:bg-no-repeat before:rotate-[180deg]">
             <div className="absolute top-[30%] w-[70%] left-8 text-white">
               <h2 className="capitalize font-sans text-4xl font-bold">
                 Welcome to scholar <span className="text-green-500">'</span> s

@@ -4,11 +4,13 @@ import { publicRoute } from "../../PublicRoute/PublicRoute";
 import { InfoContainer } from "../../AuthProvider/AuthProvider";
 import Loader from "../../Loader/Loader";
 import { Slide, toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function GetInTouch(){
     const titleRef = useRef("");
     const opinionRef= useRef("");
     const {user} = useContext(InfoContainer)
+    const navigate = useNavigate();
 
     const userMessage = useMutation({
         mutationFn:(value)=>{
@@ -82,9 +84,16 @@ export default function GetInTouch(){
                     }
                         
                         <div className="mt-4 w-[80%] mx-auto">
+                        {
+                            user?
                             <button className="capitalize border-2 border-[#DA1882] rounded-md py-2 w-full getInTouchBtn font-mono text-2xl relative overflow-hidden">
                                 mail
+                            </button>:
+                            <button className="capitalize text-[#DA1882] text-base font-black w-[40%] translate-x-[80%] hover:underline" onClick={()=>{navigate("/loginPage")}}>
+                                Log in to mail us
                             </button>
+                        }
+                            
                         </div>
                     </form>
                 </div>

@@ -40,7 +40,7 @@ export default function ScholarCard({ allData }) {
   },[])
   return (
     <>
-      <div className="rounded-md shadow-md shadow-gray-400 py-2 px-2 w-[80%] grid grid-cols-[20%_77%] gap-x-4 mb-10">
+      <div className="rounded-md shadow-md shadow-gray-400 py-2 px-2 w-[80%] grid grid-cols-[20%_77%] gap-x-4 mb-10 transition-all ease-linear duration-200 hover:bg-white hover:cursor-pointer">
         <div className="p-4 w-full h-[300px]">
           <img
             src={photo}

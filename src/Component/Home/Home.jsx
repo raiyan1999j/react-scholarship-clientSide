@@ -10,6 +10,7 @@ import Loader from "../../Loader/Loader";
 import { useQuery } from "@tanstack/react-query";
 import ErrorCompo from "../../ErrorCompo/ErrorCompo";
 import GetInTouch from "./GetInTouch";
+import { Helmet } from "react-helmet";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -29,6 +30,10 @@ export default function Home() {
   })
   return (
     <>
+    <Helmet>
+    <meta charSet="utf-8" />
+    <title>Home</title>
+    </Helmet>
       <section className="w-full bg-blue-100/50">
         <div className="h-[500px] w-[1200px] mx-auto relative ">
           <div className="absolute bg-homeBg h-full w-full">

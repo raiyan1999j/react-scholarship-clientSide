@@ -179,7 +179,7 @@ export default function Details() {
         </div>
       </section>
 
-      <section className="w-[1200px] mx-auto my-10 py-10">
+      <section className="w-[1200px] mx-auto mt-10 pt-10">
         <div className="flex flex-col w-full border-opacity-50">
           <div className="divider font-bold text-gray-500">Reviews</div>
         </div>

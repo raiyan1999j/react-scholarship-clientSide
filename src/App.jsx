@@ -84,18 +84,18 @@ export default function App(){
           </div>
           <div className='w-[70%] flex justify-center'>
             <ul className='flex flex-row justify-center w-[90%] font-semibold text-blue-950 capitalize'>
-              <li className=''>
+              <li className={`relative before:content-"" ${location.pathname=="/home"?"before:absolute before:h-[4px] before:w-full before:bottom-0 before:left-0 before:bg-rose-400":"before:absolute before:h-[4px] before:w-full before:rounded-lg before:bg-rose-500 before:bottom-0 before:left-0 before:origin-right before:scale-x-0 before:transition before:duration-300 before:ease-in hover:before:origin-left hover:before:scale-x-100"}`}>
                 <NavLink to="/home">
                   Home
                 </NavLink>
               </li>
-              <li className={`${user?"mx-auto":"ml-auto"}`}>
+              <li className={`${user?"mx-auto":"ml-auto"} relative before:content-"" ${location.pathname=="/allScholars"?"before:absolute before:h-[4px] before:w-full before:bottom-0 before:left-0 before:bg-rose-400":"before:absolute before:h-[4px] before:w-full before:rounded-lg before:bg-rose-500 before:bottom-0 before:left-0 before:origin-right before:scale-x-0 before:transition before:duration-300 before:ease-in hover:before:origin-left hover:before:scale-x-100"}`}>
                 <NavLink to="/allScholars">
                   All Scholarship
                 </NavLink>
               </li>
               {
-                user?<li>
+                user?<li className='relative before:content-"" before:absolute before:h-[4px] before:w-full before:rounded-lg before:bg-rose-500 before:bottom-0 before:left-0 before:origin-right before:scale-x-0 before:transition before:duration-300 before:ease-in hover:before:origin-left hover:before:scale-x-100'>
                 <NavLink to="/dashboard">
                   {operator}
                 </NavLink>
@@ -159,7 +159,7 @@ export default function App(){
       </main>
 
       <footer className='paymentBackground'>
-        <section className='w-full mx-auto mt-[250px] border border-b-0 border-r-0 border-l-0 border-t border-gray-400/5 pt-20'>
+        <section className='w-full mx-auto border border-b-0 border-r-0 border-l-0 border-t border-gray-400/5 pt-20'>
           <div className='flex flex-row w-[90%] mx-auto'>
             <div className='w-[38%]'>
               <div className='flex flex-row'>

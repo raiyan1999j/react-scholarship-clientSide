@@ -8,6 +8,7 @@ import { ImCross } from "react-icons/im";
 import { useQuery } from "@tanstack/react-query";
 import ErrorCompo from "../../ErrorCompo/ErrorCompo";
 import Loader from "../../Loader/Loader";
+import { Helmet } from "react-helmet";
 
 const optArray = [4,8,12];
 
@@ -55,9 +56,14 @@ export default function AllScholars() {
   for (let repeat = 1; repeat <= data?.total; repeat++) {
     pageArray.push(repeat);
   }
+
   return (
     <>
-      <section className="bg-dashNav bg-no-repeat bg-cover">
+    <Helmet>
+    <meta charSet="utf-8" />
+    <title>Scholarship</title>
+    </Helmet>
+      <section className="allScholarsBgImg bg-no-repeat bg-cover">
         <section className="w-[1200px] mx-auto pt-[100px]">
           <div className="w-[30%] mx-auto rounded-xl shadow-xl shadow-black/50 flex flex-row py-2 px-4">
             <div className="w-[80%]">
@@ -82,6 +88,12 @@ export default function AllScholars() {
           </div>:
           error?
           <ErrorCompo/>:
+          data.info.length==0?
+          <div className="flex w-full justify-center items-center h-[150px] relative">
+            <span className="customSpinner absolute bg-no-repeat bg-center -z-20 h-full w-full "></span>
+            <h2 className="capitalize text-4xl appliedTxt text-rose-800 font-bold font-serif">not match found</h2>
+          </div>
+          :
           data.info?.map((value, index) => {
             return <ScholarCard allData={value} key={index} />;
           })

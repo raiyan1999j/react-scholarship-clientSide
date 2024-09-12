@@ -11,6 +11,7 @@ import { FaEnvelope, FaEnvelopeOpen } from "react-icons/fa";
 import MessageModal from "./MessageModal";
 import EditModal from "./EditModal";
 import Swal from "sweetalert2";
+import { Helmet } from "react-helmet";
 
 export default function MyApplication() {
   const { user } = useContext(InfoContainer);
@@ -146,6 +147,10 @@ export default function MyApplication() {
   });
   return (
     <>
+    <Helmet>
+    <meta charSet="utf-8" />
+    <title>Dashboard-Application</title>
+    </Helmet>
       <section className="w-[90%] mx-auto" id="boxElem">
         <div className="mt-[50px]">
           <h2 className="capitalize text-3xl font-bold font-mono text-center">

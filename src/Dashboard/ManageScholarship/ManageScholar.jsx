@@ -13,6 +13,7 @@ import Loader from "../../Loader/Loader";
 import ErrorCompo from "../../ErrorCompo/ErrorCompo";
 import { Slide, toast, ToastContainer } from "react-toastify";
 import Swal from "sweetalert2";
+import { Helmet } from "react-helmet";
 
 const optArray = [8,12,14];
 const swalWithBootstrapButtons = Swal.mixin({
@@ -142,6 +143,10 @@ export default function ManageScholar() {
   })
   return (
     <>
+    <Helmet>
+    <meta charSet="utf-8" />
+    <title>Dashboard-ManageScholarship</title>
+    </Helmet>
       <section>
         <div className="flex flex-row justify-center my-8">
           <input

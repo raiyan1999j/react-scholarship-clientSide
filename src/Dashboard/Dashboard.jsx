@@ -11,6 +11,7 @@ import {
 } from "react-icons/md";
 import { IoReturnDownBackOutline } from "react-icons/io5";
 import Loader from "../Loader/Loader";
+import { Helmet } from "react-helmet";
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -22,6 +23,10 @@ export default function Dashboard() {
   },[])
   return (
     <>
+    <Helmet>
+    <meta charSet="utf-8" />
+    <title>Dashboard</title>
+    </Helmet>
       <header>
         <nav className="w-[300px] h-screen shadow-lg shadow-gray-500 fixed top-0 left-0 bg-dashNav before:bg-dashNavGradient overflow-hidden">
           <div className="w-full flex flex-col items-center py-5">
@@ -39,19 +44,19 @@ export default function Dashboard() {
             user?
             <div className="flex flex-col pl-8 my-4 capitalize font-mono text-base font-medium">
             
-              <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to='/dashboard/profile'>
+              <NavLink className={`flex flex-row w-full items-center mb-4 transition-all duration-500 ease-in ${location.pathname=="/dashboard/profile"?"translate-x-[20px] bg-sky-300 text-white":"hover:translate-x-[20px] hover:bg-sky-300 hover:text-white"}`} to='/dashboard/profile'>
                 <FaUser className="mr-4" />
                 {operator} profile
               </NavLink>
 
               {
                 operator=='user'?
-                <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to="/dashboard/myApplication">
+                <NavLink className={`flex flex-row w-full items-center mb-4 transition-all duration-500 ease-in ${location.pathname=="/dashboard/myApplication"?"translate-x-[20px] bg-sky-300 text-white":"hover:translate-x-[20px] hover:bg-sky-300 hover:text-white"}`} to="/dashboard/myApplication">
                 <FaEnvelope className="mr-4" />
                 My application
               </NavLink>
                 :
-                <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to="/dashboard/addScholarShip">
+                <NavLink className={`flex flex-row w-full items-center mb-4 transition-all duration-500 ease-in ${location.pathname=="/dashboard/addScholarShip"?"translate-x-[20px] bg-sky-300 text-white":"hover:translate-x-[20px] hover:bg-sky-300 hover:text-white"}`} to="/dashboard/addScholarShip">
                 <FaPaperPlane className="mr-4" />
                 Add scholarship
               </NavLink>
@@ -59,12 +64,12 @@ export default function Dashboard() {
               
               {
                 operator=='user'?
-                <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to="/dashboard/myReviews">
+                <NavLink className={`flex flex-row w-full items-center mb-4 transition-all duration-500 ease-in ${location.pathname=="/dashboard/myReviews"?"translate-x-[20px] bg-sky-300 text-white":"hover:translate-x-[20px] hover:bg-sky-300 hover:text-white"}`} to="/dashboard/myReviews">
                 <MdRateReview className="mr-4" />
                 my reviews
                 </NavLink>
                 :
-                <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to='/dashboard/manageScholarship'>
+                <NavLink className={`flex flex-row w-full items-center mb-4 transition-all duration-500 ease-in ${location.pathname=="/dashboard/manageScholarship"?"translate-x-[20px] bg-sky-300 text-white":"hover:translate-x-[20px] hover:bg-sky-300 hover:text-white"}`} to='/dashboard/manageScholarship'>
                 <MdOutlineManageAccounts className="mr-4 text-xl" />
                 Manage scholarship
               </NavLink>
@@ -72,7 +77,7 @@ export default function Dashboard() {
               
               {
                 operator=='user'?"":
-                <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to="/dashboard/manageApplied">
+                <NavLink className={`flex flex-row w-full items-center mb-4 transition-all duration-500 ease-in ${location.pathname=="/dashboard/manageApplied"?"translate-x-[20px] bg-sky-300 text-white":"hover:translate-x-[20px] hover:bg-sky-300 hover:text-white"}`} to="/dashboard/manageApplied">
                 <MdManageHistory className="mr-4 text-xl" />
                 manage applied scholarship
               </NavLink>
@@ -80,7 +85,7 @@ export default function Dashboard() {
               
               {
                 operator=='user'?"":
-                <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to="/dashboard/manageUser">
+                <NavLink className={`flex flex-row w-full items-center mb-4 transition-all duration-500 ease-in ${location.pathname=="/dashboard/manageUser"?"translate-x-[20px] bg-sky-300 text-white":"hover:translate-x-[20px] hover:bg-sky-300 hover:text-white"}`} to="/dashboard/manageUser">
                 <MdManageAccounts className="mr-4 text-xl" />
                 manage user
               </NavLink>
@@ -88,7 +93,7 @@ export default function Dashboard() {
               
               {
                 operator=='user'?"":
-                <NavLink className="flex flex-row w-full items-center mb-4 hover:translate-x-[20px] transition-all duration-500 ease-in hover:bg-sky-300 hover:text-white" to="/dashboard/manageReview">
+                <NavLink className={`flex flex-row w-full items-center mb-4 transition-all duration-500 ease-in ${location.pathname=="/dashboard/manageReview"?"translate-x-[20px] bg-sky-300 text-white":"hover:translate-x-[20px] hover:bg-sky-300 hover:text-white"}`} to="/dashboard/manageReview">
                 <MdManageSearch className="mr-4 text-xl" />
                 manage review
               </NavLink>

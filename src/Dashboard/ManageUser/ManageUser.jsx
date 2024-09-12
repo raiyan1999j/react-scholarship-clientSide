@@ -10,6 +10,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Loader from "../../Loader/Loader";
 import ErrorCompo from "../../ErrorCompo/ErrorCompo";
 import { InfoContainer } from "../../AuthProvider/AuthProvider";
+import { Helmet } from "react-helmet";
 
 const userOperator =['admin','moderator','user'];
 
@@ -80,6 +81,10 @@ export default function ManageUser() {
   }
   return (
     <>
+    <Helmet>
+    <meta charSet="utf-8" />
+    <title>Dashboard-ManageUser</title>
+    </Helmet>
       <section className="mt-[50px]">
         <div className="w-full flex flex-col items-center">
           <p>
